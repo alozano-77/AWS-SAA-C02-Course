@@ -1,0 +1,4 @@
+# macOS DS_Store
+.DS_Store
+.vscode/
+ansible.log
