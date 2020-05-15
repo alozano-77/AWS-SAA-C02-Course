@@ -2496,9 +2496,9 @@ This can be the EBS default (CMK) which is referred to as `aws/ebs` or it
 could be a customer managed CMK which you manage yourself.
 
 That key is used by EBS when an encrypted volume is created. The CMK
-generates an encrypted data encryption key which is stored on the volume with
-the physical disk. This key can only be encrypted by KMS when a role with
-the proper permissions makes the request.
+generates an encrypted **data encryption key (DEK)** which is stored with the volume with
+on the physical disk. This key can only be decrypted using KMS when a role with
+the proper permissions to decrypt that DEK.
 
 When the volume is first used, EBS asks CMS to decrypt the key and stores
 the decrypted key in memory on the EC2 host while it's being used. At all
