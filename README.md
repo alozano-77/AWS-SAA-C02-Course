@@ -1,5 +1,4 @@
 # SAA-C02 Notes
-<<<<<<< HEAD
 > These are my personal notes from Adrian Cantrill's (SAA-C02) course.
 Learning Aids from
 [aws-sa-associate-saac02](https://github.com/acantril/aws-sa-associate-saac02).
@@ -30,24 +29,6 @@ and show support <https://learn.cantrill.io.>
 ---
 
 ## Cloud-Computing-Fundamentals
-=======
-
-> These are my personal notes from Adrian Cantrill's (SAAC02) course.
-Learning Aids from
-[aws-sa-associate-saac02](https://github.com/acantril/aws-sa-associate-saac02).
-There will be errors, so please purchase his course to get the original content
-and show support https://learn.cantrill.io.
-
-## Table of Contents
-
-- [Intro-to-Cloud](#Intro-to-Cloud)
-- [AWS-Fundamentals](#AWS-Fundamentals)
-- [IAM-Accounts-AWS-Organizations](#IAM-Accounts-AWS-Organizations)
-
----
-
-## Intro-to-Cloud
->>>>>>> 621a2276c151f310eedb10fde9efe6689da18a42
 
 Cloud computing provides
 
@@ -1017,15 +998,9 @@ A trail can store events in an S3 bucket as a compressed JSON file. It can
 also use CloudWatch Logs to output the data.
 
 CloudTrail products can create an organizational trail. This allows a single
-<<<<<<< HEAD
 management point for all the APIs and management events for that org.
 
 #### CloudTrail Exam PowerUp
-=======
-management point for all the API's and management events for that org.
-
-#### CloudTrail Exam Powerup
->>>>>>> 621a2276c151f310eedb10fde9efe6689da18a42
 
 - It is enabled by default for 90 days without S3
 - Trails are how you configure S3 and CWLogs
@@ -1036,7 +1011,6 @@ management point for all the API's and management events for that org.
 
 #### CloudTrail Pricing
 
-<<<<<<< HEAD
 <https://aws.amazon.com/cloudtrail/pricing/>
 
 ---
@@ -5436,6 +5410,4 @@ This can be saved in the console or fed to other visualization tools.
 
 You can optimize the original data set to reduce the amount of space uses
 for the data and reduce the costs for querying that data.
-=======
 https://aws.amazon.com/cloudtrail/pricing/
->>>>>>> 621a2276c151f310eedb10fde9efe6689da18a42
