@@ -2728,7 +2728,7 @@ As customer load increases, the server may need to grow to handle more data.
 The server can increase in capacity, but this will require a reboot.
 
 - Often times vertical scaling can only occur during planned outages.
-- Larger instances also carry a $ premium compared to smaller instances.
+- Larger instances also carry a **$ premium** compared to smaller instances.
 - Instance size is an upper cap on performance.
 - No application modification is needed.
   - Works for all applications, even monoliths (all code in one app)
@@ -2739,27 +2739,39 @@ As the customer load increases, this adds additional capacity.
 Instead of one running copy of an application, you can have multiple versions
 running on each server.
 This requires a load balancer.
+
+> A load balancer is an _appliance_ that sits in between your servers -- in this case instances -- and your customers.
+
 When customers try to access an application, the load balancer ensures the
 servers get equal parts of the load.
 
 - Sessions are everything.
+  - When you log into youtube, netflix or your email, the state of your interaction with that application is called a *session*. 
 - With horizontal scaling you can shift between instances equally.
-- This requires either application support or off-host sessions.
-- Servers are **stateless**, the app stores session data elsewhere.
+- This requires either *application support* or *off-host* sessions.
+  - If you use off-host sessions, then your session data is stored in another place, an external database.
+  - This means that the servers are what's called **stateless**, they are just dump instances of your application.
+  - The application does care which instance you are connected to because your session is externally hosted somewhere else. 
+
+#### Benefits of Horizontal Scaling
+
 - No disruption while scaling up or down.
 - No real limits to scaling.
-- Uses smaller instances so you pay less, allows for better granularity.
+- Uses smaller instances is less expensive.
+- Allows for better granularity.
 
 ### Instance Metadata
 
-EC2 service provides data to instances
-Accessible inside all instances
+> A service EC2 provides to instances. It is data about the instance that can be used to configure or manage a running instance. It is a way an instance or anything running inside an instance can access information about the environment it wouldn't be able to access otherwise. 
 
-Memorize `http://169.254.169.254/latest/meta-data/`
+- Accessible inside all instances using the same access method.
 
-Meta-data contains information on the environment the instance is in.
-You can find out about the networking or user-data among other things.
-This is not authenticated or encrypted. Anyone who can gain access to the
+Memorize [instance metadata](http://169.254.169.254/latest/meta-data/) -> `http://169.254.169.254/latest/meta-data/`
+
+Meta-data contains information on the:
+- environment the instance is in.
+- You can find out about the networking or user-data among other things.
+- This is not authenticated or encrypted. Anyone who can gain access to the
 instance can see the meta-data. This can be restricted by local firewall
 
 ---
