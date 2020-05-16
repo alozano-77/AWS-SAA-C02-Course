@@ -2789,26 +2789,28 @@ resources. This allows applications to run in their own isolated environments.
 
 #### Image Anatomy
 
-A Docker image is composed of multiple layers and not a monolithic disk image.
-Each line of a Docker image creates a new filesystem layer on top of the
-previous. Images are created from scratch or a base image.
+A Docker image is composed of multiple independent layers. Docker images are stacks of these layers and not a single, monolithic disk image. Docker images are created initially using a _docker file_. 
+Each line in a docker file is processed one by one and each line creates a new filesystem layer inside the docker image it creates. 
+Images are created from scratch or a base image.
 Images contain read only layers, images are layer onto images.
 
-Docker container is the same as a Docker image, except it
-has an additional READ/WRITE layer of the container.
+![Anatomy of a docker image](Learning-Aids/09-Containers-and-ECS/ImageAnatomy.png)
 
-If you have lots of containers with very similar base
-structures, they will share the parts that overlap.
-The other layers are reused between containers.
+##### What are images used for?
+
+1. A docker image is actually how we create a docker container. In fact a ocker container is just a running copy of a docker image with one crucial difference: a docker container has an additional *read/write* file system layer. File system layers --  the layers that make up the docker image -- by default are _read_ only; they never change after they are created. And so, the special read/write layer is added which allows containers to run. 
+
+If you have lots of containers with very similar base structures, they will share the parts that overlap. The other layers are reused between containers.
+
+2. The reuse architecture that is offered by the way containers do their disk images scales really well. Disk space when you have lots of containers is minimized because of this layered architecture. The base layer -- the OS -- they are generally made available by the OS vendors through something called a _container registry_ and a popular one is _docker hub_. 
 
 #### Container Registry
 
-Registry or hub of container images.
+A container registry or hub is a hub of container images. As a developer or solution architect, you use a dockerfile to create a container image. Then you upload that image to a private/public repository such as the docker hub. In the case of a public hub, other people will likely do the same including vendors of the base OS such as the CentOS example shown above. From there, these container images can then be deployed to docker hosts, which are just services running a container engine (e.g. docker). 
+
+A docker host can run many containers based on or more images. A single image can be to generate containers on many docker hosts. 
 Dockerfile can create a container image where it gets stored
 in the container registry.
-
-Docker hosts can run many containers based on one or more images.
-A single image can generate Containers on many different Docker hosts.
 
 #### Container Key Concepts
 
