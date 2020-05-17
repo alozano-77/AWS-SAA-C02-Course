@@ -2230,12 +2230,12 @@ Server style applications
 
 ### EC2 Instance Types
 
-General Purpose - default steady state workloads with even resources
-Compute Optimized - Media processing, scientific modeling and gaming
-Memory Optimized - Processing large in-memory data sets
-Accelerated Computing - Hardware GPU, FPGAs
-Storage Optimized - Large amounts of super fast local storage. Massive amounts
-of IO per second. Elastic search and analytic workloads.
+- **General Purpose** (T, M) - default steady state workloads with even resources
+- **Compute Optimized** (C) - Media processing, scientific modeling and gaming
+- **Memory Optimized** (R, X) - Processing large in-memory data sets
+- **Accelerated Computing** (P, G, F) - Hardware GPU, FPGAs
+- **Storage Optimized** (H, I, D) - Large amounts of super fast local storage.
+  Massive amounts of IO per second. Elastic search and analytic workloads.
 
 #### Naming Scheme
 
