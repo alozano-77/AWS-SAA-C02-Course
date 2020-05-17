@@ -76,6 +76,13 @@ There are additional services such as *Function as a Service*,
 
 ## AWS-Fundamentals
 
+### AWS Support Plans
+
+- Basic (free)
+- Developer (one user, general guidance)
+- Business (multiple users, personal guidance)
+- Enterprise (Tecnical account manager)
+
 ### Public vs Private Services
 
 Refers to the networking only, not permissions.
