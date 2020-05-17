@@ -2190,13 +2190,21 @@ handles it all. In EC2 this feature is called **enhanced networking**.
 
 ### EC2 Architecture and Resilience
 
-- EC2 instances are virtual machines run on EC2 hosts.
-- Shared hosts: Every customer is isolated even on the same shared hardware.
-- Dedicated hosts: Pay for entire host, don't pay for instances.
+EC2 instances are virtual machines run on EC2 hosts.
+
+Tenancy:
+
+- **Shared** - Instances are run on shared hardware, but isolated from other customers.
+- **Dedicated** - Instances are run on hardware that's dedicates to a single customer.
+  Dedicated instances may share hardware with other instances from the same AWS account
+  that are not Dedicated instances.
+- **Dedicated host** - Instances are run on a physical server fully dedicated for your use.
+  Pay for entire host, don't pay for instances.
+
 - AZ resilient service. They run within only one AZ system.
   - You can't access them cross zone.
 
- EC2 host contains
+EC2 host contains
 
 - Local hardware such as CPU and memory
 - Also have temporary instance store
