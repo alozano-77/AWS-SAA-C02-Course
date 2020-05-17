@@ -245,6 +245,7 @@ No charges, deletes the disk and prevents all future charges.
 #### AMI (Server Image)
 
 AMI can use used to create an instance or created from an instance.
+AMIs in one region are not available from other regions.
 
 Contains:
 
@@ -261,6 +262,13 @@ Contains:
 - Block Device Mapping: links the volumes that the AMI has and
 how they're presented to the operating system. Determines which volume is a
 boot volume and which volumes is a data volume.
+
+AMI Types:
+
+- Amazon Quick Start AMIs
+- AWS Marketplace AMIs
+- Community AMIs
+- Private AMIs
 
 #### Connecting to EC2
 
