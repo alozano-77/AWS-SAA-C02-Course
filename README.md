@@ -3053,7 +3053,7 @@ Parameter Store:
 - Can store plaintext and ciphertext.
   - This integrates with **kms** to encrypt passwords.
 - Allows for public parameters such as the latest AMI parameter to be stored
-and referenced for EC2 creating.
+and referenced during EC2 creation
 - Is a public service so any services needs access to the public sphere or
 to be an AWS public service.
 - Applications, EC2 instances, lambda functions can all request access to
@@ -3086,11 +3086,11 @@ We can use parameter store to store the configuration for the CW agent.
 
 ### EC2 Placement Groups
 
-#### Cluster Placement
+#### Cluster Placement -> Pack Instances Close Together
 
-Pack instances close together
+Designed so that instances within the same cluster are physically close together.
 
-Achieves the highest level of performance available with EC2.
+Achieves the highest level of performance possible inside EC2.
 
 Best practice is to launch all of the instances within that group at the
 same time.
@@ -3103,20 +3103,21 @@ EC2 host.
 
 All members have direct connections to each other. They can achieve
 **10 Gbps single stream** vs 5 Gbps normally. They also have the lowest
-latency and max PPS possible in AWS.
+latency and max packets-per-second (PPS) possible in AWS.
 
 If the hardware fails, the entire cluster will fail.
 
 ##### Cluster Placement Exam PowerUp
 
-- Clusters can't span AZs. The first AZ used will lock down the cluster.
+- **Clusters can't span AZs**. The first AZ used will lock down the cluster.
 - They can span VPC peers.
 - Requires a supported instance type.
-- Best practice to use the same type of instance and launch all at once.
-- This is the only way to achieve **10Gbps SINGLE stream**, other data metrics
-assume multiple streams.
+- Best practice to use the same type of instance (not mandatory).
+- Best practice to launch all instances at once (not mandatory).
+- This is the only way to achieve **10Gbps SINGLE stream performance**, other data metrics assume multiple streams.
+- Use cases: Performance, fast transfer speeds, and low consistent latency.
 
-#### Spread Placement
+#### Spread Placement -> Keep Instances Separated
 
 Keep instances separated
 
@@ -3130,13 +3131,13 @@ group.
 
 - Provides the highest level of availability and resilience.
   - Each instance by default runs from a different rack.
-- 7 instances per AZ is a hard limit.
+- **7 instances per AZ is a hard limit**.
 - Not supported for dedicated instances or hosts.
 
-Use case: small number of critical instances that need to be kept separated
-from each other. Several mirrors of an application
+- Use case: small number of critical instances that need to be kept separated
+from each other. Several mirrors of an application; different nodes of an application; etc.
 
-#### Partition Placement
+#### Partition Placement -> Groups of Instances Spread Apart
 
 Groups of instances spread apart
 
@@ -3166,8 +3167,7 @@ You can pay for a host on-demand or reservation with 1 or 3 year terms.
 The host hardware has physical sockets and cores. This dictates how
 many instances can be run on the HW.
 
-Hosts are designed for a specific size and family. If you purchase one host, you
-configure what type of instances you want to run on it. With the older VM
+Hosts are designed for a specific size and family. If you purchase one host, you configure what type of instances you want to run on it. With the older VM
 system you cannot mix and match. The new Nitro system allows for mixing and
 matching host size.
 
@@ -3176,7 +3176,7 @@ matching host size.
 - AMI Limits, some versions can't be used
 - Amazon RDS instances are not supported
 - Placement groups are not supported for dedicated hosts.
-- Hosts can be shared with other organization accounts using **RAM**
+- Hosts can be shared with other organization accounts using **Resource Access Manager (RAM)**
 - This is mostly used for licensing problems related to ports.
 
 ### Enhanced Networking
