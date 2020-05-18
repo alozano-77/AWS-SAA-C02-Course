@@ -76,6 +76,13 @@ There are additional services such as *Function as a Service*,
 
 ## AWS-Fundamentals
 
+### AWS Support Plans
+
+- Basic (free)
+- Developer (one user, general guidance)
+- Business (multiple users, personal guidance)
+- Enterprise (Tecnical account manager)
+
 ### Public vs Private Services
 
 Refers to the networking only, not permissions.
@@ -238,6 +245,7 @@ No charges, deletes the disk and prevents all future charges.
 #### AMI (Server Image)
 
 AMI can use used to create an instance or created from an instance.
+AMIs in one region are not available from other regions.
 
 Contains:
 
@@ -254,6 +262,13 @@ Contains:
 - Block Device Mapping: links the volumes that the AMI has and
 how they're presented to the operating system. Determines which volume is a
 boot volume and which volumes is a data volume.
+
+AMI Types:
+
+- Amazon Quick Start AMIs
+- AWS Marketplace AMIs
+- Community AMIs
+- Private AMIs
 
 #### Connecting to EC2
 
@@ -2175,13 +2190,21 @@ handles it all. In EC2 this feature is called **enhanced networking**.
 
 ### EC2 Architecture and Resilience
 
-- EC2 instances are virtual machines run on EC2 hosts.
-- Shared hosts: Every customer is isolated even on the same shared hardware.
-- Dedicated hosts: Pay for entire host, don't pay for instances.
+EC2 instances are virtual machines run on EC2 hosts.
+
+Tenancy:
+
+- **Shared** - Instances are run on shared hardware, but isolated from other customers.
+- **Dedicated** - Instances are run on hardware that's dedicates to a single customer.
+  Dedicated instances may share hardware with other instances from the same AWS account
+  that are not Dedicated instances.
+- **Dedicated host** - Instances are run on a physical server fully dedicated for your use.
+  Pay for entire host, don't pay for instances.
+
 - AZ resilient service. They run within only one AZ system.
   - You can't access them cross zone.
 
- EC2 host contains
+EC2 host contains
 
 - Local hardware such as CPU and memory
 - Also have temporary instance store
@@ -2230,12 +2253,12 @@ Server style applications
 
 ### EC2 Instance Types
 
-General Purpose - default steady state workloads with even resources
-Compute Optimized - Media processing, scientific modeling and gaming
-Memory Optimized - Processing large in-memory data sets
-Accelerated Computing - Hardware GPU, FPGAs
-Storage Optimized - Large amounts of super fast local storage. Massive amounts
-of IO per second. Elastic search and analytic workloads.
+- **General Purpose** (T, M) - default steady state workloads with even resources
+- **Compute Optimized** (C) - Media processing, scientific modeling and gaming
+- **Memory Optimized** (R, X) - Processing large in-memory data sets
+- **Accelerated Computing** (P, G, F) - Hardware GPU, FPGAs
+- **Storage Optimized** (H, I, D) - Large amounts of super fast local storage.
+  Massive amounts of IO per second. Elastic search and analytic workloads.
 
 #### Naming Scheme
 
