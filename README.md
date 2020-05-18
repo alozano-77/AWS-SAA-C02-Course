@@ -2825,18 +2825,25 @@ in the container registry.
 
 ### Elastic Container Service (ECS) Concepts
 
-- Accepts containers and instructions you provide.
+- Accepts containers and instructions you provide. It orchestrates where and how to run the containers. It is a managed container-based compute service. 
+
+ECS runs into two modes: 1. Using EC2; 2. Using Fargate. 
+
 - ECS allows you to create a cluster.
   - Clusters are where containers run from.
 - Container images will be located on a registry.
-  - AWS provides ECR (elastic container registry)
+  - AWS provides a registry called **Elastic Container Registry** (ECR). 
   - Dockerhub can be used as well.
-- **Container definition** gives ECS just enough info about the single container.
+- **Container definition** tell ECS where your container is. It tells ECS which port your container uses (e.g. port 80, which is http). Container definition gives ECS just enough info about a single container.
   - A pointer to which image to use and the ports that will be exposed.
 - **Task definitions** store the resources used by the task.
-  - Stores **task role**, an IAM role that allows the task access to other
-  AWS resources.
-- Task is not by itself highly available.
+  - It also stores the **task role**, an IAM role that allows the task access to other AWS resources.
+
+> Task roles are the best practice way for giving containers within ECS permissions to access AWS products and services.
+
+- Task does not scale on its own and it is not highly available.
+
+See the [AWS documentation on container definition](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html) and [task definition](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_TaskDefinition.html) for more information.
 
 ECS **Service** is configured via Service Definition and represents
 how many copies of a task you want to run for scaling and HA.
@@ -2856,7 +2863,7 @@ are within that VPC.
 You specify an initial size which will drive an **auto scaling group**.
 
 ECS using EC2 mode is not a serverless solution, you need to worry about
-capacity for your cluster.
+capacity and availability for your cluster.
 
 The container instances are not delivered as a managed service, they
 are managed as normal EC2 instances.
@@ -2872,7 +2879,7 @@ to access from the same pool of resources.
 Fargate deployment still uses a cluster with a VPC where AZs are specified.
 
 For ECS tasks, they are injected into the VPC. Each task is given an
-elastic network interface which has an IP address within the VPC. They then
+_elastic network interface_ which has an IP address within the VPC. They then
 run like a VPC resource.
 
 You only pay for the container resources you use.
@@ -2884,7 +2891,7 @@ If you already are using containers, use **ECS**.
 **EC2 mode** is good for a large workload if you are price conscious.
 This allows for spot pricing and prepayment.
 
-**Fargate** is great if you,
+**Fargate** is great if you:
 
 - Have a large workload but are overhead conscious.
 - Have small or burst style workloads.
@@ -2908,9 +2915,9 @@ This could perform some software installs and post install configs.
 Bootstrapping is done using **user data** and is injected into the instance
 in the same way that meta-data is. It is accessed using the meta-data IP.
 
-<http://169.254.169.254/latest/>
+<http://169.254.169.254/latest/user-data>
 
-Anything you pass in is executed by the instance OS only once on launch!
+Anything you pass in is executed by the instance OS **only once on launch!** It is for launch time configuration only. 
 
 EC2 doesn't validate the user data. You can tell EC2 to pass in trash data
 and the data will be injected. The OS needs to understand the user data.
@@ -2939,7 +2946,7 @@ EC2 doesn't know what the user data contains, it's just a block of data.
 The user data is not secure, anyone can see what gets passed in. For this
 reason it is important not to pass passwords or long term credentials.
 
-User data is limited to 16 KB in size. Anything larger than this will
+**User data is limited to 16 KB in size**. Anything larger than this will
 need to pass a script to download the larger set of data.
 
 User data can be modified if you stop the instance, change the user
@@ -2954,6 +2961,11 @@ downloads that are needed for the user.
 When looking at an AMI, this can be measured in minutes.
 
 AMI baking will front load the time needed by configuring as much as possible.
+
+- Use AMI backing for any part of the process that is time intensive.
+- Use bootstrap for the final configuration.
+
+This way you reduce the post-launch time and thus the boot-time-to-service.
 
 ### AWS::CloudFormation::Init
 
