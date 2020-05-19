@@ -81,7 +81,7 @@ There are additional services such as *Function as a Service*,
 - Basic (free)
 - Developer (one user, general guidance)
 - Business (multiple users, personal guidance)
-- Enterprise (Tecnical account manager)
+- Enterprise (Technical account manager)
 
 ### Public vs Private Services
 
