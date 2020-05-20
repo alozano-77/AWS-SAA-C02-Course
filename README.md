@@ -3526,6 +3526,7 @@ This does not provide fault tolerance as there will be some impact during change
   - Generally two times the price.
 - The standby replica cannot be accessed directly unless a fail occurs.
 - Failover is highly available, not fault tolerant.
+- Offers only high availability and minimizes disruptions associated with software updates, backups, and instance type changes not performance improvement or scalability. (Don't for exam questions that try to trick you into choosing options that say Multi-AZ can improve performance.)
 - Same region only (others AZ in the VPC).
 - Backups are taken from standby which removes performance impacts.
 - Failover can happen for a number of reasons.
@@ -3559,7 +3560,7 @@ between the compute resource and the storage. If you are using single AZ, this
 can impact your application. If you are using Multi-AZ, the snapshot occurs
 on the standby replica.
 
-Manual snapshots don't expire, you have to clean them yourself.
+**Manual snapshots don't expire**, you have to clean them yourself.
 Automatic Snapshots can be configured to make things easier.
 
 In addition to automated backup, every 5 minutes database transaction logs are
@@ -3567,7 +3568,7 @@ saved to S3. Transaction logs store the actual data which changes inside a
 database so the actual operations that are executed. This allows a database
 to be restored to a point in time often with 5 minute granularity.
 
-Automatic cleanups can be anywhere from 0 to 35 days.
+Automatic cleanups can be anywhere from *0 to 35* days.
 This means you can restore to any point in that time frame.
 This will use both the snapshots and the translation logs.
 
@@ -3600,7 +3601,7 @@ encryption, configuration, and networking without intervention.
 
 #### Why do these matter
 
-READ performance
+(READ Replicas) Performance Improvements
 
 - 5 direct read-replicas per DB instance.
 - Each of these provides an additional instance of read performance.
@@ -3610,14 +3611,18 @@ READ performance
 - Provides global resilience by using cross region replication.
 - They don't improve RTO
 
-Read Replicas provide near 0 RPO
+(Read Replicas) Availability Improvements
 
-- If the primary instance fails, you can promote a read-replica to take over.
+- Snapshots & backups improve recovery-point-objective (time difference between the last backup and the occurrence of a failure).
+- Provide near 0 RPO; RTOs still remain a problem.
+- If the primary instance fails, you can promote a read-replica (RR) quickly to take over thus resulting in a low RTO (the time between a failure and full recovery).
 - Once it is promoted, it allows for read and write.
 - Only works for failures.
   - Read-replicas will replicate data corruption.
   - In this case you must default back to snapshots and backups.
 - Promotion cannot be reversed.
+- RRs are for reads only until promoted.
+- Offers global availability improvements and global resilience. 
 
 ### Amazon Aurora
 
@@ -3707,7 +3712,7 @@ your data base to a previous point in time. This helps for data corruption.
 You can adjust the window backtrack will work for.
 
 Fast clones make a new database much faster than copying all the data.
-It references the original storage and only write the differences between
+It references the original storage and only stores the differences between
 the two. It uses a tiny amount of storage and only stores data that's changed
 in the clone or changed in the original after you make the clone.
 
@@ -3753,7 +3758,7 @@ Introduces the idea of secondary regions with up to 16 read only replicas.
 Replication from primary region to secondary regions happens at the storage
 layer and typically occurs within one second.
 
-- Great for cross region disaster recovery and business continuity.
+- Great for *cross region disaster recovery and business continuity*.
 - Global read scaling
   - Low latency performance improvements for international customers.
 - The application can perform read operations against the read replicas.
