@@ -3922,34 +3922,22 @@ Clients shouldn't see errors that occur with one server.
 
 ### 1.13.2. Application Load Balancer (ALB)
 
-ALB is a layer 7 or Application Layer Load Balancer.
-It is capable of inspecting data that passes through.
-It can understand the application layer `http` and `https` and
-take actions based on things in those protocols like paths, headers,
-and hosts.
+ALB is a layer 7 or Application Layer Load Balancer. It is capable of inspecting data that passes through it. It can understand the application layer `http` and `https` and
+take actions based on things in those protocols like paths, headers, and hosts.
 
-Capacity that you have as part of an ALB increases automatically based
-on the load which passes through that ALB. This is made of multiple ALB nodes
-each running in different AZs. This makes them scalable and highly available.
+All AWS load balancers are scalable and highly available. Capacity that you have as part of an ALB increases automatically based on the load which passes through that ALB. This is made of multiple ALB nodes each running in different AZs. This makes them scalable and highly available.
 
-Load balancing can be internet facing or internal.
-The difference is whether the nodes of the LB, the things which
-run in the AZs have public IP addresses or not.
+Load balancing can be internet facing or internal. The difference is whether the nodes of the LB, the things which run in the AZs have public IP addresses or not.
 
-Internet facing LB is designed to be connected to, from public internet based
-clients, and load balance them across targets.
+Internet facing LB is designed to be connected to, from public internet based clients, and load balance them across targets.
 
-Internal load balancer is not accessible from the internet and is used to load
-balance inside a VPC only.
+Internal load balancer is not accessible from the internet and is used to load balance inside a VPC only.
 
-Load balancer sits between a client and one or more servers.
-Front end or listening side, accepts connections from a client.
-Back end is used for distribution to the targets.
+Load balancer sits between a client and one or more servers. Front end or listening side, accepts connections from a client. Back end is used for distribution to the targets.
 
-LB billed on hourly rate and **Load Balancer Capacity Unit** LCU.
-LCU that you consume is based on the highest value for all of the
-individual measurements. You pay a certain number of LCUs based on your
-load over that hour.
+LB billed based on two things:
+1. A standard hourly rate.
+2. An LCU (**Load Balancer Capacity Unit**) rate. One LCU allows 25 connections per second, 3,000 active connections per minute, 1GB per hour for EC2 instances and IP addresses as targets, and 0.4GB per hour for Lambda functions as targets, and 1,000 rule evaluations per second. LCU that you consume is based on the highest value for all of the individual measurements. You pay a certain number of LCUs based on your load over that hour.
 
 #### 1.13.2.1. Cross zone load balancing
 
@@ -3968,14 +3956,14 @@ to direct traffic to different Target Groups based on their DNS.
 
 #### 1.13.2.2. ALB Exam PowerUp
 
-- Targets are one single compute resource that connections are connected
-towards.
+- Targets are one single compute resource that connections are directed
+towards. Targets represents Lambda functions, EC2 instances, ECS containers.
 - Target groups are groups of targets which are addressed using rules.
-- Rules are
-  - path based `/cat` or `/dog`
-  - host based if you want to use different DNS names.
+- Rules are:
+  - path-based `/cat` or `/dog`
+  - host-based if you want to use different DNS names.
 - Support EC2, EKS, Lambda, HTTPS, HTTP/2 and websockets.
-- ALB can use SNI for multiple SSL certs attached to that LB.
+- ALB can use Server Name Indication (SNI)[^1] for multiple SSL certs attached to that LB.
   - LB can direct individual domain names using SSL certs at different target
   groups.
 - AWS does not suggest using Classic Load Balancer (CLB), these are legacy.
@@ -5441,3 +5429,5 @@ This can be saved in the console or fed to other visualization tools.
 
 You can optimize the original data set to reduce the amount of space uses
 for the data and reduce the costs for querying that data. For more information see the AWS [documentation.](https://aws.amazon.com/cloudtrail/pricing/)
+
+[^1]: For more information on Server Name Indication see the Cloudfare SNI [documentation.](https://www.cloudflare.com/learning/ssl/what-is-sni/)
