@@ -1,377 +1,27 @@
----
-toc:
-  depth_from: 1
-  depth_to: 6
-  ordered: false
----
-
-# 1. SAA-C02 Notes {ignore=true}
+# 1. SAA-C02 Notes 
 
 > These are my personal notes from Adrian Cantrill's (SAA-C02) course.Learning Aids from [aws-sa-associate-saac02](https://github.com/acantril/aws-sa-associate-saac02). There may be errors, so please purchase his course to get the original content and show support <https://learn.cantrill.io.>
 
-## 1.1. Table of Contents {ignore=true}
-
-<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
-
-<!-- code_chunk_output -->
+**Table of Contents**
 
 - [1.2. Cloud Computing Fundamentals](#12-cloud-computing-fundamentals)
-  - [1.2.1. Public vs Private vs Multi Cloud](#121-public-vs-private-vs-multi-cloud)
-  - [1.2.2. Cloud Service Models](#122-cloud-service-models)
 - [1.3. AWS-Fundamentals](#13-aws-fundamentals)
-  - [1.3.1. Public vs Private Services](#131-public-vs-private-services)
-  - [1.3.2. AWS Global Infrastructure](#132-aws-global-infrastructure1)
-    - [1.3.2.1. Regions](#1321-regions)
-    - [1.3.2.2. AWS Edge Locations](#1322-aws-edge-locations)
-    - [1.3.2.3. AWS Management](#1323-aws-management)
-    - [1.3.2.4. Region's 3 Benefits](#1324-regions-3-benefits)
-  - [1.3.3. Regions and AZs](#133-regions-and-azs)
-    - [1.3.3.1. Service Resilience](#1331-service-resilience)
-  - [1.3.4. AWS Default VPC](#134-aws-default-vpc)
-    - [1.3.4.1. Default VPC Facts](#1341-default-vpc-facts)
-  - [1.3.5. Elastic Compute Cloud (EC2)](#135-elastic-compute-cloud-ec2)
-    - [1.3.5.1. Infrastructure as as Service (IaaS)](#1351-infrastructure-as-as-service-iaas)
-    - [1.3.5.2. Running State](#1352-running-state)
-    - [1.3.5.3. Stopped State](#1353-stopped-state)
-    - [1.3.5.4. Terminated State](#1354-terminated-state)
-    - [1.3.5.5. AMI (Server Image)](#1355-ami-server-image)
-    - [1.3.5.6. Connecting to EC2](#1356-connecting-to-ec2)
-  - [1.3.6. S3 (Default Storage Service)](#136-s3-default-storage-service)
-    - [1.3.6.1. Objects](#1361-objects)
-    - [1.3.6.2. Buckets](#1362-buckets)
-  - [1.3.7. CloudFormation Basics](#137-cloudformation-basics)
-  - [1.3.8. Resources](#138-resources)
-  - [1.3.9. CloudWatch Basics](#139-cloudwatch-basics)
-    - [1.3.9.1. Namespace](#1391-namespace)
-    - [1.3.9.2. Metric](#1392-metric)
-    - [1.3.9.3. Alarms](#1393-alarms)
-  - [1.3.10. Shared Responsibility Model](#1310-shared-responsibility-model)
-  - [1.3.11. High Availability (HA), Fault-Tolerance (FT), and Disaster Recover (DR)](#1311-high-availability-ha-fault-tolerance-ft-and-disaster-recover-dr)
-    - [1.3.11.1. High Availability (HA)](#13111-high-availability-ha)
-    - [1.3.11.2. Fault-Tolerance (FT)](#13112-fault-tolerance-ft)
-    - [1.3.11.3. Disaster Recover (DR)](#13113-disaster-recover-dr)
-  - [1.3.12. Domain Name System (DNS)](#1312-domain-name-system-dns)
-    - [1.3.12.1. DNS Root](#13121-dns-root)
-    - [1.3.12.2. DNS Hierarchy](#13122-dns-hierarchy)
-  - [1.3.13. Route53 Fundamentals](#1313-route53-fundamentals)
-    - [1.3.13.1. Register Domains](#13131-register-domains)
-    - [1.3.13.2. Route53 Details](#13132-route53-details)
-  - [1.3.14. DNS Record](#1314-dns-record)
-    - [1.3.14.1. TTL - Time To Live](#13141-ttl-time-to-live)
 - [1.4. IAM-Accounts-AWS-Organizations](#14-iam-accounts-aws-organizations)
-  - [1.4.1. IAM Identity Policies](#141-iam-identity-policies)
-    - [1.4.1.1. Statement Components](#1411-statement-components)
-    - [1.4.1.2. Priority Level](#1412-priority-level)
-    - [1.4.1.3. Inline Policies and Managed Policies](#1413-inline-policies-and-managed-policies)
-  - [1.4.2. IAM Users](#142-iam-users)
-    - [1.4.2.1. Amazon Resource Name (ARN)](#1421-amazon-resource-name-arn)
-    - [1.4.2.2. IAM FACTS](#1422-iam-facts)
-  - [1.4.3. IAM Groups](#143-iam-groups)
-  - [1.4.4. IAM Roles](#144-iam-roles)
-  - [1.4.5. When to use IAM Roles](#145-when-to-use-iam-roles)
-    - [1.4.5.1. Emergency or out of the usual situations](#1451-emergency-or-out-of-the-usual-situations)
-    - [1.4.5.2. Adding AWS into existing corp environment](#1452-adding-aws-into-existing-corp-environment)
-    - [1.4.5.3. Making an app with 1,000,000 users](#1453-making-an-app-with-1000000-users)
-    - [1.4.5.4. Cross Account Access](#1454-cross-account-access)
-  - [1.4.6. AWS Organizations](#146-aws-organizations)
-    - [1.4.6.1. Organization Root](#1461-organization-root)
-    - [1.4.6.2. Consolidated billing](#1462-consolidated-billing)
-    - [1.4.6.3. Create new accounts in an org](#1463-create-new-accounts-in-an-org)
-    - [1.4.6.4. Role Switching](#1464-role-switching)
-  - [1.4.7. Service Control Policies](#147-service-control-policies)
-    - [1.4.7.1. Allow List vs Deny List](#1471-allow-list-vs-deny-list)
-  - [1.4.8. CloudWatch Logs](#148-cloudwatch-logs)
-    - [1.4.8.1. Architecture of CloudWatch Logs](#1481-architecture-of-cloudwatch-logs)
-  - [1.4.9. CloudTrail Essentials](#149-cloudtrail-essentials)
-    - [1.4.9.1. CloudTrail Trail](#1491-cloudtrail-trail)
-    - [1.4.9.2. CloudTrail Exam PowerUp](#1492-cloudtrail-exam-powerup)
-    - [1.4.9.3. CloudTrail Pricing](#1493-cloudtrail-pricing)
 - [1.5. Simple-Storage-Service-(S3)](#15-simple-storage-service-s3)
-  - [1.5.1. S3 Security](#151-s3-security)
-    - [1.5.1.1. S3 Bucket Policy](#1511-s3-bucket-policy)
-    - [1.5.1.2. ACLs (Legacy)](#1512-acls-legacy)
-    - [1.5.1.3. S3 Exam PowerUp](#1513-s3-exam-powerup)
-  - [1.5.2. S3 Static Hosting](#152-s3-static-hosting)
-    - [1.5.2.1. Offloading](#1521-offloading)
-    - [1.5.2.2. Out-of-band pages](#1522-out-of-band-pages)
-    - [1.5.2.3. S3 Pricing](#1523-s3-pricing)
-  - [1.5.3. Object Versioning and MFA Delete](#153-object-versioning-and-mfa-delete)
-    - [1.5.3.1. MFA Delete](#1531-mfa-delete)
-  - [1.5.4. S3 Performance Optimization](#154-s3-performance-optimization)
-  - [1.5.5. Encryption 101](#155-encryption-101)
-    - [1.5.5.1. Encryption at Rest](#1551-encryption-at-rest)
-    - [1.5.5.2. Encryption in Transit](#1552-encryption-in-transit)
-    - [1.5.5.3. Terms](#1553-terms)
-    - [1.5.5.4. Symmetric Encryption](#1554-symmetric-encryption)
-    - [1.5.5.5. Asymmetric Encryption](#1555-asymmetric-encryption)
-    - [1.5.5.6. Signing](#1556-signing)
-    - [1.5.5.7. Steganography](#1557-steganography)
-  - [1.5.6. Key Management Service (KMS)](#156-key-management-service-kms)
-    - [1.5.6.1. CMKs - Customer Master Keys](#1561-cmks-customer-master-keys)
-    - [1.5.6.2. Data Encryption Key (DEK)](#1562-data-encryption-key-dek)
-    - [1.5.6.3. KMS Key Concepts](#1563-kms-key-concepts)
-    - [1.5.6.4. Key Policy (resource policy)](#1564-key-policy-resource-policy)
-  - [1.5.7. KMS Key Demo](#157-kms-key-demo)
-  - [1.5.8. Object Encryption](#158-object-encryption)
-    - [1.5.8.1. SSE-C (Server-side encryption with customer provided keys)](#1581-sse-c-server-side-encryption-with-customer-provided-keys)
-    - [1.5.8.2. SSE-S3 AES256 (Server-side encryption w/ Amazon S3 managed keys)](#1582-sse-s3-aes256-server-side-encryption-w-amazon-s3-managed-keys)
-    - [1.5.8.3. SSE-KMS (Server-side encryption w/ customer master keys stored in AWS KMS)](#1583-sse-kms-server-side-encryption-w-customer-master-keys-stored-in-aws-kms)
-  - [1.5.9. S3 Object Storage Classes](#159-s3-object-storage-classes)
-    - [1.5.9.1. S3 Standard](#1591-s3-standard)
-    - [1.5.9.2. S3 Standard-IA](#1592-s3-standard-ia)
-    - [1.5.9.3. One Zone-IA](#1593-one-zone-ia)
-    - [1.5.9.4. S3 Glacier](#1594-s3-glacier)
-    - [1.5.9.5. S3 Glacier Deep Archive](#1595-s3-glacier-deep-archive)
-    - [1.5.9.6. S3 Intelligent-Tiering](#1596-s3-intelligent-tiering)
-  - [1.5.10. Object Lifecycle Management](#1510-object-lifecycle-management)
-    - [1.5.10.1. Transition Actions](#15101-transition-actions)
-    - [1.5.10.2. Expiration Actions](#15102-expiration-actions)
-  - [1.5.11. S3 Replication](#1511-s3-replication)
-    - [1.5.11.1. S3 Replication Options](#15111-s3-replication-options)
-    - [1.5.11.2. Important Replication Tips](#15112-important-replication-tips)
-    - [1.5.11.3. Why use replication](#15113-why-use-replication)
-  - [1.5.12. S3 Presigned URL](#1512-s3-presigned-url)
-    - [1.5.12.1. S3 Presigned URL Exam PowerUp](#15121-s3-presigned-url-exam-powerup)
-  - [1.5.13. S3 Select and Glacier Select](#1513-s3-select-and-glacier-select)
 - [1.6. Virtual-Private-Cloud-VPC](#16-virtual-private-cloud-vpc)
-  - [1.6.1. Networking Refresher](#161-networking-refresher)
-    - [1.6.1.1. IPv4 - RFC 791 (1981)](#1611-ipv4-rfc-791-1981)
-    - [1.6.1.2. Classful Addressing](#1612-classful-addressing)
-    - [1.6.1.3. Internet / Private IPs - RFC1918](#1613-internet-private-ips-rfc1918)
-    - [1.6.1.4. Classless inter-domain routing (CIDR)](#1614-classless-inter-domain-routing-cidr)
-    - [1.6.1.5. IP address notations to remember](#1615-ip-address-notations-to-remember)
-    - [1.6.1.6. Packets](#1616-packets)
-    - [1.6.1.7. IPv6 - RFC 8200 (2017)](#1617-ipv6-rfc-8200-2017)
-  - [1.6.2. VPC Sizing and Structure](#162-vpc-sizing-and-structure)
-    - [1.6.2.1. How to size VPC](#1621-how-to-size-vpc)
-  - [1.6.3. Custom VPC](#163-custom-vpc)
-    - [1.6.3.1. Custom VPC Facts](#1631-custom-vpc-facts)
-    - [1.6.3.2. DNS provided by R53](#1632-dns-provided-by-r53)
-  - [1.6.4. VPC Subnets](#164-vpc-subnets)
-    - [1.6.4.1. Reserved IP addresses](#1641-reserved-ip-addresses)
-    - [1.6.4.2. DHCP Options Set](#1642-dhcp-options-set)
-    - [1.6.4.3. IP allocation Options](#1643-ip-allocation-options)
-  - [1.6.5. VPC Routing and Internet Gateway](#165-vpc-routing-and-internet-gateway)
-    - [1.6.5.1. Route Tables](#1651-route-tables)
-    - [1.6.5.2. Internet Gateway](#1652-internet-gateway)
-    - [1.6.5.3. Using IGW](#1653-using-igw)
-    - [1.6.5.4. Bastion Host / Jumpbox](#1654-bastion-host-jumpbox)
-  - [1.6.6. Network Access Control List (NACL)](#166-network-access-control-list-nacl)
-    - [1.6.6.1. NACLs example below](#1661-nacls-example-below)
-    - [1.6.6.2. NACL Exam PowerUp](#1662-nacl-exam-powerup)
-  - [1.6.7. Security Groups](#167-security-groups)
-    - [1.6.7.1. SGs vs NACL](#1671-sgs-vs-nacl)
-  - [1.6.8. Network Address Translation (NAT) Gateway](#168-network-address-translation-nat-gateway)
 - [1.7. Elastic-Cloud-Compute-EC2](#17-elastic-cloud-compute-ec2)
-  - [1.7.1. Virtualization 101](#171-virtualization-101)
-    - [1.7.1.1. Emulated Virtualization - Software Virtualization](#1711-emulated-virtualization-software-virtualization)
-    - [1.7.1.2. Para-Virtualization](#1712-para-virtualization)
-    - [1.7.1.3. Hardware Assisted Virtualization](#1713-hardware-assisted-virtualization)
-    - [1.7.1.4. SR-IOV (Singe Route IO virtualization)](#1714-sr-iov-singe-route-io-virtualization)
-  - [1.7.2. EC2 Architecture and Resilience](#172-ec2-architecture-and-resilience)
-    - [1.7.2.1. EC2 Strengths](#1721-ec2-strengths)
-  - [1.7.3. EC2 Instance Types](#173-ec2-instance-types)
-    - [1.7.3.1. Naming Scheme](#1731-naming-scheme)
-  - [1.7.4. Storage Refresher](#174-storage-refresher)
-    - [1.7.4.1. Three types of storage](#1741-three-types-of-storage)
-    - [1.7.4.2. Storage Performance](#1742-storage-performance)
-  - [1.7.5. Elastic Block Store (EBS)](#175-elastic-block-store-ebs)
-    - [1.7.5.1. General Purpose SSD (gp2)](#1751-general-purpose-ssd-gp2)
-    - [1.7.5.2. Provisioned IOPS SSD (io1)](#1752-provisioned-iops-ssd-io1)
-    - [1.7.5.3. HDD Volume Types](#1753-hdd-volume-types)
-    - [1.7.5.4. EBS Exam Power Up](#1754-ebs-exam-power-up)
-  - [1.7.6. EC2 Instance Store](#176-ec2-instance-store)
-    - [1.7.6.1. Instance Store Exam PowerUp](#1761-instance-store-exam-powerup)
-  - [1.7.7. EBS vs Instance Store](#177-ebs-vs-instance-store)
-  - [1.7.8. EBS Snapshots, restore, and fast snapshot restore](#178-ebs-snapshots-restore-and-fast-snapshot-restore)
-    - [1.7.8.1. Snapshot and volume performance](#1781-snapshot-and-volume-performance)
-    - [1.7.8.2. Snapshot Consumption and Billing](#1782-snapshot-consumption-and-billing)
-    - [1.7.8.3. EBS Encryption](#1783-ebs-encryption)
-      - [1.7.8.3.1. EBS Encryption Exam Power Up](#17831-ebs-encryption-exam-power-up)
-  - [1.7.9. EC2 Network Interfaces, Instance IPs and DNS](#179-ec2-network-interfaces-instance-ips-and-dns)
-    - [1.7.9.1. Elastic Network Interface (ENI)](#1791-elastic-network-interface-eni)
-    - [1.7.9.2. ENI Exam PowerUp](#1792-eni-exam-powerup)
-  - [1.7.10. Amazon Machine Image (AMI)](#1710-amazon-machine-image-ami)
-    - [1.7.10.1. AMI Lifecycle](#17101-ami-lifecycle)
-    - [1.7.10.2. AMI Exam PowerUps](#17102-ami-exam-powerups)
-  - [1.7.11. EC2 Pricing Models](#1711-ec2-pricing-models)
-    - [1.7.11.1. On-Demand Instances](#17111-on-demand-instances)
-    - [1.7.11.2. Spot Instances](#17112-spot-instances)
-    - [1.7.11.3. Reserved Instance](#17113-reserved-instance)
-  - [1.7.12. Instance Status Checks and Autorecovery](#1712-instance-status-checks-and-autorecovery)
-  - [1.7.13. Horizontal and Vertical Scaling](#1713-horizontal-and-vertical-scaling)
-    - [1.7.13.1. Vertical Scaling](#17131-vertical-scaling)
-    - [1.7.13.2. Horizontal Scaling](#17132-horizontal-scaling)
-    - [1.7.13.3. Benefits of Horizontal Scaling](#17133-benefits-of-horizontal-scaling)
-  - [1.7.14. Instance Metadata](#1714-instance-metadata)
 - [1.8. Containers-and-ECS](#18-containers-and-ecs)
-  - [1.8.1. Intro to Containers](#181-intro-to-containers)
-    - [1.8.1.1. Image Anatomy](#1811-image-anatomy)
-      - [1.8.1.1.1. What are images used for](#18111-what-are-images-used-for)
-    - [1.8.1.2. Container Registry](#1812-container-registry)
-    - [1.8.1.3. Container Key Concepts](#1813-container-key-concepts)
-  - [1.8.2. Elastic Container Service (ECS) Concepts](#182-elastic-container-service-ecs-concepts)
-  - [1.8.3. ECS Cluster Types](#183-ecs-cluster-types)
-    - [1.8.3.1. EC2 mode](#1831-ec2-mode)
-    - [1.8.3.2. Fargate mode](#1832-fargate-mode)
-    - [1.8.3.3. EC2 vs ECS(EC2) vs Fargate](#1833-ec2-vs-ecsec2-vs-fargate)
 - [1.9. Advanced-EC2](#19-advanced-ec2)
-  - [1.9.1. Bootstrapping EC2 using User Data](#191-bootstrapping-ec2-using-user-data)
-    - [1.9.1.1. Bootstrapping Architecture](#1911-bootstrapping-architecture)
-    - [1.9.1.2. User Data Key Points](#1912-user-data-key-points)
-    - [1.9.1.3. Boot-Time-To-Service-Time](#1913-boot-time-to-service-time)
-  - [1.9.2. AWS::CloudFormation::Init](#192-awscloudformationinit)
-    - [1.9.2.1. cfn-init explained](#1921-cfn-init-explained)
-    - [1.9.2.2. CreationPolicy and Signals](#1922-creationpolicy-and-signals)
-  - [1.9.3. EC2 Instance Roles](#193-ec2-instance-roles)
-  - [1.9.4. AWS System Manager Parameter Store](#194-aws-system-manager-parameter-store)
-  - [1.9.5. System and Application Logging on EC2](#195-system-and-application-logging-on-ec2)
-  - [1.9.6. EC2 Placement Groups](#196-ec2-placement-groups)
-    - [1.9.6.1. Cluster Placement -> Pack Instances Close Together](#1961-cluster-placement-pack-instances-close-together)
-      - [1.9.6.1.1. Cluster Placement Exam PowerUp](#19611-cluster-placement-exam-powerup)
-    - [1.9.6.2. Spread Placement -> Keep Instances Separated](#1962-spread-placement-keep-instances-separated)
-      - [1.9.6.2.1. Spread Placement Exam PowerUp](#19621-spread-placement-exam-powerup)
-    - [1.9.6.3. Partition Placement -> Groups of Instances Spread Apart](#1963-partition-placement-groups-of-instances-spread-apart)
-      - [1.9.6.3.1. Partition Placement Exam PowerUp](#19631-partition-placement-exam-powerup)
-  - [1.9.7. EC2 Dedicated Hosts](#197-ec2-dedicated-hosts)
-    - [1.9.7.1. Dedicated Hosts Limitations](#1971-dedicated-hosts-limitations)
-  - [1.9.8. Enhanced Networking](#198-enhanced-networking)
-    - [1.9.8.1. EBS Optimized](#1981-ebs-optimized)
 - [1.10. Route-53](#110-route-53)
-  - [1.10.1. Public Hosted Zones](#1101-public-hosted-zones)
-  - [1.10.2. Route 53 Health Checks](#1102-route-53-health-checks)
-  - [1.10.3. Route 53 Routing Policies Examples](#1103-route-53-routing-policies-examples)
 - [1.11. Relational-Database-Service-RDS](#111-relational-database-service-rds)
-  - [1.11.1. Database Refresher](#1111-database-refresher)
-    - [1.11.1.1. Relational (SQL)](#11111-relational-sql)
-    - [1.11.1.2. Non-Relational (NoSQL)](#11112-non-relational-nosql)
-      - [1.11.1.2.1. Key-Value databases](#111121-key-value-databases)
-      - [1.11.1.2.2. Wide Column Store](#111122-wide-column-store)
-      - [1.11.1.2.3. Document](#111123-document)
-      - [1.11.1.2.4. Row Database (MySQL)](#111124-row-database-mysql)
-      - [1.11.1.2.5. Column Database (Redshift)](#111125-column-database-redshift)
-      - [1.11.1.2.6. Graph](#111126-graph)
-  - [1.11.2. Databases on EC2](#1112-databases-on-ec2)
-    - [1.11.2.1. Reasons EC2 Database might make sense](#11121-reasons-ec2-database-might-make-sense)
-    - [1.11.2.2. Reasons why you really shouldn't run a database on EC2](#11122-reasons-why-you-really-shouldnt-run-a-database-on-ec2)
-  - [1.11.3. Relational Database Service (RDS)](#1113-relational-database-service-rds)
-    - [1.11.3.1. RDS Database Instance](#11131-rds-database-instance)
-  - [1.11.4. RDS Multi AZ (High-Availability)](#1114-rds-multi-az-high-availability)
-    - [1.11.4.1. RDS Exam PowerUp](#11141-rds-exam-powerup)
-  - [1.11.5. RDS Backup and Restores](#1115-rds-backup-and-restores)
-    - [1.11.5.1. RDS Backup Exam PowerUp](#11151-rds-backup-exam-powerup)
-  - [1.11.6. RDS Read-Replicas](#1116-rds-read-replicas)
-    - [1.11.6.1. Why do these matter](#11161-why-do-these-matter)
-  - [1.11.7. Amazon Aurora](#1117-amazon-aurora)
-    - [1.11.7.1. Aurora Endpoints](#11171-aurora-endpoints)
-    - [1.11.7.2. Costs](#11172-costs)
-    - [1.11.7.3. Aurora Restore, Clone and Backtrack](#11173-aurora-restore-clone-and-backtrack)
-  - [1.11.8. Aurora Serverless](#1118-aurora-serverless)
-    - [1.11.8.1. Aurora Serverless - Use Cases](#11181-aurora-serverless-use-cases)
-  - [1.11.9. Aurora Global Database](#1119-aurora-global-database)
-  - [1.11.10. Aurora Multi-Master Writes](#11110-aurora-multi-master-writes)
-  - [1.11.11. Database Migration Service (DMS)](#11111-database-migration-service-dms)
 - [1.12. Network-Storage-EFS](#112-network-storage-efs)
-  - [1.12.1. EFS Architecture](#1121-efs-architecture)
-    - [1.12.1.1. Elastic File System Explained](#11211-elastic-file-system-explained)
-    - [1.12.1.2. EFS Exam PowerUp](#11212-efs-exam-powerup)
 - [1.13. HA-and-Scaling](#113-ha-and-scaling)
-  - [1.13.1. Load Balancing Fundamentals](#1131-load-balancing-fundamentals)
-    - [1.13.1.1. Load Balancers Architecture](#11311-load-balancers-architecture)
-    - [1.13.1.2. LB Exam PowerUp](#11312-lb-exam-powerup)
-  - [1.13.2. Application Load Balancer (ALB)](#1132-application-load-balancer-alb)
-    - [1.13.2.1. Cross zone load balancing](#11321-cross-zone-load-balancing)
-    - [1.13.2.2. ALB Exam PowerUp](#11322-alb-exam-powerup)
-  - [1.13.3. Launch Configuration and Templates](#1133-launch-configuration-and-templates)
-  - [1.13.4. Autoscaling Groups](#1134-autoscaling-groups)
-    - [1.13.4.1. Scaling Policies](#11341-scaling-policies)
-  - [1.13.5. Network Load Balancer (NLB)](#1135-network-load-balancer-nlb)
-  - [1.13.6. SSL Offload and Session Stickiness](#1136-ssl-offload-and-session-stickiness)
-    - [1.13.6.1. Bridging - Default mode](#11361-bridging-default-mode)
-    - [1.13.6.2. Pass-through - Network Load Balancer](#11362-pass-through-network-load-balancer)
-    - [1.13.6.3. Offload](#11363-offload)
-    - [1.13.6.4. Connection Stickiness](#11364-connection-stickiness)
 - [1.14. Serverless-and-App-Services](#114-serverless-and-app-services)
-  - [1.14.1. Architecture Evolution](#1141-architecture-evolution)
-    - [1.14.1.1. Monolithic](#11411-monolithic)
-    - [1.14.1.2. Tiered](#11412-tiered)
-    - [1.14.1.3. Evolving with Queues](#11413-evolving-with-queues)
-    - [1.14.1.4. Event Driven Architecture](#11414-event-driven-architecture)
-  - [1.14.2. AWS Lambda](#1142-aws-lambda)
-    - [1.14.2.1. Lambda Architecture](#11421-lambda-architecture)
-    - [1.14.2.2. Key Considerations](#11422-key-considerations)
-  - [1.14.3. CloudWatch Events and EventBridge](#1143-cloudwatch-events-and-eventbridge)
-    - [1.14.3.1. CloudWatch Events Key Concepts](#11431-cloudwatch-events-key-concepts)
-  - [1.14.4. Application Programming Interface (API) Gateway](#1144-application-programming-interface-api-gateway)
-  - [1.14.5. Serverless](#1145-serverless)
-    - [1.14.5.1. Example of Serverless](#11451-example-of-serverless)
-  - [1.14.6. Simple Notification Service (SNS)](#1146-simple-notification-service-sns)
-  - [1.14.7. AWS Step Functions](#1147-aws-step-functions)
-    - [1.14.7.1. Step Function States](#11471-step-function-states)
-  - [1.14.8. Simple Queue Service (SQS)](#1148-simple-queue-service-sqs)
-  - [1.14.9. Kinesis](#1149-kinesis)
-  - [1.14.10. SQS vs Kinesis](#11410-sqs-vs-kinesis)
 - [1.15. CDN-and-Optimization](#115-cdn-and-optimization)
-  - [1.15.1. Architecture Basics](#1151-architecture-basics)
-    - [1.15.1.1. Caching Optimization](#11511-caching-optimization)
-  - [1.15.2. AWS Certificate Manager (ACM)](#1152-aws-certificate-manager-acm)
-  - [1.15.3. Origin Access Identity (OAI)](#1153-origin-access-identity-oai)
-  - [1.15.4. AWS Global Accelerator](#1154-aws-global-accelerator)
 - [1.16. Advanced-VPC](#116-advanced-vpc)
-  - [1.16.1. VPC Flow Logs](#1161-vpc-flow-logs)
-  - [1.16.2. Egress-Only Internet Gateway](#1162-egress-only-internet-gateway)
-  - [1.16.3. VPC Endpoints (Gateway)](#1163-vpc-endpoints-gateway)
-  - [1.16.4. VPC Endpoints (Interface)](#1164-vpc-endpoints-interface)
-    - [1.16.4.1. Gateway Endpoints vs Interface Endpoints](#11641-gateway-endpoints-vs-interface-endpoints)
-  - [1.16.5. VPC Peering](#1165-vpc-peering)
 - [1.17. Hybrid-and-Migration](#117-hybrid-and-migration)
-  - [1.17.1. AWS Site-to-Site VPN](#1171-aws-site-to-site-vpn)
-  - [1.17.2. AWS Direct Connect (DX)](#1172-aws-direct-connect-dx)
-  - [1.17.3. AWS Transit Gateway (TGW)](#1173-aws-transit-gateway-tgw)
-  - [1.17.4. Storage Gateway](#1174-storage-gateway)
-  - [1.17.5. Snowball / Edge / Snowmobile](#1175-snowball-edge-snowmobile)
-    - [1.17.5.1. Snowball](#11751-snowball)
-    - [1.17.5.2. Snowball Edge](#11752-snowball-edge)
-    - [1.17.5.3. Snowmobile](#11753-snowmobile)
-  - [1.17.6. AWS Directory Service](#1176-aws-directory-service)
-    - [1.17.6.1. Directory Modes](#11761-directory-modes)
-  - [1.17.7. AWS DataSync](#1177-aws-datasync)
-    - [1.17.7.1. AWS DataSync Components](#11771-aws-datasync-components)
-  - [1.17.8. FSx for Windows File Server](#1178-fsx-for-windows-file-server)
-    - [1.17.8.1. Words to look for](#11781-words-to-look-for)
 - [1.18. Security-Deployment-Operations](#118-security-deployment-operations)
-  - [1.18.1. AWS Secrets Manager](#1181-aws-secrets-manager)
-    - [1.18.1.1. Secrets Manager Example](#11811-secrets-manager-example)
-  - [1.18.2. AWS Shield and WAF (Web Application Firewall)](#1182-aws-shield-and-waf-web-application-firewall)
-    - [1.18.2.1. Example of Architecture](#11821-example-of-architecture)
-  - [1.18.3. CloudHSM](#1183-cloudhsm)
-    - [1.18.3.1. Cloud HSM Use Cases](#11831-cloud-hsm-use-cases)
 - [1.19. NoSQL-and-DynamoDB](#119-nosql-and-dynamodb)
-  - [1.19.1. DynamoDB Architecture](#1191-dynamodb-architecture)
-    - [1.19.1.1. Dynamo DB Tables](#11911-dynamo-db-tables)
-    - [1.19.1.2. Dynamo DB Backups](#11912-dynamo-db-backups)
-    - [1.19.1.3. Dynamo DB Considerations](#11913-dynamo-db-considerations)
-  - [1.19.2. DynamoDB Operations, Consistency, and Performance](#1192-dynamodb-operations-consistency-and-performance)
-    - [1.19.2.1. DynamoDB Reading and Writing](#11921-dynamodb-reading-and-writing)
-    - [1.19.2.2. Query](#11922-query)
-    - [1.19.2.3. Scan](#11923-scan)
-    - [1.19.2.4. DynamoDB Consistency Model](#11924-dynamodb-consistency-model)
-    - [1.19.2.5. WCU Example Calculation](#11925-wcu-example-calculation)
-    - [1.19.2.6. RCU Example Calculation](#11926-rcu-example-calculation)
-  - [1.19.3. DynamoDB Streams and Triggers](#1193-dynamodb-streams-and-triggers)
-    - [1.19.3.1. Trigger Concepts](#11931-trigger-concepts)
-  - [1.19.4. DynamoDB Local (LSI) and Global (GSI) Secondary Indexes](#1194-dynamodb-local-lsi-and-global-gsi-secondary-indexes)
-    - [1.19.4.1. Local Secondary Indexes (LSI)](#11941-local-secondary-indexes-lsi)
-    - [1.19.4.2. Global Secondary Index (GSI)](#11942-global-secondary-index-gsi)
-    - [1.19.4.3. LSI and GSI Considerations](#11943-lsi-and-gsi-considerations)
-  - [1.19.5. DynamoDB Global Tables](#1195-dynamodb-global-tables)
-  - [1.19.6. DynamoDB Accelerator (DAX)](#1196-dynamodb-accelerator-dax)
-    - [1.19.6.1. DAX Architecture](#11961-dax-architecture)
-    - [1.19.6.2. DAX Considerations](#11962-dax-considerations)
-  - [1.19.7. Amazon Athena](#1197-amazon-athena)
-    - [1.19.7.1. Athena Explained](#11971-athena-explained)
-
-<!-- /code_chunk_output -->
 
 ---
 
@@ -439,7 +89,7 @@ This is done by taking a part of the private service and projecting it into the
 AWS public zone which allows public internet to make inbound or outbound
 connections.
 
-### 1.3.2. AWS Global Infrastructure[^1]
+### 1.3.2. AWS Global Infrastructure
 
 #### 1.3.2.1. Regions
 
@@ -4271,6 +3921,8 @@ Clients shouldn't see errors that occur with one server.
 ALB is a layer 7 or Application Layer Load Balancer. It is capable of inspecting data that passes through it. It can understand the application layer `http` and `https` and
 take actions based on things in those protocols like paths, headers, and hosts.
 
+![OSI Model](/Learning-Aids/14-HA-and-Scaling/OSINetworkModel.png)
+
 All AWS load balancers are scalable and highly available. Capacity that you have as part of an ALB increases automatically based on the load which passes through that ALB. This is made of multiple ALB nodes each running in different AZs. This makes them scalable and highly available.
 
 Load balancing can be internet facing or internal. The difference is whether the nodes of the LB, the things which run in the AZs have public IP addresses or not.
@@ -4309,7 +3961,7 @@ towards. Targets represents Lambda functions, EC2 instances, ECS containers.
   - path-based `/cat` or `/dog`
   - host-based if you want to use different DNS names.
 - Support EC2, EKS, Lambda, HTTPS, HTTP/2 and websockets.
-- ALB can use Server Name Indication (SNI)[^2] for multiple SSL certs attached to that LB.
+- ALB can use Server Name Indication (SNI)[^1] for multiple SSL certs attached to that LB.
   - LB can direct individual domain names using SSL certs at different target
   groups.
 - AWS does not suggest using Classic Load Balancer (CLB), these are legacy.
@@ -4317,18 +3969,21 @@ towards. Targets represents Lambda functions, EC2 instances, ECS containers.
 
 ### 1.13.3. Launch Configuration and Templates
 
-They are documents which allow you to config an EC2 instance in advance.
-Anything you usually define at the point of launching an instance can be
-selected with a Launch Configuration (LC) or Launch Template (LT).
+They are documents which allow you to define the configuration of an EC2 instance in advance.
 
-LTs are newer and provide more features than LCs like versioning.
+They allow you to configure:
 
-Both of these are not editable. You define them once and that configuration
-is locked.
-If you need to adjust a configuration, you must make a new one and launch it.
+- AMIs to use; Instance Type; Storate and Key Pairs. 
+- Networking and Security Groups
+- Userdata & IAM Role
 
-LTs can be used to save time when provisioning EC2 instances
-from the console UI / CLI.
+Anything you usually define at the point of launching an instance can be selected with a Launch Configuration (LC) or Launch Template (LT).
+
+LTs are newer and provide more features than LCs such as T2/T3 unlimited, placement groups, capacity reservations, elastic graphics, and versioning.
+
+Both of these are not editable. You define them once and that configuration is locked. If you need to adjust a configuration, you must make a new one and launch it.
+
+LTs can be used to save time when provisioning EC2 instances from the console UI / CLI.
 
 ### 1.13.4. Autoscaling Groups
 
@@ -4336,9 +3991,9 @@ from the console UI / CLI.
 - They make use of LCs or LTs to know what to provision.
 - Autoscaling group uses one LC or one version of a LT which it's linked with.
 - Three values to control
-  - minimum
-  - desired
-  - maximum
+  - minimum size
+  - desired capacity
+  - maximum size
 
 Provision or terminate instances to keep at the desired level
 Scaling Policies can trigger this based on metrics.
@@ -4347,9 +4002,12 @@ Autoscaling Groups will distribute EC2 instances to try and keep the AZs equal.
 
 #### 1.13.4.1. Scaling Policies
 
-Manual Scaling - manually adjust the desired capacity
-Scheduled Scaling - time based adjustments
-Dynamic Scaling
+Scaling policies are rules that you can use to define autoscaling of instances.
+There are three types of scaling policies:
+
+1. Manual Scaling - manually adjust the desired capacity
+2. Scheduled Scaling - useful for known periods of high or low usage. They are time based adjustments e.g. Sales Periods.
+3. Dynamic Scaling:
 
 - Simple: If CPU is above 50%, add one to capacity
 - Stepped: If CPU usage is above 50%, add one, if above 80% add three
@@ -4369,29 +4027,27 @@ the status of HTTP and HTTPS requests. This makes them more application aware.
 
 - Autoscaling Groups are free, only billed for the resources deployed.
 - Always use cool downs to avoid rapid scaling.
-- Try and use more smaller instances to allow granularity.
-- You should use ALB with autoscaling groups.
-- ASG defines when and where, Launch Template defines what.
+- Think about implementing more and smaller instances to allow granularity.
+- Generally, for anything client-facing you should always use Auto Scaling Groups (ASG) with Application Load Balancers (ALB) with autoscaling because they allow you to provide elasticity by abstracting the user away from individual servers. Since, the customers will be connecting through an ALB, they don't have any visibility of individual servers.
+- ASG defines WHEN and WHERE; Launch Templates defines WHAT.
 
 ### 1.13.5. Network Load Balancer (NLB)
 
 Part of AWS Version 2 series of load balancers.
-NLBs are Layer 4, only understand TCP and UDP.
 
-Can't interpret HTTP or HTTPs, but this makes it much faster in latency.
-If you see anything about latency and HTTP and HTTPS are not involved, this
-should default to a NLB.
+1. NLBs are Layer 4, only understand TCP and UDP.
 
-There is nothing stopping NLB from load balancing on HTTP just by routing data.
-They would do this really fast and can deliver millions of requests per second.
+2. Can't interpret HTTP or HTTPs, but this makes it much faster in latency.
+[**EXAM HINT]** => If you see anything about latency and HTTP and HTTPS are not involved, this should default to a NLB.
 
-Only member of the load balancing family that can be provided a static IP.
-There is 1 interface per AZ. Can also use Elastic IPs (whitelisting) and should
-be used for this purpose.
+3. Rapid Scaling: There is nothing stopping NLB from load balancing on HTTP just by routing data. They would do this really fast and can deliver millions of requests per second.
 
-Can perform SSL pass through.
+4. Only member of the load balancing family that can be provided a static IP.
+There is 1 interface per AZ. Can also use Elastic IPs (whitelisting on firewalls) and should be used for this purpose.
 
-NLB can load balance non HTTP/S applications, doesn't care about anything
+5. Can perform SSL pass through.
+
+6. NLB can load balance non-HTTP/S applications, doesn't care about anything
 above TCP/UDP. This means it can handle load balancing for FTP or things
 that aren't HTTP or HTTPS.
 
@@ -4422,6 +4078,8 @@ perform these cryptographic operations. This overhead can be significant.
 The main benefit is the elastic load balancer gets to see the unencrypted
 HTTP and can take actions based on what's contained in this plain text
 protocol.
+
+![SSL Offload](Learning-Aids/14-HA-and-Scaling/SSLOffload.png)
 
 #### 1.13.6.2. Pass-through - Network Load Balancer
 
@@ -4454,7 +4112,11 @@ a stateless experience. If the state is stored on a particular server,
 sessions can't be load balanced across multiple servers.
 
 There is an option available within elastic load balancers called Session
-Stickiness. And within an application load balancer this is enabled on a
+Stickiness.
+
+![Session Stickiness](Learning-Aids/14-HA-and-Scaling/SessionStickiness.png)
+
+And within an application load balancer this is enabled on a
 target group. If enabled, the first time a user makes a request, the load
 balancer generates a cookie called AWSALB with a duration. A valid duration
 is between one second and seven days. For this time, sessions will be sent to
@@ -4466,7 +4128,7 @@ new cookie
 
 This could cause backend unevenness because one user will always be forced
 to the same server no matter what the distributed load is. Applications
-should be designed to hold session stickiness somewhere other than EC2.
+should be designed to hold session stickiness somewhere other than EC2. You can hold session state in, for instance, DynamoDB. If store session state data externally, this means EC2 instances will be completely stateless.
 
 ---
 
@@ -5776,6 +5438,4 @@ This can be saved in the console or fed to other visualization tools.
 You can optimize the original data set to reduce the amount of space uses
 for the data and reduce the costs for querying that data. For more information see the AWS [documentation.](https://aws.amazon.com/cloudtrail/pricing/)
 
-[^1]: https://www.infrastructure.aws/
-
-[^2]: For more information on Server Name Indication see the Cloudfare SNI [documentation.](https://www.cloudflare.com/learning/ssl/what-is-sni/)
+[^1]: For more information on Server Name Indication see the Cloudfare SNI [documentation.](https://www.cloudflare.com/learning/ssl/what-is-sni/)
