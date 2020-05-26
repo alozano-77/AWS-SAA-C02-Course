@@ -302,7 +302,7 @@ present this as a folder. In actuality this is not true, there are no folders.
 
 CloudFormation templates can be used to create, update, modify, and delete infrastructure.
 
-They can be written in YAML or JSON. An example is provided below. 
+They can be written in YAML or JSON. An example is provided below.
 
 ```YAML
 ## This is not mandatory unless a description is added
@@ -3934,6 +3934,7 @@ Internal load balancer is not accessible from the internet and is used to load b
 Load balancer sits between a client and one or more servers. Front end or listening side, accepts connections from a client. Back end is used for distribution to the targets.
 
 LB billed based on two things:
+
 1. A standard hourly rate.
 2. An LCU (**Load Balancer Capacity Unit**) rate. One LCU allows 25 connections per second, 3,000 active connections per minute, 1GB per hour for EC2 instances and IP addresses as targets, and 0.4GB per hour for Lambda functions as targets, and 1,000 rule evaluations per second. LCU that you consume is based on the highest value for all of the individual measurements. You pay a certain number of LCUs based on your load over that hour.
 
@@ -3973,7 +3974,7 @@ They are documents which allow you to define the configuration of an EC2 instanc
 
 They allow you to configure:
 
-- AMIs to use; Instance Type; Storate and Key Pairs. 
+- AMIs to use; Instance Type; Storate and Key Pairs.
 - Networking and Security Groups
 - Userdata & IAM Role
 
@@ -4220,7 +4221,7 @@ an event bus.
 - **Lambda function** is piece of code in one language.
 - Lambda functions use a **runtime** (e.g. Python 3.6)
 - Runs in a **runtime environment**.
-  - Virtual environment that is ready to go to run code in that language. Think of it as a _container_. 
+  - Virtual environment that is ready to go to run code in that language. Think of it as a _container_.
   - You are billed only for the duration a function runs.
   - There is no charge for having lambda functions waiting and ready to go.
 
@@ -4310,18 +4311,19 @@ targets.
 
 ### 1.14.4. Application Programming Interface (API) Gateway
 
-- A way applications or services can communicate with each other.
-- API gateway is an AWS managed service.
+API stands for Application Programming Interface. It's a way that you can take an application you developed and provide its functionality either directly to users, system utlities, or other applications to include that functionality inside their code. It's a way applications or services can communicate with each other.
+
+- API gateway is an AWS managed service:
   - Provides managed AWS endpoints.
   - Can also perform authentication to prove you are who you claim.
   - You can create an API and present it to your customers for use.
-- Allows you to create, publish, monitor, and secure APIs.
+- Allows you to create, publish, monitor, and secure APIs (and it does these tasks as a service).
 - Billed based on:
   - number of API calls
   - amount of data transferred
   - additional performance features such as caching
 - Serve as an entry point for serverless architecture.
-- If you have on premises legacy services that use APIs, this can be integrated.
+- They come in handy during architecture evolution. For instance, if you have on premises legacy services that use APIs, this can be integrated.
 
 Great during an architecture evolution because the endpoints don't change.
 
@@ -4332,24 +4334,15 @@ This might move some of the data to fargate and aurora architecture.
 
 ### 1.14.5. Serverless
 
-This is not one single thing, you manage few if any servers.
-This aims to remove overhead and risk as much as possible.
-Applications are a collection of small and specialized functions that do
-one thing really well and then stop.
+This is not one single thing, you manage few if any servers. This aims to remove overhead and risk as much as possible. Applications are a collection of small and specialized functions that do one thing really well and then stop.
 
-These functions are stateless and run in ephemeral environments.
-Every time they run, they obtain the data that they need, they do something
-and then optionally, they store the result persistently somehow or deliver
-the output to something else.
+These functions are stateless and run in ephemeral environments. Every time they run, they obtain the data that they need, they do something and then optionally, they store the result persistently somehow or deliver the output to something else.
 
-Generally, everything is event driven. Nothing is running until it's required.
-While not being used, there should be little to no cost.
+Serverless architecture should use function-as-a-service (FaaS) products such as Lambda for any general processing need. Lambda as a service is billed based on execution duration and functions only run when there a form of execution is happening. Because serverless is event-driven, it means while not being used a serverless architecture should be very close to zero cost until something in that environment generates an event. Serverless architectures generally have no persistent usage of compute within that system.
 
-Should use managed services when possible.
+Serverless environments should use, where possible, managed services. It shouldn't re-invent the wheel. Examples include using S3 for any persistent object storage or dynamoDB for any persistent data storage and third party identity providers such as Google, Twitter, Facebook, or even corporate identities such as LDAP & Active Directory instead of building your own. Other services that AWS provides such as Elastic Transcoder can be used to convert media files or manipulate these files in other ways.
 
-Aim is to consume as a service whatever you can, code as little as possible,
-and use function as a service for any general purpose compute needs, and
-then use all of those building blocks together to create your application.
+Your aim should be to use as-a-Service offerings as much as you can; code as little as possible and use function-as-a-service (FaaS) for any general compute needs. You all of those building blocks together to create your application.
 
 #### 1.14.5.1. Example of Serverless
 
@@ -4374,15 +4367,16 @@ transcode bucket using the DynamoDB entry.
 
 - HA, Durable, PUB/SUB messaging service.
 - Public AWS service meaning to access it, you need network connectivity
-with the Public AWS endpoints.
-- Coordinates sending and delivering of messages up to 256KB in size.
+with the Public AWS endpoints. The benefit of this is that it becomes accessible from anywhere that has that network connectivity.
+- Coordinates sending and delivering of messages: payloads that are up to 256KB in size.
   - Messages are not designed for large binary files.
 - SNS topics are the base entity of SNS.
   - Permissions are controlled and configuration for SNS is defined.
-- Publisher sends messages to a topic.
+- Publisher sends messages to a **topic**.
   - Topics have subscribers which receive messages.
 - Subscribers receive all of the messages sent to the Topic.
-  - Subscribers can be HTTP and HTTPS endpoints, emails, or SQS queues.
+  - Subscribers can be HTTP and HTTPS endpoints, emails, or SQS queues, Mobile Push Notifications, SMS Messages and Lambda.
+- SNS is used across AWS products and services for notifications. For instance, CloudWatch uses it when alarms change state; CloudFormation uses it when stacks change state; Auto Scaling Groups can even be configured to send notifications to a topic when a scaling event occurs.
   - Filters can be applied to limit messages sent to subscribers.
 - Fanout allows for a single SNS topic with multiple SQS queues as subscribers.
   - Can create multiple related workflows.
@@ -4391,7 +4385,7 @@ with the Public AWS endpoints.
 
 Offers:
 
-- Delivery Status including HTTP, Lambda, SQS
+- Delivery Status including HTTP/s, Lambda, SQS
 - Delivery retries which ensure reliable delivery
 - HA and Scalable (Regional)
 - SSE (server side encryption)
