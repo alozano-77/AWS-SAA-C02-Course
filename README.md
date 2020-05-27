@@ -4393,14 +4393,15 @@ Offers:
 
 ### 1.14.7. AWS Step Functions
 
-There are many problems with lambdas limitations that can be solved with
-a state machine. A state machine is a workflow. It has a start point, end point
-and in between there are states. States are things inside a State Machine which
-can do things. States can do things, and take in data, modify data, and output
-data.
+There are some crucial lambdas limitations:
+- Lambda is a FaaS product
+- There is a 15-minute maximum execution time
+- Lambda functions can, theoretically, be chained together but, this can get messy at scale
+- Runtime environments are _stateless_. Each environment is isolated; cleaned each time and any data needs to be transferred between environments if you want to maintain any form of state. This is why you cannot hold a state through different Lambda function invocations.
 
-State machine is designed to perform an activity or workflow with lots of
-individual components and maintain the idea of data between those states.
+Step funtions allow you to create state machines. A state machine is a workflow. It has a *start point*, *end point*, and in between there are *states*. States are things inside a State Machine which can do things. States can do things, and take in data, modify data, and output data.
+
+State machine is designed to perform an activity or workflow with lots of individual components and maintain the idea of data between those states.
 
 Maximum duration for a state machine execution is 1 year.
 
@@ -4408,22 +4409,18 @@ Two types of workflow
 
 - Standard
   - Default
-  - 1 year workflow
+  - 1 year workflow exeution limit
 
 - Express
   - Designed for IOT or other high transaction uses
   - 5 minute workflow
   - Provides better processing guarantees
 
-Started via API Gateway, IOT Rules, EventBridge, Lambda. Generally used for
-back end processing.
+Started via API Gateway, IOT Rules, EventBridge, Lambda. Generally used for back end processing.
 
-With State machines you can use a template to create and export State Machines
-once they're configured to your liking, it's called Amazon States Language or
-ASL. It's based on JSON.
+With State machines you can use a template to create and export State Machines once they're configured to your liking, it's called **Amazon States Language or ASL**. It's based on JSON.
 
-State machines are provided permission to interact with other AWS services via
-IAM roles.
+State machines are provided permission to interact with other AWS services via IAM roles.
 
 #### 1.14.7.1. Step Function States
 
@@ -4436,7 +4433,7 @@ are available.
   - will wait for a certain period of time
   - will wait until specific date and time
 - Choice
-  - different path is determined based on an import
+  - different paths is determined based on an input. This is useful if you want a different set of behavior based on that input. For example, you might want the state machine to react differently depending on the stock level of an item in an order.
 - Parallel
   - will create parallel branches based on a choice
 - Map
@@ -4444,10 +4441,9 @@ are available.
   - for each item in that list, performs an action or set of actions based on
   that particular item.
 - Task
-  - represents a single unit of work performed by the State Machine.
+  - represents a single unit of work performed by a State Machine.
   - it allows the state machine to actually do things.
-  - can be integrated with many different services such as lambda, AWS batch,
-   dynamoDB, ECS, SNS, SQS, Glue, SageMaker, EMR, and lots of others.
+  - can be integrated with many different services such as Lambda, AWS batch, dynamoDB, ECS, SNS, SQS, Glue, SageMaker, EMR, and lots of others.
 
 ### 1.14.8. Simple Queue Service (SQS)
 
@@ -4471,12 +4467,18 @@ Public service that provides fully managed highly available message queues.
   puts it into a different workload to try and fix the corruption.
 - ASG can scale and lambdas can be invoked based on queue length.
 - Standard queue
-  - multi-lane HW
+  - multi-lane highway. 
   - guarantee the order and at least once delivery.
 - FIFO queue
   - single lane road with no way to overtake
   - guarantee the order and at exactly once delivery
   - 3,000 messages p/s with batching or up to 300 messages p/s without
+
+    Standard Queue| FIFO Queue |
+    ---------|----------|---------
+    Multi lane highway | Single lane road with no way to overtake | 
+    guarantee the order and at least one delivery | guarantee the order and at exactly one delivery | 
+    empty| 3000 messages p/s with batching or up to 300 messages p/s without | 
 
 Billed on **requests** not messages. A request is a single request to SQS.
 One request can return 0 - 10 messages up to 64KB data in total.
@@ -4503,7 +4505,7 @@ policies only can allow access from an outside account. This is a resource polic
 
 - Scalable streaming service. It is designed to inject data from
 lots of devices or lots of applications.
-- Many producers send data into a Kinesis Stream.
+- Many producers send data into a Kinesis Stream. Streams are the basic unit of Kinesis. 
 - The stream can scale from low to near infinite data rates.
 - Highly available public service by design.
 - Streams store a 24-hour moving window of data.
@@ -4521,8 +4523,7 @@ that can be ingested during a 24 hour period. However much you ingest during
 **Kinesis data records (1MB)** are stored across shards and are the blocks
 of data for a stream.
 
-**Kinesis Data Firehose** connects to a Kinesis stream. It can move the data
-from a stream onto S3 or another service.
+**Kinesis Data Firehose** connects to a Kinesis stream. It can move the data from a stream onto S3 or another service. Kinesis Firehose allows for the long term persistence of storage of kinesis data into services like S3. 
 
 ### 1.14.10. SQS vs Kinesis
 
@@ -4539,6 +4540,13 @@ SQS
 - One consumption group from that tier
 - Allow for async communications
 - Once the message is processed, it is deleted
+
+  Kinesis | SQS |
+  ---------|----------|
+  Large throughout or large numbers of devices| One thing or one group of things sending messages to the queue
+  Huge scale ingestion with multiple consumers| One consumption group from that tier| C2
+  Rolling window for multiple consumers | Allow for async communications | C3
+  Designed for data ingestion, analytics, monitoring, and app clicks | Once the message is processed, it is deleted | C3
 
 ---
 
