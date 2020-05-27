@@ -3620,6 +3620,12 @@ encryption, configuration, and networking without intervention.
 - RRs are for reads only until promoted.
 - Offers global availability improvements and global resilience.
 
+### Enhanced Monitoring
+
+CloudWatch gathers metrics about CPU utilization from the hypervisor for a DB instance, and Enhanced Monitoring gathers its metrics from an agent on the instance. As a result, you might find differences between the measurements, because the hypervisor layer performs a small amount of work. The differences can be greater if your DB instances use smaller instance classes, because then there are likely more virtual machines (VMs) that are managed by the hypervisor layer on a single physical instance. 
+
+> Enhanced Monitoring metrics are useful when you want to see how different processes or threads on a DB instance use the CPU.
+
 ### 1.11.7. Amazon Aurora
 
 Aurora architecture is VERY different from RDS.
