@@ -4565,13 +4565,13 @@ SQS
 - Content is cached in locations close to customers.
 - If the content is not available on the local cache when requested, CloudFront
 will fetch the item and cache it and deliver it locally.
-- This provides lower latency and higher throughput for customers.
+- This provides lower latency (more responsiveness) and higher throughput (faster page loads) for customers.
 - Can handle static and dynamic content.
-- **Origin** the original location of your content, can be an S3 bucket or LB.
+- **Origin** the original location of your content, can be an S3 bucket or ALB. In theory it can be anywhere on the internet accessible by CloudFront.
 - **Distribution** the configuration unit of CloudFront.
 - **Edge locations** global infrastructure which hosts a cache of your data.
   - There are over 200 edge locations.
-  - They can be one or more racks in a third party server system.
+  - They are generally one or more racks in a 3rd party data center.
   - Normally 90% storage with some small compute.
 - **Regional Edge Cache**
   - Larger version of an edge location.
@@ -4591,20 +4591,20 @@ them and the object is not caching it will need to be fetched first.
 If string parameters aren't involved in the caching, you can select no
 to forward them to the origin.
 
-If the application does use query string parameters, you can use all of them for
+If the application does use **query string parameters**, you can use all of them for
 caching or just selected ones.
 
 ### 1.14.2. AWS Certificate Manager (ACM)
 
 - HTTP lacks encryption and is insecure
-- HTTPS uses SSL/TLS layer of encryption added to HTTP
-- Data is encrypted in-transit
-- Certificates allow servers to prove their identity
-- Signed by a trusted authority (CA).
+- HTTPS (HyperText Transfer Protocol Secure) uses SSL/TLS to create a secure tunnel over which normal http can be transferred.  
+- Data is encrypted in-transit from the perspective of an outside observer.
+- HTTPS Certificates also allows for servers to prove their identity
+- Signed by a trusted authority (a Certificate Authority [CAs]), which are trusted by your browser.
 - To be secure, a website generates a certificate, and has a CA sign it. The
 website then uses that certificate to prove its authenticity.
 - ACM allows you to create, renew, and deploy certificates.
-- Supported AWS services ONLY (CloudFront and ALB, NOT EC2)
+- Supported AWS services ONLY (CloudFront, ALB and API Gateway, Elastic Beanstalk, CloudFormation, **NOT EC2**)
 - If it's not a managed service, ACM doesn't support it.
 - CloudFront must have a trusted and signed certificate. Can't be self signed.
 
@@ -4627,6 +4627,7 @@ permissions.
 
 - Move the AWS network closer to customers.
 - Designed to optimize the flow of data from users to your AWS infrastructure.
+- While CloudFront caches your application at Edge Locations, Global Accelerator moves the AWS infrastructure closer to your customers. 
 - Generally customers who are further away from your infrastructure go through
 more internet based hops and this means a lower quality connection.
 - Normal IP addresses are unicast IP addresses. These refer to one thing.
@@ -4636,7 +4637,8 @@ more internet based hops and this means a lower quality connection.
   - Traffic initially uses public internet and enters Global Accelerator at
   the closest edge location.
   - Traffic then flows globally across the AWS global backbone network.
-- Global accelerator is a network product, can use TCP/UDP.
+- Global accelerator is a network product, and it uses non HTTP/S (TCP/UDP) protocols.
+- If you see questions that mention _caching_ that will most likely be CloudFront but, if you see questions that mention TCP or UDP and the requirement for _global performance optimization_ then possibly it's going to be global accelerator which is the right answer.
 
 ---
 
