@@ -4,24 +4,24 @@
 
 **Table of Contents**
 
-- [1.2. Cloud Computing Fundamentals](#12-cloud-computing-fundamentals)
-- [1.3. AWS-Fundamentals](#13-aws-fundamentals)
-- [1.4. IAM-Accounts-AWS-Organizations](#14-iam-accounts-aws-organizations)
-- [1.5. Simple-Storage-Service-(S3)](#15-simple-storage-service-s3)
-- [1.6. Virtual-Private-Cloud-VPC](#16-virtual-private-cloud-vpc)
-- [1.7. Elastic-Cloud-Compute-EC2](#17-elastic-cloud-compute-ec2)
-- [1.8. Containers-and-ECS](#18-containers-and-ecs)
-- [1.9. Advanced-EC2](#19-advanced-ec2)
-- [1.10. Route-53](#110-route-53)
-- [1.11. Relational-Database-Service-RDS](#111-relational-database-service-rds)
-- [1.12. Network-Storage-EFS](#112-network-storage-efs)
-- [1.13. HA-and-Scaling](#113-ha-and-scaling)
-- [1.14. Serverless-and-App-Services](#114-serverless-and-app-services)
-- [1.15. CDN-and-Optimization](#115-cdn-and-optimization)
-- [1.16. Advanced-VPC](#116-advanced-vpc)
-- [1.17. Hybrid-and-Migration](#117-hybrid-and-migration)
-- [1.18. Security-Deployment-Operations](#118-security-deployment-operations)
-- [1.19. NoSQL-and-DynamoDB](#119-nosql-and-dynamodb)
+- [1.1. Cloud Computing Fundamentals](#11-cloud-computing-fundamentals)
+- [1.2. AWS-Fundamentals](#12-aws-fundamentals)
+- [1.3. IAM-Accounts-AWS-Organizations](#13-iam-accounts-aws-organizations)
+- [1.4. Simple-Storage-Service-(S3)](#14-simple-storage-service-s3)
+- [1.5. Virtual-Private-Cloud-VPC](#15-virtual-private-cloud-vpc)
+- [1.6. Elastic-Cloud-Compute-EC2](#16-elastic-cloud-compute-ec2)
+- [1.7. Containers-and-ECS](#17-containers-and-ecs)
+- [1.8. Advanced-EC2](#18-advanced-ec2)
+- [1.9. Route-53](#19-route-53)
+- [1.10. Relational-Database-Service-RDS](#110-relational-database-service-rds)
+- [1.11. Network-Storage-EFS](#111-network-storage-efs)
+- [1.12. HA-and-Scaling](#112-ha-and-scaling)
+- [1.13. Serverless-and-App-Services](#113-serverless-and-app-services)
+- [1.14. CDN-and-Optimization](#114-cdn-and-optimization)
+- [1.15. Advanced-VPC](#115-advanced-vpc)
+- [1.16. Hybrid-and-Migration](#116-hybrid-and-migration)
+- [1.17. Security-Deployment-Operations](#117-security-deployment-operations)
+- [1.18. NoSQL-and-DynamoDB](#118-nosql-and-dynamodb)
 
 ---
 
@@ -4646,8 +4646,8 @@ more internet based hops and this means a lower quality connection.
 
 ### 1.15.1. VPC Flow Logs
 
-- Capture packet metadata, not packet contents.
-  - Things like source IP
+- Capture packet metadata, not packet contents. For packet contents you need a packet sniffer. Flow logs only capture things like:
+  - Source IP
   - Destination IP
   - Packet size
   - Anything which could be observed from the outside of the packet.
@@ -4655,28 +4655,54 @@ more internet based hops and this means a lower quality connection.
   - VPC: all interfaces in that vpc
   - Subnets: interfaces in that subnet
   - Interface directly
-- VPC flow logs are not realtime
-- Destination can be S3 or CloudWatch logs
+- VPC flow logs are **NOT** realtime
+- Destination can be [S3](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-s3.html) or [CloudWatch logs](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-cwl.html)
 - Flow log inheritance is downwards starting at the VPC.
 - RDS can use VPC flow logs
 - The packet will always have source, then destination, then response.
+- ICMP protocol number is 1; TCP is 6; UDP is 17.
+- The following are excluded from VPC Flow Logs:
+  - Instance metadata: http://169.254.169.254/latest/metadata
+  - AWS Time Synchronization Server: http://169.254.169.123
+  - Amazon DNS Server
+  - Amazon Windows Licensing Server
+
+Example of Flow Logs
+
+```html
+<version>
+<account>
+<interface-id>
+<srcaddr>
+<dstaddr>
+<srcport>
+<dstport>
+<protocol>
+<packets>
+<bytes>
+<start>
+<end>
+<action>
+<log-status>
+```
 
 ### 1.15.2. Egress-Only Internet Gateway
 
 - IPv4 addresses are private or public
-- NAT allows private IPs to access public networks and receive responses.
-- NAT will not allow externally initiated connections IN.
-- Using IPv6, all IPs are public.
+- NAT allows IPv4 private IPs with a way to access public internet or public AWS services and receive responses.
+- NAT does this in a way that will not allow externally initiated connections (from the public internet) IN.
+- NAT process exists because of the limitation of IPv4; it does not work with IPv6.
+- Using IPv6, all IPs are publicly routable.
   - Internet Gateway (IPv6) allows all IPs **in** and **out**
 - Egress-only is **outbound only** for IPv6. It is exactly the same as
 NAT, only outbound only.
 - To configure the Egress-only gateway, you must add default IPv6 route `::/0`
 added to RT with `eigw-id` as target.
 
-### 1.15.3. VPC Endpoints (Gateway)
+### 1.15.3. VPC Gateway Endpoints
 
-Allow a private only resource inside a VPC or any resource inside a private
-only VPC access to S3 and DynamoDB.
+- Provide _private_ access to S3 and DynamoDB
+  - Allow a private only resource inside a VPC or any resource inside a private-only VPC access to S3 and DynamoDB. (Remember that both S3 and DynamoDB are public services)
 
 Normally when you want to access a public service through a VPC, you
 need infrastructure. You would create an IGW and attach it to the VPC.
@@ -4684,25 +4710,23 @@ Resources inside need to be granted IP address or implement one or more
 NAT gateways which allow instances with private IP addresses to access
 these public services.
 
-When you allocate a gateway endpoint to a subnet, a prefix list is added
+- When you allocate a gateway endpoint to a subnet, a ***prefix list*** is added
 to the route table. The target is the gateway endpoint.
 Any traffic destined for S3, goes via the gateway endpoint.
 The gateway endpoint is highly available for all AZs in a region by default.
 
-With a gateway endpoint you set which subnet will be used with it and
-it will configure automatically.
-A gateway endpoint is a VPC gateway object.
-Endpoint policy controls what things can be connected to by that endpoint.
+- With a gateway endpoint you set which subnet will be used with it and
+it will configure automatically. A gateway endpoint is a VPC gateway object.
+  - Endpoint policy controls what things can be connected to by that endpoint.
 
-Gateway endpoints can only be used to access services in the same region.
-Can't access cross-region services.
+- Gateway endpoints can only be used to access services in the same region.
+Can't access cross-region services. You cannot, for instance, access an S3 bucket located in the `ap-southeast-2` region from a gateway endpoint in the `us-east-1` region.
 
-S3 buckets can be set to private only by allowing access ONLY from
-a gateway endpoint. For anything else, the implicit deny will apply.
+- Prevent Leaky Buckets: S3 buckets can be set to private only by allowing access ONLY from a gateway endpoint. For anything else, the _implicit deny_ will apply.
 
-They are only accessible from inside that specific VPC.
+A limitation is that they are only accessible from inside that specific VPC.
 
-### 1.15.4. VPC Endpoints (Interface)
+### 1.15.4. VPC Interface Endpoints
 
 - Provide private access to AWS Public Services.
   - Anything EXCEPT S3 and DynamoDB
@@ -4713,12 +4737,13 @@ They are only accessible from inside that specific VPC.
 - You can use Endpoint policies to restrict what can be accessed with
 the endpoint.
 - ONLY TCP and IPv4 at the moment.
-- Behind the scenes, it uses PrivateLink.
+- Behind the scenes, it uses ***PrivateLink***.
+  - PrivateLink allows external services to be injected into your VPC either from AWS or $3^{rd}$ parties.
 - Endpoint provides a **NEW** service endpoint DNS
   - e.g. `vpce-123-xyz.sns.us-east-1.vpce.amazonaws.com`
-- Regional DNS is one single DNS name that works whatever AZ you're using to
+- **Regional DNS** is one single DNS name that works whatever AZ you're using to
 access the interface endpoint. Good for simplicity and HA.
-- Zonal DNS resolved to that one specific interface in that one specific AZ.
+- **Zonal DNS** resolved to that one specific interface in that one specific AZ.
 - Either of those two points of endpoints can be used by applications to
 directly and immediately utilize interface endpoints.
 - PrivateDNS associates R53 private hosted zone with your VPC. This private
@@ -4733,28 +4758,29 @@ need changes to the applications. The application thinks it's communicating
 directly with S3 or DynamoDB and all we're doing by using a gateway endpoint
 is influencing the route that the traffic flow uses. Instead of using IGW,
 it goes via gateway endpoint and can use private IP addressing.
-**highly available**
+Gateway endpoints because they are VPC gateway logical object; they are **highly available by design**
 
 **Interface Endpoints** uses DNS and a private IP address for the interface
 endpoint. You can either use the endpoint specific DNS names or you can
 enable PrivateDNS which overrides the default and allows unmodified
 applications to access the services using the interface endpoint. This doesn't
 use routing and only DNS.
-**not highly available**
+Interface endpoints because they use normal VPC network interfaces are **not highly available**. 
+> Make sure as a Solutions Architect when you are designing an architecture if you are utilizing multiple AZs then you need to put interface endpoints in every AZ that you use inside that VPC.
 
 ### 1.15.5. VPC Peering
 
-Direct encrypted network link between two and only two VPCs.
-Peering connection can be in the same or cross region and in the same or
+VPC Peering is a service that lets you create a private and encrypted network link between ***two and only two VPCs***.
+- Peering connection can be in the same or cross region and in the same or
 across accounts.
 
-When you create a VPC peer, you can enable an option so that public hostnames
+- When you create a VPC peer, you can enable an option so that public hostnames
 of services in the peered VPC resolve to the private internal IPs. You
 can use the same DNS names if its in peered VPCs or not. If you attempt
 to resolve the public DNS hostname of an EC2 instance, it will resolve
 to the private IP address of the EC2 instance.
 
-VPCs in the same region can reference each other by using security group id.
+- VPCs in the same region can reference each other by using security group id.
 You can do the same efficient referencing and nesting of security groups that
 you can do if you're inside the same VPC. This is a feature that only works
 with VPC peers inside the same region.
