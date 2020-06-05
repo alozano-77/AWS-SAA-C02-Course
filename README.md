@@ -4804,14 +4804,23 @@ VPC Peering Connections CANNOT be created with overlapping VPC CIDRs.
 ### 1.16.1. AWS Site-to-Site VPN
 
 - A logical connection between a VPC and on-premise network encrypted in transit
-using IPSec, running over the public internet.
+using IPSec, running over the public internet (in most cases).
 - This can be fully Highly Available if you design it correctly
 - Quick to provision, less than an hour.
 - VPNs connect VPCs and private on-prem networks.
 - Virtual Private Gateway (VGW) is the target on one or more route tables
-- Customer Gateway (CGW)
-  - logical piece of configuration on AWS
-  - thing that configuration represents
+- Customer Gateway (CGW) can represent two things:
+  1. logical piece of configuration on AWS
+  2. A physical piece on-prem router which the VPN connects to.
+
+Differences between static and dynamic VPN.
+
+Static| Dynamic |
+---------|----------|
+ Uses static networking config | Uses border gateway protocol (BGP) | C1
+ Networks for remote side statically configured on the VPN connection | BGP is configured on both the customer and AWS side using (ASN). Networks are exchanged via BGP. | C2
+ Routes for remote side added to route tables as static routes | Routes can be added statically or configured dynamically by using a feature called ***route propagation*** on the route tables in the VPC| C3
+
 - VPN connection itself stores the config and links to one VGW and one CGW
 - Speed cap on VPN with two tunnels of 1.25 Gbps (gigabits per second).
   - AWS limit, will need to check speed supported by customer router.
@@ -4824,6 +4833,7 @@ using IPSec, running over the public internet.
   - on-premises internet connection costs
 - VPN setup of hours or less
 - Great as a backup especially for Direct Connect (DX)
+- Can be used with Direct Connect (DX)
 
 ### 1.16.2. AWS Direct Connect (DX)
 
