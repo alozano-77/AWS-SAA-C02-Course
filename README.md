@@ -1237,7 +1237,7 @@ parties know how the data will be hidden.
   - Can handle both symmetric and asymmetric keys.
 - KMS can perform cryptographic operations itself.
 - Keys never leave KMS.
-- Keys use **FIPS 140-2 (L2)** security standard.
+- Keys use **Federal Information Processing Standard (FIPS) 140-2 (L2)** security standard.
   - Some features are compliant with Level 3.
   - All features are compliant with Level 2.
 
@@ -2166,7 +2166,7 @@ the same piece of hardware but they get caught up on sharing.
 #### 1.6.1.4. SR-IOV (Singe Route IO virtualization)
 
 Allows a network or any card to present itself as many mini cards.
-As far as the HW is concerned, they are real dedicated cards for their
+As far as the HV is concerned, they are real dedicated cards for their
 use. No translation needs to be done by the HV. The physical card
 handles it all. In EC2 this feature is called **enhanced networking**.
 
@@ -4711,9 +4711,7 @@ NAT gateways which allow instances with private IP addresses to access
 these public services.
 
 - When you allocate a gateway endpoint to a subnet, a ***prefix list*** is added
-to the route table. The target is the gateway endpoint.
-Any traffic destined for S3, goes via the gateway endpoint.
-The gateway endpoint is highly available for all AZs in a region by default.
+to the route table. The target is the gateway endpoint. Any traffic destined for S3, goes via the gateway endpoint. The gateway endpoint is highly available for all AZs in a region by default.
 
 - With a gateway endpoint you set which subnet will be used with it and
 it will configure automatically. A gateway endpoint is a VPC gateway object.
@@ -4771,8 +4769,8 @@ Interface endpoints because they use normal VPC network interfaces are **not hig
 ### 1.15.5. VPC Peering
 
 VPC Peering is a service that lets you create a private and encrypted network link between ***two and only two VPCs***.
-- Peering connection can be in the same or cross region and in the same or
-across accounts.
+
+- Peering connection can be in the same or cross region and in the same or across accounts.
 
 - When you create a VPC peer, you can enable an option so that public hostnames
 of services in the peered VPC resolve to the private internal IPs. You
@@ -4842,21 +4840,24 @@ Static| Dynamic |
 - Two speeds
   - 1 Gpbs: 1000-Base-LX
   - 10 Gbps: 10GBASE-LR
-- This is a cross connect to your customer router (requires VLANS/BGP)
+- This is a **cross connect** to your customer router (requires VLANs/BGP)
 - You can connect to a partner router if extending to your location.
   - The port needs to be arranged to connect somewhere else and connect to
   your hardware.
-- This is a single fiber optic cable from the DX port to your network.
-- VIFs are multiple virtual interfaces (VIFs) over one DX
+- This is a single fiber optic cable from the AWS Managed DX port to your network.
+- You can run Virtual Interfaces (VIFs) over a single DX connect fiber optic line.
+- There is a one-to-many relationship between a DX line and VIFs. Therefore, you can multiple VIFs running on a single DX line. 
+- VIFs are of two types:
   - Private VIF (VPC)
-    - Represents one VPC
+    - Connects to one AWS VPC
     - Can have as many Private VIFs as you want.
   - **Public VIF** (Public Zone Services)
     - Only public services, not public internet
+    - Can be used with a site-to-site VPN to enable a private encryption using IPSec.
 
-Has one physical cable with no high availability and no encryption.
-DX Port Provisioning is likely quick, the cross-connect takes longer.
-Can take weeks or month for physical cable to be installed.
+Has one physical cable with **no high availability and no encryption**.
+DX Port Provisioning is quick, the cross-connect takes longer.
+Physical installation of cross-connect network can take weeks or months
 Generally use a VPN first then bring a DX in and leave VPN as backup.
 
 - Up to 40 Gbps with aggregation, 4 x 10 Gbps ports.
@@ -4891,7 +4892,8 @@ the benefits of IPSEC encryption.
 is required.
 - Can be used to create global networks.
   - You can use these for cross-region peering attachments.
-- Can share between accounts using AWS RAM
+- Can share between accounts using AWS Resource Access Manager (RAM)
+- You achieve a less network complexity if you implement a transit gateway (TGW)
 
 ### 1.16.4. Storage Gateway
 
@@ -4908,7 +4910,7 @@ is required.
   - Data is kept locally
   - Awesome for migrations
 - Volume Mode (Cache Mode)
-  - Data as added to gateway is not stored locally.
+  - Data added to gateway is not stored locally.
   - Backup to EBS Snapshots
   - Primarily stored on AWS
   - Great for limited local storage capacity.
@@ -5029,7 +5031,7 @@ windows filesystem or Directory Services.
 - VSS: User Driven Restores
 - Native File System (NFS) accessible over SMB
 - Windows permissions model
-- Product supports DFS, scale out file share.
+- Product supports Distribute File Systems (DFS), scale out file share.
 - Managed service, no file server admin
 - Integrates with DS and your own directory.
 
@@ -5108,7 +5110,7 @@ AWS and it integrates with other AWS products. Can generate keys, manage
 keys, and can integrate for encryption. The problem is this is a shared
 service. You're using a service which other accounts within AWS also use.
 Although the permissions are strict, AWS still does manage the hardware for KMS.
-KMS is a hardware security module or HSM. These are industry standard pieces
+KMS is a **Hardware Security Module** or HSM. These are industry standard pieces
 of hardware which are designed to manage keys and perform cryptographic
 operations.
 
@@ -5128,7 +5130,7 @@ HSM will not integrate with AWS by design and uses industry standard APIs.
 - Java Cryptography Extensions (JCE)
 - Microsoft CryptoNG (CNG) libraries
 
-KMS can use CloudHSM as a custom key store, CloudHSM integrates with KMS.
+KMS can use CloudHSM as a **custom key store**, CloudHSM integrates with KMS.
 
 HSM is not highly available and runs within one AZ. To be HA, you need at least
 two HSM devices and one in each AZ you use. Once HSM is in a cluster, they
@@ -5145,7 +5147,7 @@ AWS has no access to the HSM appliances which store the keys.
 CloudHSM.
 - Can offload the SSL/TLS processing from webservers. CloudHSM
 is much more efficient to do these encryption processes.
-- Oracle Databases can use CloudHSM to enable transparent data encryption (TDE)
+- Oracle Databases can use CloudHSM to enable **transparent data encryption (TDE)**
 - Can protect the private keys an issuing certificate authority.
 - Anything that needs to interact with non AWS products.
 
@@ -5296,12 +5298,33 @@ If you can tolerate the cost savings you can scale better.
 - Calculate WCU per item, round up, then multiply by average per second.
 - (2.5 KB / 1 KB) = 3 * 10 p/s = 30 WCU
 
+To calculate the Write Capacity Unit we need:
+
+1. The number of items to store. We represent this as $N_i$.
+2. Average size per item rounded up. We represent this as $S_i$.
+3. Multiply 1 & 2 above.
+
+Note: 1 WCU $=$ 1KB
+
+Example: What is the WCU of storing 10 items per second with 2.5K average size per item.
+
+Answer: $N_i \cdot S_i$ = $10 \cdot 3 = 30$ WCUs
+
 #### 1.18.2.6. RCU Example Calculation
 
 - Retrieve 10 items per second with 2.5K average size per item.
 - Calculate RCU per item, round up, then multiply by average per second.
 - (2.5 KB / 4 KB) = 1 * 10 p/s = 10 RCU for strongly consistent.
   - 5 RCU for eventually consistent.
+
+Note: 1 RCU $=$ 4KB
+
+Example: What is the RCU of storing 10 items per second with 2.5K average size per item. 
+
+$N_i = 10$
+$S_i = 1$ $\Rightarrow$ how many 2.5 ($\sim$3) can you get in 4, which is 1.
+
+Answer: $N_i \cdot S_i$ = $10 \cdot 1 = 10$ RCUs
 
 ### 1.18.3. DynamoDB Streams and Triggers
 
