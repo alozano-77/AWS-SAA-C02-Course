@@ -3522,6 +3522,7 @@ This does not provide fault tolerance as there will be some impact during change
 - Multi-AZ feature is not free tier, extra infrastructure for standby.
   - Generally two times the price.
 - The standby replica cannot be accessed directly unless a fail occurs.
+   - Can't be used for scaling. It's an availability improvement not performance one.
 - Failover is highly available, not fault tolerant.
 - Same region only (others AZ in the VPC).
 - Backups are taken from standby which removes performance impacts.
