@@ -4591,7 +4591,8 @@ permissions.
 
 ### Lambda@Edge
 - Permits to run lightweight Labda functions at Edge Locations
- -Adjust data between Viewer & Origin
+
+ - Adjust data between Viewer & Origin
  - Only Node.JS and Python are supported
  - Only AWS Public Space is supported ( NO VPC )
  - No layers supported
