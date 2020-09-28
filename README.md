@@ -4589,6 +4589,14 @@ will only get the implicit deny.
 Best practice is to create one OAI per CloudFront distribution to manage
 permissions.
 
+### Lambda@Edge
+- Permits to run lightweight Labda functions at Edge Locations
+ -Adjust data between Viewer & Origin
+ - Only Node.JS and Python are supported
+ - Only AWS Public Space is supported ( NO VPC )
+ - No layers supported
+ - Different Limits vs Normal Lambda
+
 ### AWS Global Accelerator
 
 - Move the AWS network closer to customers.
