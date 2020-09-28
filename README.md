@@ -4590,13 +4590,20 @@ Best practice is to create one OAI per CloudFront distribution to manage
 permissions.
 
 ### Lambda@Edge
-- Permits to run lightweight Labda functions at Edge Locations
 
+- Permits to run lightweight Labda functions at Edge Locations
  - Adjust data between Viewer & Origin
  - Only Node.JS and Python are supported
  - Only AWS Public Space is supported ( NO VPC )
  - No layers supported
  - Different Limits vs Normal Lambda
+
+ **Lambda@Edge Use Cases**
+
+ - A/B Testing - Viewer Request
+ - Migration Between S3 Origins - Origin Request
+ - Different objects based on Device - Origin Request
+ - Content By Country - Origin Request
 
 ### AWS Global Accelerator
 
