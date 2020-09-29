@@ -5082,7 +5082,7 @@ hardware security module (HSM) that's hosted within the AWS cloud.
 AWS provisions the HW, but it is impossible for them to help. There is no way
 to recover data from them if access is lost.
 
-Fully FIPS 140-2 Level 3 (KSM is L2 overall, but some is L3)
+Fully FIPS 140-2 Level 3 (KMS is L2 overall, but some is L3)
 IF you require level 3 overall, you MUST use CloudHSM.
 
 KSM all actions are performed with AWS CLI and IAM roles.
