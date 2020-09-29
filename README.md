@@ -4987,6 +4987,17 @@ windows filesystem or Directory Services.
 - Managed service, no file server admin
 - Integrates with DS and your own directory.
 
+### FSx for Lustre
+
+- Designed for HPC - Linux workloads Clients
+- Designed for Machine Learning, Big Data, Financial Modelling
+- 100 GB/s throughout & sub millisecond latencies
+- Deployment types **Persistent** or **Scratch**
+  - Scratch - Optimized for Short term no replication & fast ( Designed for pure performance) - NO HA, NO REPLICATION
+  - Persistent - longer term, HA ( IN ONE AZ), self-healing
+- Accessible over VPN or Direct Connect
+- Can be backed up to S3 ( Manual or Automatic 0-35 days retention)
+
 ---
 
 ## Security-Deployment-Operations
