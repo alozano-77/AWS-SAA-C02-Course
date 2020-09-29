@@ -2724,6 +2724,16 @@ Can perform scheduled reservation when you can commit to specific time windows.
 Great if you have a known stead state usage, email usage, domain server.
 Cheapest option with no tolerance for disruption.
 
+**Regional and zonal Reserved Instances**
+
+|                               | **Regional Reserved Instances**                              | **Zonal Reserved Instances**                                 |
+| :---------------------------: | :----------------------------------------------------------- | ------------------------------------------------------------ |
+| Availability Zone flexibility | The Reserved Instance discount applies to instance usage in any Availability Zone in the specified Region. | No Availability Zone flexibility—the Reserved Instance discount applies to instance usage in the specified Availability Zone only. |
+|     Capacity reservation      | No capacity reservation—a regional Reserved Instance does *not* provide a capacity reservation. | A zonal Reserved Instance provides a capacity reservation in the specified Availability Zone. |
+|   Instance size flexibility   | The Reserved Instance discount applies to instance usage within the instance family, regardless of size. Only supported on Amazon Linux/Unix Reserved Instances with default tenancy. | No instance size flexibility—the Reserved Instance discount applies to instance usage for the specified instance type and size only. |
+
+
+
 ### Instance Status Checks and Autorecovery
 
 Every instance has two high level status checks
