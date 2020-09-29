@@ -5089,9 +5089,9 @@ KSM all actions are performed with AWS CLI and IAM roles.
 
 HSM will not integrate with AWS by design and uses industry standard APIs.
 
-- PKCS#11
-- Java Cryptography Extensions (JCE)
-- Microsoft CryptoNG (CNG) libraries
+- **PKCS#11**
+- **Java Cryptography Extensions (JCE)**
+- **Microsoft CryptoNG (CNG) libraries**
 
 KMS can use CloudHSM as a custom key store, CloudHSM integrates with KMS.
 
