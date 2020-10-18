@@ -2127,7 +2127,7 @@ with a Route Table in each AZ with NATGW as target.
 - With NAT Gateway it is not possible, it is managed service. NAT Gateway cannot be used as Bastion host and it cannot do port forwarding.
 - You cannot use SG with NAT instance, you can only use NACLs.
 - NAT is not required for IPv6. Inside AWS all IPv6 addresses are publicly routable. IG works with all IPv6 addresses directly.
-- That means if you choose to make an instance in private subnet have a default IPv6 route to IG, it'll become public instance.
+- That means if you choose to make an instance in private subnet that have a default IPv6 route to IG, it'll become public instance.
 - Managed service, scales up to 45 Gbps. Can deploy multiple NATGW to increase
 bandwidth.
 - AWS charges on usage per hour and data volume processed.
