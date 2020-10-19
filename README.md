@@ -244,7 +244,7 @@ No charges, deletes the disk and prevents all future charges.
 
 #### AMI (Server Image)
 
-AMI can use used to create an instance or created from an instance.
+AMI can be used to create an instance or can be created from an instance.
 AMIs in one region are not available from other regions.
 
 Contains:
