@@ -242,7 +242,7 @@ Charged for EBS storage  only.
 
 No charges, deletes the disk and prevents all future charges.
 
-#### AMI (Server Image)
+#### AMI (Amazon Machine Images)
 
 AMI can use used to create an instance or created from an instance.
 AMIs in one region are not available from other regions.
