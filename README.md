@@ -2120,6 +2120,14 @@ returned.
   - If that AZ fails, there is no recovery.
 - For a fully region resilient service, you must deploy one NATGW in each AZ
 with a Route Table in each AZ with NATGW as target.
+- NAT instance is limited by capabilities of the instance it is running on and that instance is also general purpose, so won't offer the same level of custom design performance as NAT Gateway.
+- NAT instance is single instance running in single AZ it'll fail if EC2 hardware fails, network fails, storage fails or AZ itself fails.
+- NAT Gateway has benefit over NAT instance, inside one AZ it is highly available.
+- You can connect to NAT instance just like any other instance, you can use them as Bastion host or can use them for port forwarding.
+- With NAT Gateway it is not possible, it is managed service. NAT Gateway cannot be used as Bastion host and it cannot do port forwarding.
+- You cannot use SG with NAT instance, you can only use NACLs.
+- NAT is not required for IPv6. Inside AWS all IPv6 addresses are publicly routable. IG works with all IPv6 addresses directly.
+- That means if you choose to make an instance in private subnet that have a default IPv6 route to IG, it'll become public instance.
 - Managed service, scales up to 45 Gbps. Can deploy multiple NATGW to increase
 bandwidth.
 - AWS charges on usage per hour and data volume processed.
