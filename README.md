@@ -3554,6 +3554,7 @@ This does not provide fault tolerance as there will be some impact during change
 - Multi-AZ feature is not free tier, extra infrastructure for standby.
   - Generally two times the price.
 - The standby replica cannot be accessed directly unless a fail occurs.
+   - Can't be used for scaling. It's an availability improvement not performance one.
 - Failover is highly available, not fault tolerant.
 - Offers only high availability and minimizes disruptions associated with software updates, backups, and instance type changes not performance improvement or scalability. (Don't for exam questions that try to trick you into choosing options that say Multi-AZ can improve performance.)
 - Same region only (others AZ in the VPC).
@@ -4656,6 +4657,23 @@ will only get the implicit deny.
 Best practice is to create one OAI per CloudFront distribution to manage
 permissions.
 
+### 1.14.3.(1/2) Lambda@Edge
+
+- Permits to run lightweight Labda functions at Edge Locations
+ - Adjust data between Viewer & Origin
+ - Only Node.JS and Python are supported
+ - Only AWS Public Space is supported ( NO VPC )
+ - No layers supported
+ - Different Limits vs Normal Lambda
+
+ **Lambda@Edge Use Cases**
+
+ - A/B Testing - Viewer Request
+ - Migration Between S3 Origins - Origin Request
+ - Different objects based on Device - Origin Request
+ - Content By Country - Origin Request
+
+
 ### 1.14.4. AWS Global Accelerator
 
 - Move the AWS network closer to customers.
@@ -5068,6 +5086,17 @@ windows filesystem or Directory Services.
 - Managed service, no file server admin
 - Integrates with DS and your own directory.
 
+### FSx for Lustre
+
+- Designed for HPC - Linux workloads Clients
+- Designed for Machine Learning, Big Data, Financial Modelling
+- 100 GB/s throughout & sub millisecond latencies
+- Deployment types **Persistent** or **Scratch**
+  - Scratch - Optimized for Short term no replication & fast ( Designed for pure performance) - NO HA, NO REPLICATION
+  - Persistent - longer term, HA ( IN ONE AZ), self-healing
+- Accessible over VPN or Direct Connect
+- Can be backed up to S3 ( Manual or Automatic 0-35 days retention)
+
 ---
 
 ## 1.17. Security-Deployment-Operations
@@ -5147,21 +5176,21 @@ KMS is a **Hardware Security Module** or HSM. These are industry standard pieces
 of hardware which are designed to manage keys and perform cryptographic
 operations.
 
-You can run your own HSM on premise. Cloud HSM is a true "single tenant"
-hardware security module (HSM) that's hosted within the AWS cloud.
+You can run your own HSM on premise.
+**Cloud HSM is a true "single tenant"hardware security module (HSM)** that's hosted within the AWS cloud.
 AWS provisions the HW, but it is impossible for them to help. There is no way
 to recover data from them if access is lost.
 
-Fully FIPS 140-2 Level 3 (KSM is L2 overall, but some is L3)
+Fully FIPS 140-2 Level 3 (KMS is L2 overall, but some is L3)
 IF you require level 3 overall, you MUST use CloudHSM.
 
 KSM all actions are performed with AWS CLI and IAM roles.
 
 HSM will not integrate with AWS by design and uses industry standard APIs.
 
-- PKCS#11
-- Java Cryptography Extensions (JCE)
-- Microsoft CryptoNG (CNG) libraries
+- **PKCS#11**
+- **Java Cryptography Extensions (JCE)**
+- **Microsoft CryptoNG (CNG) libraries**
 
 KMS can use CloudHSM as a **custom key store**, CloudHSM integrates with KMS.
 
