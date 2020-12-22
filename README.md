@@ -73,7 +73,15 @@ There are additional services such as *Function as a Service*,
 
 ## 1.2. AWS-Fundamentals
 
+### AWS Support Plans
+
+- Basic (free)
+- Developer (one user, general guidance)
+- Business (multiple users, personal guidance)
+- Enterprise (Technical account manager)
+
 ### 1.2.1. Public vs Private Services
+
 
 Refers to the networking only, not permissions.
 
@@ -234,7 +242,8 @@ No charges, deletes the disk and prevents all future charges.
 
 #### 1.2.5.5. AMI (Server Image)
 
-AMI can use used to create an instance or created from an instance.
+AMI can be used to create an instance or can be created from an instance.
+AMIs in one region are not available from other regions.
 
 Contains:
 
@@ -252,7 +261,15 @@ Contains:
 how they're presented to the operating system. Determines which volume is a
 boot volume and which volumes is a data volume.
 
+
 #### 1.2.5.6. Connecting to EC2
+
+AMI Types:
+
+- Amazon Quick Start AMIs
+- AWS Marketplace AMIs
+- Community AMIs
+- Private AMIs
 
 - Windows using RDP (Remote Desktop Protocol), Port 3389
 - Linux SSH protocol, Port 22
@@ -2102,6 +2119,14 @@ returned.
   - If that AZ fails, there is no recovery.
 - For a fully region resilient service, you must deploy one NATGW in each AZ
 with a Route Table in each AZ with NATGW as target.
+- NAT instance is limited by capabilities of the instance it is running on and that instance is also general purpose, so won't offer the same level of custom design performance as NAT Gateway.
+- NAT instance is single instance running in single AZ it'll fail if EC2 hardware fails, network fails, storage fails or AZ itself fails.
+- NAT Gateway has benefit over NAT instance, inside one AZ it is highly available.
+- You can connect to NAT instance just like any other instance, you can use them as Bastion host or can use them for port forwarding.
+- With NAT Gateway it is not possible, it is managed service. NAT Gateway cannot be used as Bastion host and it cannot do port forwarding.
+- You cannot use SG with NAT instance, you can only use NACLs.
+- NAT is not required for IPv6. Inside AWS all IPv6 addresses are publicly routable. IG works with all IPv6 addresses directly.
+- That means if you choose to make an instance in private subnet that have a default IPv6 route to IG, it'll become public instance.
 - Managed service, scales up to 45 Gbps. Can deploy multiple NATGW to increase
 bandwidth.
 - AWS charges on usage per hour and data volume processed.
@@ -2172,13 +2197,21 @@ handles it all. In EC2 this feature is called **enhanced networking**.
 
 ### 1.6.2. EC2 Architecture and Resilience
 
-- EC2 instances are virtual machines run on EC2 hosts.
-- Shared hosts: Every customer is isolated even on the same shared hardware.
-- Dedicated hosts: Pay for entire host, don't pay for instances.
+EC2 instances are virtual machines run on EC2 hosts.
+
+Tenancy:
+
+- **Shared** - Instances are run on shared hardware, but isolated from other customers.
+- **Dedicated** - Instances are run on hardware that's dedicates to a single customer.
+  Dedicated instances may share hardware with other instances from the same AWS account
+  that are not Dedicated instances.
+- **Dedicated host** - Instances are run on a physical server fully dedicated for your use.
+  Pay for entire host, don't pay for instances.
+
 - AZ resilient service. They run within only one AZ system.
   - You can't access them cross zone.
 
- EC2 host contains
+EC2 host contains
 
 - Local hardware such as CPU and memory
 - Also have temporary instance store
@@ -2227,12 +2260,12 @@ Server style applications
 
 ### 1.6.3. EC2 Instance Types
 
-General Purpose - default steady state workloads with even resources
-Compute Optimized - Media processing, scientific modeling and gaming
-Memory Optimized - Processing large in-memory data sets
-Accelerated Computing - Hardware GPU, FPGAs
-Storage Optimized - Large amounts of super fast local storage. Massive amounts
-of IO per second. Elastic search and analytic workloads.
+- **General Purpose** (T, M) - default steady state workloads with even resources
+- **Compute Optimized** (C) - Media processing, scientific modeling and gaming
+- **Memory Optimized** (R, X) - Processing large in-memory data sets
+- **Accelerated Computing** (P, G, F) - Hardware GPU, FPGAs
+- **Storage Optimized** (H, I, D) - Large amounts of super fast local storage.
+  Massive amounts of IO per second. Elastic search and analytic workloads.
 
 #### 1.6.3.1. Naming Scheme
 
