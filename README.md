@@ -1228,7 +1228,7 @@ Private keys must be handled securely.
 
 Encryption by itself does not prove who encrypted the data.
 
-1. An entity can encrypt a message with their private key.
+1. An entity can sign a message with their private key
 2. Their public key is hosted in an accessible location.
 3. The receiving party can use the public key to confirm who sent the message.
 
