@@ -1,34 +1,31 @@
-# SAA-C02 Notes
-> These are my personal notes from Adrian Cantrill's (SAA-C02) course.
-Learning Aids from
-[aws-sa-associate-saac02](https://github.com/acantril/aws-sa-associate-saac02).
-There may be errors, so please purchase his course to get the original content
-and show support <https://learn.cantrill.io.>
+# 1. SAA-C02 Notes
 
-## Table of Contents
+> These are my personal notes from Adrian Cantrill's (SAA-C02) course.Learning Aids from [aws-sa-associate-saac02](https://github.com/acantril/aws-sa-associate-saac02). There may be errors, so please purchase his course to get the original content and show support <https://learn.cantrill.io.>
 
-- [Cloud-Computing-Fundamentals](#Cloud-Computing-Fundamentals)
-- [AWS-Fundamentals](#AWS-Fundamentals)
-- [IAM-Accounts-AWS-Organizations](#IAM-Accounts-AWS-Organizations)
-- [Simple-Storage-Service-S3](#Simple-Storage-Service-S3)
-- [Virtual-Private-Cloud-VPC](#Virtual-Private-Cloud-VPC)
-- [Elastic-Cloud-Compute-EC2](#Elastic-Cloud-Compute-EC2)
-- [Containers-and-ECS](#Containers-and-ECS)
-- [Advanced-EC2](#Advanced-EC2)
-- [Route-53](#Route-53)
-- [Relational-Database-Service-RDS](#Relational-Database-Service-RDS)
-- [Network-Storage-EFS](#Network-Storage-EFS)
-- [HA-and-Scaling](#HA-and-Scaling)
-- [Serverless-and-App-Services](#Serverless-and-App-Services)
-- [CDN-and-Optimization](#CDN-and-Optimization)
-- [Advanced-VPC](#Advanced-VPC)
-- [Hybrid-and-Migration](#Hybrid-and-Migration)
-- [Security-Deployment-Operations](#Security-Deployment-Operations)
-- [NoSQL-and-DynamoDB](#NoSQL-and-DynamoDB)
+**Table of Contents**
+
+- [1.1. Cloud Computing Fundamentals](#11-cloud-computing-fundamentals)
+- [1.2. AWS-Fundamentals](#12-aws-fundamentals)
+- [1.3. IAM-Accounts-AWS-Organizations](#13-iam-accounts-aws-organizations)
+- [1.4. Simple-Storage-Service-(S3)](#14-simple-storage-service-s3)
+- [1.5. Virtual-Private-Cloud-VPC](#15-virtual-private-cloud-vpc)
+- [1.6. Elastic-Cloud-Compute-EC2](#16-elastic-cloud-compute-ec2)
+- [1.7. Containers-and-ECS](#17-containers-and-ecs)
+- [1.8. Advanced-EC2](#18-advanced-ec2)
+- [1.9. Route-53](#19-route-53)
+- [1.10. Relational-Database-Service-RDS](#110-relational-database-service-rds)
+- [1.11. Network-Storage-EFS](#111-network-storage-efs)
+- [1.12. HA-and-Scaling](#112-ha-and-scaling)
+- [1.13. Serverless-and-App-Services](#113-serverless-and-app-services)
+- [1.14. CDN-and-Optimization](#114-cdn-and-optimization)
+- [1.15. Advanced-VPC](#115-advanced-vpc)
+- [1.16. Hybrid-and-Migration](#116-hybrid-and-migration)
+- [1.17. Security-Deployment-Operations](#117-security-deployment-operations)
+- [1.18. NoSQL-and-DynamoDB](#118-nosql-and-dynamodb)
 
 ---
 
-## Cloud-Computing-Fundamentals
+## 1.1. Cloud Computing Fundamentals
 
 Cloud computing provides
 
@@ -40,7 +37,7 @@ standard protocols and methods.
 4. Rapid Elasticity: Scale up and down automatically in response to system load.
 5. Measured Service: Usage is measured. Pay only for what you consume.
 
-### Public vs Private vs Multi Cloud
+### 1.1.1. Public vs Private vs Multi Cloud
 
 - Public Cloud: using 1 public cloud such as AWS, Azure, Google Cloud.
 - Private Cloud: using on-premises real cloud. Must meet 5 requirements.
@@ -48,7 +45,7 @@ standard protocols and methods.
 - Hybrid Cloud: using public and private clouds in one environment
   - This is **NOT** using Public Cloud and Legacy on-premises hardware.
 
-### Cloud Service Models
+### 1.1.2. Cloud Service Models
 
 The *Infrastructure Stack* or *Application Stack* contains multiple components
 that make up the total service. There are parts that **you** manage as well
@@ -74,7 +71,7 @@ There are additional services such as *Function as a Service*,
 
 ---
 
-## AWS-Fundamentals
+## 1.2. AWS-Fundamentals
 
 ### AWS Support Plans
 
@@ -83,7 +80,8 @@ There are additional services such as *Function as a Service*,
 - Business (multiple users, personal guidance)
 - Enterprise (Technical account manager)
 
-### Public vs Private Services
+### 1.2.1. Public vs Private Services
+
 
 Refers to the networking only, not permissions.
 
@@ -99,9 +97,9 @@ This is done by taking a part of the private service and projecting it into the
 AWS public zone which allows public internet to make inbound or outbound
 connections.
 
-### [AWS Global Infrastructure](https://www.infrastructure.aws/)
+### 1.2.2. AWS Global Infrastructure
 
-#### Regions
+#### 1.2.2.1. Regions
 
 AWS Region is an area of the world they have selected for a full deployment of
 AWS infrastructure.
@@ -118,7 +116,7 @@ Areas such as countries or states
 AWS can only deploy regions as fast as their planning allows.
 Regions are often not near their customers.
 
-#### AWS Edge Locations
+#### 1.2.2.2. AWS Edge Locations
 
 Local distribution points. Useful for services such as Netflix so they can store
 data closer to customers for low latency high speed transfers.
@@ -126,13 +124,13 @@ data closer to customers for low latency high speed transfers.
 If a customer wants to access data stored in Brisbane, they will stream data
 from the Sydney Region through an Edge Location hosted in Brisbane.
 
-#### AWS Management
+#### 1.2.2.3. AWS Management
 
 Regions are connected together with high speed networking.
 Some services such as EC2 need to be selected in a region.
 Some services are global such as IAM
 
-#### Region's 3 Benefits
+#### 1.2.2.4. Region's 3 Benefits
 
 - Geographical Separation
   - Useful for natural disasters
@@ -145,7 +143,7 @@ Some services are global such as IAM
   - Tune architecture for performance
   - Duplicate infrastructure at closer points to customers
 
-#### Regions and AZs
+### 1.2.3. Regions and AZs
 
 Region Name: Asia Pacific (Sydney)
 Region Code: ap-southeast-2
@@ -156,7 +154,7 @@ Components are allowed to distribute load and resilience by using multiple zones
 
 AZs are connected to each other with high speed redundant networks.
 
-#### Service Resilience
+#### 1.2.3.1. Service Resilience
 
 1. Globally Resilient: IAM or Route 53. No way for them to go down. Data is
 replicated throughout multiple regions.
@@ -166,7 +164,7 @@ replicate data to multiple AZs in that region.
 AZ and the service to keep running because of redundant equipment, but should
 not be relied on.
 
-### AWS Default VPC
+### 1.2.4. AWS Default VPC
 
 VPC is a virtual network inside of AWS.
 A VPC is within 1 account and 1 region which makes it regionally resilient.
@@ -175,7 +173,7 @@ A VPC is private and isolated until decided otherwise.
 One default VPC per region. Can have many custom VPCs which are all private
 by default.
 
-#### Default VPC Facts
+#### 1.2.4.1. Default VPC Facts
 
 VPC CIDR - defines start and end ranges of the VPC.
 IP CIDR of a default VPC is always: **172.31.0.0/16**
@@ -191,11 +189,11 @@ The higher the / number is, the smaller the grouping.
 
 Two /17's will fit into a /16, sixteen /20 subnets can fit into one /16.
 
-### Elastic Compute Cloud (EC2)
+### 1.2.5. Elastic Compute Cloud (EC2)
 
 Default compute service. Provides access to virtual machines called instances.
 
-**IaaS** - Infrastructure as as Service
+#### 1.2.5.1. Infrastructure as as Service (IaaS)
 
 The unit of consumption is an instance
 EC2 instance is configured to launch into a single VPC subnet.
@@ -220,7 +218,7 @@ Pricing based on:
 - Storage
 - Networking
 
-#### Running State
+#### 1.2.5.2. Running State
 
 Charged for all four categories.
 
@@ -229,7 +227,7 @@ Charged for all four categories.
 - OS is stored on disk allocated
 - Networking is always ready to transfer information.
 
-#### Stopped State
+#### 1.2.5.3. Stopped State
 
 Charged for EBS storage  only.
 
@@ -238,13 +236,13 @@ Charged for EBS storage  only.
 - Networking is not running
 - Storage is allocated to the instance for the OS.
 
-#### Terminated State
+#### 1.2.5.4. Terminated State
 
 No charges, deletes the disk and prevents all future charges.
 
-#### AMI (Server Image)
+#### 1.2.5.5. AMI (Server Image)
 
-AMI can use used to create an instance or created from an instance.
+AMI can be used to create an instance or can be created from an instance.
 AMIs in one region are not available from other regions.
 
 Contains:
@@ -263,14 +261,15 @@ Contains:
 how they're presented to the operating system. Determines which volume is a
 boot volume and which volumes is a data volume.
 
+
+#### 1.2.5.6. Connecting to EC2
+
 AMI Types:
 
 - Amazon Quick Start AMIs
 - AWS Marketplace AMIs
 - Community AMIs
 - Private AMIs
-
-#### Connecting to EC2
 
 - Windows using RDP (Remote Desktop Protocol), Port 3389
 - Linux SSH protocol, Port 22
@@ -279,7 +278,7 @@ Login to the instance using an SSH key pair.
 Private Key - Stored on local machine to initiate connection.
 Public Key - AWS places this key on the instance.
 
-### S3 (Default Storage Service)
+### 1.2.6. S3 (Default Storage Service)
 
 Global Storage platform. Runs from all regions and is a public service.
 Can be accessed anywhere from the internet with an unlimited amount of users.
@@ -289,7 +288,7 @@ This should be the default storage platform
 S3 is an object storage, not file, or block storage.
 You can't mount an S3 Bucket.
 
-#### Objects
+#### 1.2.6.1. Objects
 
 Can be thought of a file. Two main components:
 
@@ -304,7 +303,7 @@ Other components:
 - Access Control
 - Sub resources
 
-#### Buckets
+#### 1.2.6.2. Buckets
 
 - Created in a specific AWS Region.
 - Data has a primary home region. Will not leave this region unless told.
@@ -316,11 +315,11 @@ Other components:
 If the objects name starts with a slash such as `/old/Koala1.jpg` the UI will
 present this as a folder. In actuality this is not true, there are no folders.
 
-### CloudFormation Basics
+### 1.2.7. CloudFormation Basics
 
-Templates can modify infrastructure to, create, update and delete.
+CloudFormation templates can be used to create, update, modify, and delete infrastructure.
 
-Written in YAML or JSON
+They can be written in YAML or JSON. An example is provided below.
 
 ```YAML
 ## This is not mandatory unless a description is added
@@ -364,7 +363,7 @@ Outputs:
   set of outputs
 ```
 
-#### Resources
+### 1.2.8. Resources
 
 An example which creates an EC2 instance
 
@@ -388,7 +387,7 @@ It is cloud formations job to keep the logical and physical resources in sync.
 
 A template can be updated and then used to update the same stack.
 
-### CloudWatch Basics
+### 1.2.9. CloudWatch Basics
 
 Collects and manages operational data on your behalf.
 
@@ -400,13 +399,13 @@ Three products in one
   - If an AWS service does something, CW events can perform another action
   - Generate an event to do something at a certain time of day or time of week.
 
-#### Namespace
+#### 1.2.9.1. Namespace
 
 Container for monitoring data.
 Naming can be anything so long as it's not `AWS/service` such as `AWS/EC2`.
 This is used for all metric data of that service
 
-#### Metric
+#### 1.2.9.2. Metric
 
 Time ordered set of data points such as:
 
@@ -424,20 +423,20 @@ Anytime CPU Utilization is reported, the **datapoint** will report
 **Dimensions** separate data points for different **things** or
 **perspectives** within the same metric
 
-#### Alarms
+#### 1.2.9.3. Alarms
 
 Has two states `ok` or `alarm`.State can send an SNS or action.
 Third state can be insufficient data state. Not a problem, just wait.
 
-### Shared Responsibility Model
+### 1.2.10. Shared Responsibility Model
 
 AWS: Responsible for security **OF** the cloud
 
 Customer: Responsible for security **IN** the cloud
 
-### High Availability (HA), Fault-Tolerance (FT), and Disaster Recover (DR)
+### 1.2.11. High Availability (HA), Fault-Tolerance (FT), and Disaster Recover (DR)
 
-#### High Availability (HA)
+#### 1.2.11.1. High Availability (HA)
 
 - Aims to **ensure** an agreed level of operational **performance**, usually
 **uptime**, for a **higher than normal period**
@@ -449,7 +448,7 @@ Customer: Responsible for security **IN** the cloud
   - 99.9% (Three 9's) = 8.7 hours downtime per year.
   - 99.999 (Five 9's) = 5.26 minutes downtime per year.
 
-#### Fault-Tolerance (FT)
+#### 1.2.11.2. Fault-Tolerance (FT)
 
 - System can **continue operating properly**
 in the event of the **failure of some** (one or more faults within) of its
@@ -466,7 +465,7 @@ While being monitored, the life support system is dosing medicine.
 This type of system cannot only be highly available, even a movement of
 interruption is deadly.
 
-#### Disaster Recover (DR)
+#### 1.2.11.3. Disaster Recover (DR)
 
 - Set of policies, tools and procedures to **enable the recovery** or
 **continuation** of **vital** technology infrastructure and systems
@@ -484,7 +483,7 @@ This involves:
 This is designed to keep the crucial and non replaceable parts of the
 system in place.
 
-### Domain Name System (DNS)
+### 1.2.12. Domain Name System (DNS)
 
 DNS is a discovery service. Translates machines into humans and vice-versa.
 It is a huge database and has to be distributed.
@@ -506,7 +505,7 @@ Find the Nameserver which hosts a particular Zonefile.
 Query that Nameserver for a record with that Zone.
 It then passes the information back to the client.
 
-#### DNS Root
+#### 1.2.12.1. DNS Root
 
 The starting point of DNS.
 DNS names are read right to left with multiple parts separated by periods.
@@ -530,7 +529,7 @@ The Root Zone is organized by IANA (Internet Assigned Numbers Authority).
 Their job is to manage the contents of the root zone. IANA is in charge
 of the DNS system because they control the root zone.
 
-#### DNS Hierarchy
+#### 1.2.12.2. DNS Hierarchy
 
 Assuming a laptop is querying DNS directly for www.amazon.com and using
 a root hints file to know how to access a root server and query the root zone.
@@ -552,7 +551,7 @@ The top level domains are the only things to the left of the DNS name.
 **Registrar** has relationships with the .org TLD zone manager
 allowing domain registration
 
-### Route53 Fundamentals
+### 1.2.13. Route53 Fundamentals
 
 - Registers domains
 - Can Host Zone Files on managed nameservers
@@ -560,7 +559,7 @@ allowing domain registration
 - Globally Resilience
   - Can operate with failure in one or more regions
 
-#### Register Domains
+#### 1.2.13.1. Register Domains
 
 Has relationships with all major registries
 
@@ -574,14 +573,14 @@ Has relationships with all major registries
 records into the zone file for the top level domain.
   - This is done with a nameserver record.
 
-#### Route53 Details
+#### 1.2.13.2. Route53 Details
 
 **Zonefiles** in AWS
 Hosted on four managed name servers
 
 - Can be **public** or **private**
 
-### DNS Record
+### 1.2.14. DNS Record
 
 - Nameserver (NS): Allows delegation to occur in the DNS.
 - A and AAAA Records: Maps the host to a v4 or v6 host type. Most of the time
@@ -597,7 +596,7 @@ to be part of the same zone as the host.
 - TXT Record: Allows you to add arbitrary text to a domain.
 One common usage is to prove domain ownership.
 
-#### TTL - Time To Live
+#### 1.2.14.1. TTL - Time To Live
 
 This is a numeric setting on DNS records in seconds.
 Allows the admin to specify how long the query can be stored
@@ -612,9 +611,9 @@ If another client queries the same thing, they will get back a
 
 ---
 
-## IAM-Accounts-AWS-Organizations
+## 1.3. IAM-Accounts-AWS-Organizations
 
-### IAM Identity Policies
+### 1.3.1. IAM Identity Policies
 
 Identity Policies are attached to AWS Identities which are
 IAM users, IAM groups, and IAM roles. These are a set of security statements
@@ -624,7 +623,7 @@ When an identity attempts to access AWS resources, that identity needs
 to prove who it is to AWS, a process known as **Authentication**.
 Once authenticated, that identity is known as an **authenticated identity**
 
-#### Statement Components
+#### 1.3.1.1. Statement Components
 
 - Statement ID (SID): Optional field that should help describe
   - The resource you're interacting
@@ -637,18 +636,18 @@ Once authenticated, that identity is known as an **authenticated identity**
   - list of multiple independent actions
 - Resource: similar to action except for format `arn:aws:s3:::catgifs`
 
-#### Priority Level
+#### 1.3.1.2. Priority Level
 
 - Explicit Deny: Denies access to a particular resource cannot be overruled.
 - Explicit Allow: Allows access so long there is not an explicit deny.
 - Default Deny (Implicit): IAM identities start off with no resource access.
 
-#### Inline Policies and Managed Policies
+#### 1.3.1.3. Inline Policies and Managed Policies
 
 - Inline Policy: grants access and assigned on each accounts individually.
 - Managed Policy (best practice): one policy is applied to all users at once.
 
-### IAM Users
+### 1.3.2. IAM Users
 
 Identity used for anything requiring **long-term** AWS access
 
@@ -669,7 +668,7 @@ There are two ways to authenticate:
 
 Once the **Principal** has authenticated, it becomes an **authenticated identity**
 
-#### Amazon Resource Name (ARN)
+#### 1.3.2.1. Amazon Resource Name (ARN)
 
 Uniquely identify resources within any AWS accounts.
 
@@ -701,12 +700,12 @@ An example that leads to confusion:
 
 These two ARNs do not overlap
 
-#### IAM FACTS
+#### 1.3.2.2. IAM FACTS
 
 - 5,000 IAM users per account
 - IAM user can be a member of 10 groups
 
-### IAM Groups
+### 1.3.3. IAM Groups
 
 Containers for users. **You cannot login to IAM groups** They have no
 credentials of their own. Used solely for management of IAM users.
@@ -736,7 +735,7 @@ A bucket can give access to one or more users or one or more roles.
 An S3 Resource cannot grant access to a group, it is not an identity.
 Groups are used to allow permissions to be assigned to IAM users.
 
-### IAM Roles
+### 1.3.4. IAM Roles
 
 A single thing that uses an identity is an IAM User.
 
@@ -771,7 +770,7 @@ Roles are real identities and can be referenced within resource policies.
 Secure Token Service (sts:AssumeRole) this is what generates the temporary
 security credentials (TSC).
 
-### When to use IAM Roles
+### 1.3.5. When to use IAM Roles
 
 Lambda Execution Role.
 For a given lambda function, you cannot determine the number of principals
@@ -785,7 +784,7 @@ CloudWatch and S3.
 
 It is better when possible to use an IAM Role versus attaching a policy.
 
-#### Emergency or out of the usual situations
+#### 1.3.5.1. Emergency or out of the usual situations
 
 Break Glass Situation - There is a key for something the team does not
 normally have access to. When you break the glass, you must have a reason
@@ -793,7 +792,7 @@ to do.
 A role can have an Emergency Role which will allow further access if
 its really needed.
 
-#### Adding AWS into existing corp environment
+#### 1.3.5.2. Adding AWS into existing corp environment
 
 You may have an existing identity provider you are trying to allow access to.
 This may offer SSO (Single Sign On) or over 5000 identities.
@@ -803,7 +802,7 @@ To solve this, you allow an IAM role in the AWS account to be assumed
 by one of the active directories.
 **ID Federation** allowing an external service the ability to assume a role.
 
-#### Making an app with 1,000,000 users
+#### 1.3.5.3. Making an app with 1,000,000 users
 
 **Web Identity Federation** uses IAM roles to allow broader access.
 These allow you to use an existing web identity such as google, facebook, or
@@ -813,12 +812,12 @@ an IAM role to access web resources such as DynamoDB.
 No AWS Credentials are stored on the application.
 Can scale quickly and beyond.
 
-#### Cross Account Access
+#### 1.3.5.4. Cross Account Access
 
 You can use a role in the partner account and use that to upload objects
 to AWS resources.
 
-### AWS Organizations
+### 1.3.6. AWS Organizations
 
 Without an organization, each AWS account needs it's own set of IAM users
 as well as individual payment methods.
@@ -834,13 +833,13 @@ become **member accounts**.
 Organizations can only have one **master accounts** and zero or more
 **member accounts**
 
-#### Organization Root
+#### 1.3.6.1. Organization Root
 
 This is a container that can hold AWS member accounts or the master account.
 It could also contain **organizational units** which can contain other
 units or member accounts.
 
-#### Consolidated billing
+#### 1.3.6.2. Consolidated billing
 
 The individual billing for the member accounts is removed and they pass their
 billing to the master account.
@@ -848,7 +847,7 @@ Inside an AWS organization, you get a single monthly bill for the master
 account which covers all the billing for each users.
 Can offer a discount with consolidation of reservations and volume discounts
 
-#### Create new accounts in an org
+#### 1.3.6.3. Create new accounts in an org
 
 Adding accounts in an organization is easy with only an email needed.
 You no longer need IAM users in each accounts. You can use IAM roles
@@ -856,11 +855,11 @@ to change these.
 It is best to have a single AWS account only used for login.
 Some enterprises may use an AWS account while smaller ones may use the master.
 
-#### Role Switching
+#### 1.3.6.4. Role Switching
 
 Allows you to switch between accounts from the command line
 
-### Service Control Policies
+### 1.3.7. Service Control Policies
 
 Can be used to restrict what member accounts in an org can do.
 
@@ -876,7 +875,7 @@ should not be used because it is a security risk.
 SCPs limit what the account, **including root** can do inside that account.
 They don't grant permissions themselves, just act as a barrier.
 
-#### Allow List vs Deny List
+#### 1.3.7.1. Allow List vs Deny List
 
 Deny list is the default.
 
@@ -936,7 +935,7 @@ services offered by AWS. A lot less admin overhead.
 }
 ```
 
-### CloudWatch Logs
+### 1.3.8. CloudWatch Logs
 
 This is a public service, this can be used from AWS VPC or on premise
 environment.
@@ -950,7 +949,7 @@ Comes with some AWS Integrations.
 Security is provided with IAM roles or Service roles
 Can generate metrics based on logs **metric filter**
 
-#### Architecture of CloudWatch Logs
+#### 1.3.8.1. Architecture of CloudWatch Logs
 
 It is a regional service `us-east-1`
 
@@ -965,7 +964,7 @@ retention settings and permissions.
 Once the settings are defined on a log group, they apply to all log streams
 in that log group. Metric filters are also applied on the log groups.
 
-### CloudTrail Essentials
+### 1.3.9. CloudTrail Essentials
 
 Concerned with who did what.
 
@@ -985,7 +984,7 @@ in the AWS account. Create an EC2 instance or terminating one.
 Objects being uploaded to S3 or a Lambda function being invoked. This is not
 enabled by default and must be enabled for that trail.
 
-#### CloudTrail Trail
+#### 1.3.9.1. CloudTrail Trail
 
 Logs events for the AWS region it is created in. It is a regional service.
 
@@ -1015,7 +1014,7 @@ also use CloudWatch Logs to output the data.
 CloudTrail products can create an organizational trail. This allows a single
 management point for all the APIs and management events for that org.
 
-#### CloudTrail Exam PowerUp
+#### 1.3.9.2. CloudTrail Exam PowerUp
 
 - It is enabled by default for 90 days without S3
 - Trails are how you configure S3 and CWLogs
@@ -1024,21 +1023,21 @@ management point for all the APIs and management events for that org.
   - Trail must be enabled to do this
 - NOT REALTIME - There is a delay. Approximately 15 minute delay
 
-#### CloudTrail Pricing
+#### 1.3.9.3. CloudTrail Pricing
 
 <https://aws.amazon.com/cloudtrail/pricing/>
 
 ---
 
-## Simple-Storage-Service-(S3)
+## 1.4. Simple-Storage-Service-(S3)
 
-### S3 Security
+### 1.4.1. S3 Security
 
 **S3 is private by default!** The only identity which has any initial
 access to an S3 bucket is the account root user of the account which owns that
 bucket.
 
-#### S3 Bucket Policy
+#### 1.4.1.1. S3 Bucket Policy
 
 This is a **resource policy**
 
@@ -1055,13 +1054,13 @@ Different from an **identity policy**
 
 Each bucket can only have one policy, but it can have multiple statements.
 
-#### ACLs (Legacy)
+#### 1.4.1.2. ACLs (Legacy)
 
 A way to apply a subresource to objects and buckets.
 These are legacy and AWS does not recommend their use.
 They are inflexible and allow simple permissions.
 
-#### S3 Exam PowerUp
+#### 1.4.1.3. S3 Exam PowerUp
 
 When to use Identity Policy or Bucket Policy:
 
@@ -1079,7 +1078,7 @@ Bucket
 
 ACLs: NEVER - unless you must.
 
-### S3 Static Hosting
+### 1.4.2. S3 Static Hosting
 
 Normal access is via AWS APIs.
 This allows access via HTTP using a web browser.
@@ -1100,18 +1099,18 @@ This cannot be changed.
 You can use a custom domain for a bucket, but then the bucket name matters.
 The name of the bucket must match the domain.
 
-#### Offloading
+#### 1.4.2.1. Offloading
 
 Instead of using EC2 to host an entire website, the compute service
 can generate a HTML file which points to the resources hosted on a static
 bucket. This ensures the media is retrieved from S3 and not EC2.
 
-#### Out-of-band pages
+#### 1.4.2.2. Out-of-band pages
 
 This may be an error page to display maintenance if the server goes offline.
 We could then change our DNS and move customers to a backup website on S3.
 
-#### S3 Pricing
+#### 1.4.2.3. S3 Pricing
 
 - Cost to store data, per GB / month fee
   - Prorated for less than a GB or month.
@@ -1121,7 +1120,7 @@ We could then change our DNS and move customers to a backup website on S3.
 - Each operation has a cost per 1000 operations.
   - Can add up for static website hosting with many requests.
 
-### Object Versioning and MFA Delete
+### 1.4.3. Object Versioning and MFA Delete
 
 Without Versioning:
 
@@ -1147,7 +1146,7 @@ the item.
 To delete an object, you must delete all the versions of that object
 using their version marker.
 
-#### MFA Delete
+#### 1.4.3.1. MFA Delete
 
 Enabled within version configuration in a bucket.
 This means MFA is required to change bucket versioning state.
@@ -1157,7 +1156,7 @@ In order to change a version state or delete a particular version of an object,
 you need to provide the serial number of your MFA token as well as the code
 it generates. These are concatenated and passed with any API calls.
 
-### S3 Performance Optimization
+### 1.4.4. S3 Performance Optimization
 
 Single PUT Upload
 
@@ -1185,9 +1184,9 @@ S3 Accelerated Transfer
 - Benefits improve the larger the location and distance.
   - The worse the start, the better the performance benefits.
 
-### Encryption 101
+### 1.4.5. Encryption 101
 
-#### Encryption at Rest
+#### 1.4.5.1. Encryption at Rest
 
 - An example is a password on a laptop
   - If the laptop is stolen, the data is already encrypted and useless.
@@ -1195,25 +1194,25 @@ S3 Accelerated Transfer
 find and access the base storage device, they can't do anything with it.
 - Only one entity involved
 
-#### Encryption in Transit
+#### 1.4.5.2. Encryption in Transit
 
 - An encryption tunnel outside the raw data.
 - Anyone looking from the outside will only see a stream of scrambled data.
 - Used when there are multiple parties or systems at play.
 
-#### Terms
+#### 1.4.5.3. Terms
 
 - plaintext: unencrypted data not limited to text
 - key: a password
 - ciphertext: encrypted data generated by an algorithm from plaintext and a key
 
-#### Symmetric Encryption
+#### 1.4.5.4. Symmetric Encryption
 
 The key is handed from one entity to another before the data.
 This is difficult because the key needs to be transferred securely.
 If the data is time sensitive, the key needs to be arranged beforehand.
 
-#### Asymmetric Encryption
+#### 1.4.5.5. Asymmetric Encryption
 
 - public key: cannot decrypt data but can generate ciphertext
 - private key: can decrypt data encrypted by the public key
@@ -1225,7 +1224,7 @@ The private key can decrypt the data.
 This is secure because stolen public keys can only encrypt data.
 Private keys must be handled securely.
 
-#### Signing
+#### 1.4.5.6. Signing
 
 Encryption by itself does not prove who encrypted the data.
 
@@ -1233,7 +1232,7 @@ Encryption by itself does not prove who encrypted the data.
 2. Their public key is hosted in an accessible location.
 3. The receiving party can use the public key to confirm who sent the message.
 
-#### Steganography
+#### 1.4.5.7. Steganography
 
 Encryption is obvious when used. There is no denying that the
 data was encrypted. Someone could force you to decrypt the data packet.
@@ -1245,7 +1244,7 @@ One party would take another party's public key and encrypt some data to create
 ciphertext. That ciphertext can be hidden in another file so long as both
 parties know how the data will be hidden.
 
-### Key Management Service (KMS)
+### 1.4.6. Key Management Service (KMS)
 
 - Regional service
   - Every region is isolated when using KMS.
@@ -1255,11 +1254,11 @@ parties know how the data will be hidden.
   - Can handle both symmetric and asymmetric keys.
 - KMS can perform cryptographic operations itself.
 - Keys never leave KMS.
-- Keys use **FIPS 140-2 (L2)** security standard.
+- Keys use **Federal Information Processing Standard (FIPS) 140-2 (L2)** security standard.
   - Some features are compliant with Level 3.
   - All features are compliant with Level 2.
 
-#### CMKs - Customer Master Keys
+#### 1.4.6.1. CMKs - Customer Master Keys
 
 - Managed by KMS and used within cryptographic operations.
 - AWS services, applications, and the user can all use them.
@@ -1276,7 +1275,7 @@ It is logical and contains
 - Description
 - State of the Key: active or not
 
-#### Data Encryption Key (DEK)
+#### 1.4.6.2. Data Encryption Key (DEK)
 
 - Generated by KMS using the CMK and `GenerateDataKey` operation.
 - Used to encrypt data larger than 4KB in size.
@@ -1302,7 +1301,7 @@ Architecture
 3. Discard the plaintext data version of the DEK.
 4. The encrypted DEK is stored next to the ciphertext generated earlier.
 
-#### KMS Key Concepts
+#### 1.4.6.3. KMS Key Concepts
 
 - Customer Master Keys (CMK) are isolated to a region.
   - Never leave the region or KMS.
@@ -1330,7 +1329,7 @@ Aliases are also per region. You can create a `MyApp1` alias in all regions
 but they would be separate aliases, and in each region it would be pointing
 potentially at a different CMK.
 
-#### Key Policy (resource policy)
+#### 1.4.6.4. Key Policy (resource policy)
 
 - Every CMK has one.
 - Customer managed CMKs can adjust the policy.
@@ -1345,7 +1344,7 @@ needs to be trusted by the key.
 - It sets up this chain of trust from the key to the account to IAM and then
 to an IAM user, if they're granted any identity permissions.
 
-### KMS Key Demo
+### 1.4.7. KMS Key Demo
 
 Linux/macOS commands
 
@@ -1367,7 +1366,7 @@ aws kms decrypt \
     --query Plaintext | base64 --decode > decryptedplans.txt
 ```
 
-### Object Encryption
+### 1.4.8. Object Encryption
 
 Buckets aren't encrypted, **objects are**.
 Multiple objects in a bucket can use a different encryption methods.
@@ -1391,7 +1390,7 @@ Server-Side encryption
 - After S3 sees the data, it is then encrypted.
 - AWS will handle some or all of these processes.
 
-#### SSE-C (Server-side encryption with customer provided keys)
+#### 1.4.8.1. SSE-C (Server-side encryption with customer provided keys)
 
 - Customer is responsible for the keys themselves.
 - S3 services manages the actual encryption and decryption
@@ -1413,7 +1412,7 @@ it with the key used to encrypt it. If the key that you supply is correct,
 the proper hash, S3 will decrypt the object, discard the key, and return the
 plaintext version of the object.
 
-#### SSE-S3 AES256 (Server-side encryption w/ Amazon S3 managed keys)
+#### 1.4.8.2. SSE-S3 AES256 (Server-side encryption w/ Amazon S3 managed keys)
 
 AWS handles both the encryption and decryption process as well as the
 key generation and management. This provides very little control over how
@@ -1434,7 +1433,7 @@ Three Problems with this method:
 - No way to control key material rotation.
 - No role separation. A full S3 admin can decrypt data and open objects.
 
-#### SSE-KMS (Server-side encryption w/ customer master keys stored in AWS KMS)
+#### 1.4.8.3. SSE-KMS (Server-side encryption w/ customer master keys stored in AWS KMS)
 
 Much like SSE-S3, where AWS handles both the keys and encryption process.
 KMS handles the master key and not S3. The first time an object is uploaded,
@@ -1463,7 +1462,7 @@ The CMK is used to decrypt the data encryption key for that object.
 That decrypted data encryption key is used to decrypt the object itself.
 If you don't have access to KMS, you don't have access to the object.
 
-### S3 Object Storage Classes
+### 1.4.9. S3 Object Storage Classes
 
 Picking a storage class can be done while uploading a specific object.
 The default is S3 standard. Once an object is uploaded to a specific class,
@@ -1471,7 +1470,7 @@ it can be easily changed as long as some conditions are met.
 
 Objects in S3 are stored in a specific region.
 
-#### S3 Standard
+#### 1.4.9.1. S3 Standard
 
 - Default AWS storage class that's used in S3, should be user default as well.
 - S3 Standard is region resilient, and can tolerate the failure of an AZ.
@@ -1484,7 +1483,7 @@ Objects in S3 are stored in a specific region.
 
 All of the other storage classes trade some of these compromises for another.
 
-#### S3 Standard-IA
+#### 1.4.9.2. S3 Standard-IA
 
 - Designed for less frequent rapid access when it is needed.
 - Cheaper rate to store data you will rarely need, but if you do need it, you
@@ -1499,7 +1498,7 @@ need it quickly.
 Designed for data that isn't accessed often, long term storage, backups,
 disaster recovery files. The requirement for data to be safe is most important.
 
-#### One Zone-IA
+#### 1.4.9.3. One Zone-IA
 
 - Designed for data that is accessed less frequently but needed quickly.
 - 80% of the base cost of Standard-IA.
@@ -1512,7 +1511,7 @@ Great choice for secondary copies of primary data or backup copies.
 If data is easily creatable from a primary data set, this would be a great
 place to store the output from another data set.
 
-#### S3 Glacier
+#### 1.4.9.4. S3 Glacier
 
 - No immediate access to objects, retrieval in minutes or hours.
 - Make a request to access objects then after a duration, you get access.
@@ -1531,7 +1530,7 @@ Retrieval methods:
 - Standard: 3 - 5 hours to restore.
 - Bulk: 5 - 12 hours. Has the lowest cost and is good for a large set of data.
 
-#### S3 Glacier Deep Archive
+#### 1.4.9.5. S3 Glacier Deep Archive
 
 - Designed for long term backups and as a tape-drive replacement.
 - 4.3% of the base cost of S3 standard
@@ -1539,7 +1538,7 @@ Retrieval methods:
 - Standard retrieval within 12 hours, bulk retrieval in 48 hours.
 - Cannot use to make data public or download normally.
 
-#### S3 Intelligent-Tiering
+#### 1.4.9.6. S3 Intelligent-Tiering
 
 - Combination of standard and standard IA.
 - Uses automation to remove overhead of moving objects.
@@ -1548,12 +1547,12 @@ Retrieval methods:
 
 This is good for objects that are unknown their access pattern.
 
-### Object Lifecycle Management
+### 1.4.10. Object Lifecycle Management
 
 Intelligent-Tiering is used for objects where access patterns is unknown.
 A lifecycle configuration is a set of **rules** that consists of **actions**.
 
-#### Transition Actions
+#### 1.4.10.1. Transition Actions
 
 Change the storage class over time such as:
 
@@ -1563,12 +1562,12 @@ Change the storage class over time such as:
 
 Objects must flow downwards, they can't flow in the reverse direction.
 
-#### Expiration Actions
+#### 1.4.10.2. Expiration Actions
 
 Once an object has been uploaded and changed, you can purge older versions
 after 90 days to keep costs down.
 
-### S3 Replication
+### 1.4.11. S3 Replication
 
 There are two types of S3 replication available.
 
@@ -1594,7 +1593,7 @@ by the destination account. If configuring between accounts, you must
 add a bucket policy on the destination account to allow the IAM role from
 the source account access to the bucket.
 
-#### S3 Replication Options
+#### 1.4.11.1. S3 Replication Options
 
 - Which objects are replicated.
   - Default is all source objects, but can select a smaller subset of objects.
@@ -1608,7 +1607,7 @@ the source account access to the bucket.
   - Adds a guaranteed level of SLA within 15 minutes for extra cost.
   - This is useful for buckets that must be in sync the whole time.
 
-#### Important Replication Tips
+#### 1.4.11.2. Important Replication Tips
 
 - Replication is not retroactive.
   - If you enable replication on a bucket that already has objects, the old
@@ -1626,7 +1625,7 @@ some of those objects.
 - Will not replicate system events, glacier, or glacier deep archive.
 - No deletes are replicated.
 
-#### Why use replication
+#### 1.4.11.3. Why use replication
 
 SRR - Log Aggregation
 SRR - Sync production and test accounts
@@ -1634,7 +1633,7 @@ SRR - Resilience with strict sovereignty requirements
 CRR - Global resilience improvements
 CRR - Latency reduction
 
-### S3 Presigned URL
+### 1.4.12. S3 Presigned URL
 
 A way to give another person or application access to a object inside an S3
 bucket using your credentials in a safe way.
@@ -1651,7 +1650,7 @@ S3 will create a presigned URL and return it. This URL will have encoded inside
 it the details that IAM admin provided. It will be configured to expire at
 a certain date and time as requested by the IAM admin user.
 
-#### S3 Presigned URL Exam PowerUp
+#### 1.4.12.1. S3 Presigned URL Exam PowerUp
 
 - You can create a presigned URL for an object you have do not have access to.
 The object will not allow access because your user does not have access.
@@ -1661,7 +1660,7 @@ that generated it at the moment the item is being accessed.
 - Don't generate presigned URLs with an IAM role.
   - The role will likely expire before the URL does.
 
-### S3 Select and Glacier Select
+### 1.4.13. S3 Select and Glacier Select
 
 This provides a ways to retrieve parts of objects and not the entire object.
 
@@ -1674,11 +1673,11 @@ The filtering happens at the S3 service itself saving time and data.
 
 ---
 
-## Virtual-Private-Cloud-VPC
+## 1.5. Virtual-Private-Cloud-VPC
 
-### Networking Refresher
+### 1.5.1. Networking Refresher
 
-#### IPv4 - RFC 791 (1981)
+#### 1.5.1.1. IPv4 - RFC 791 (1981)
 
 Dotted decimal notation for human readability.
 
@@ -1689,7 +1688,7 @@ There are just over 4 billion addresses.
 This was not very flexible because it was either too small or large for
 some corporations. Some IP addresses was always left unused.
 
-#### Classful Addressing
+#### 1.5.1.2. Classful Addressing
 
 - Class A range
   - Starts at `0.0.0.0` and ends at `127.255.255.255`.
@@ -1702,7 +1701,7 @@ some corporations. Some IP addresses was always left unused.
   - Half of range class B
   - Starts at `192.0.0.0` and ends at `223.255.255.255`.
 
-#### Internet / Private IPs - RFC1918
+#### 1.5.1.3. Internet / Private IPs - RFC1918
 
 These can't communicate over the internet and are used internally only
 
@@ -1710,7 +1709,7 @@ These can't communicate over the internet and are used internally only
 - 16 Class B networks: `172.16.0.0` - `172.31.255.255`
 - 256 Class C networks: `192.168.0.0` - `192.168.255.255`
 
-#### Classless inter-domain routing (CIDR)
+#### 1.5.1.4. Classless inter-domain routing (CIDR)
 
 CIDR networks are represented by the starting IP address of the network
 called the network address and the prefix.
@@ -1725,7 +1724,7 @@ CIDR Example: `10.0.0.0/16`
 - `10.0.0.0/17` and `10.0.128.0/17` are each half of the original example.
   - This is called **subnetting**
 
-#### IP address notations to remember
+#### 1.5.1.5. IP address notations to remember
 
 - `0.0.0.0/0` means all IP addresses
 - `10.0.0.0/8` means 10.ANYTHING - Class A
@@ -1736,7 +1735,7 @@ CIDR Example: `10.0.0.0/16`
 `10.0.0.0/16` is the equivalent of `1234` as a password. You should consider
 other ranges that people might use to ensure it does not overlap.
 
-#### Packets
+#### 1.5.1.6. Packets
 
 Contains:
 
@@ -1754,7 +1753,7 @@ This allows devices to have multiple conversations at the same time.
 In AWS when data goes through network devices, filters can be set based on
 IP addresses and port numbers.
 
-#### IPv6 - RFC 8200 (2017)
+#### 1.5.1.7. IPv6 - RFC 8200 (2017)
 
 `2001:0db8:28ac:0000:0000:82ae:3910:7334`
 
@@ -1778,7 +1777,7 @@ the prefix.
 
 `::/0` represents all IPv6 addresses
 
-### VPC Sizing and Structure
+### 1.5.2. VPC Sizing and Structure
 
 VPC Consideration
 
@@ -1803,7 +1802,7 @@ An example using 4 AWS accounts.
   - 1 region in AUS
 - Total of 40 ranges, 10 ranges for each account.
 
-#### How to size VPC
+#### 1.5.2.1. How to size VPC
 
 A subnet is located in one availability zone.
 Try to split each subnet into tiers (web, application, db, spare).
@@ -1812,7 +1811,7 @@ splitting the network into 4 different AZs.
 This allows for at least one subnet in each AZ, and one spare.
 Taking a /16 subnet and splitting it 16 ways will make each a /20.
 
-### Custom VPC
+### 1.5.3. Custom VPC
 
 - Regional Isolated and Resilient Service.
   - Operates from all AZs in that region
@@ -1827,7 +1826,7 @@ Taking a /16 subnet and splitting it 16 ways will make each a /20.
   - Dedicated locks any resourced created in that VPC to be on dedicated
   hardware which comes at a cost premium.
 
-#### Custom VPC Facts
+#### 1.5.3.1. Custom VPC Facts
 
 IPv4 private and public IPs
 
@@ -1848,7 +1847,7 @@ to use, or you can select to use your own IPv6 addresses which you own.
 - IPv6 does not have private addresses, they are all routed as public by
 default.
 
-#### DNS provided by R53
+#### 1.5.3.2. DNS provided by R53
 
 Available on the base IP address of the VPC + 2.
 If the VPC is `10.0.0.0` then the DNS IP will be `10.0.0.2`
@@ -1863,7 +1862,7 @@ Two options that manage how DNS works in a VPC:
   - If true, instances in the VPC can use the DNS IP address.
   - If false, this is not available.
 
-### VPC Subnets
+### 1.5.4. VPC Subnets
 
 - AZ Resilient subnetwork of a VPC.
   - If the AZ fails, the subnet and services also fail.
@@ -1876,7 +1875,7 @@ Two options that manage how DNS works in a VPC:
   - (256 /64 subnets can fit in the /56 VPC)
 - Subnets can communicate with other subnets in the VPC by default.
 
-#### Reserved IP addresses
+#### 1.5.4.1. Reserved IP addresses
 
 There are five IP addresses within every VPC subnet that you cannot use.
 Whatever size of the subnet, the IP addresses are five less than you expect.
@@ -1889,7 +1888,7 @@ If using `10.16.16.0/20` (`10.16.16.0` - `10.16.31.255`)
 - Network + 3: `10.16.16.3` - Reserved for future AWS use
 - Broadcast Address: `10.16.31.255` (Last IP in subnet)
 
-#### DHCP Options Set
+#### 1.5.4.2. DHCP Options Set
 
 This is how computing devices receive IP addresses automatically. There is
 one options set applied to a VPC at one time and this configuration flows
@@ -1901,7 +1900,7 @@ through to subnets.
   - Change the VPC allocation to the new one
   - Delete the old one
 
-#### IP allocation Options
+#### 1.5.4.3. IP allocation Options
 
 - Auto Assign public IPv4 address
   - This will create a public IP address in addition to their private subnet.
@@ -1909,7 +1908,7 @@ through to subnets.
 - Auto Assign IPv6 address
   - For this to work, the subnet and VPC need an allocation of addresses.
 
-### VPC Routing and Internet Gateway
+### 1.5.5. VPC Routing and Internet Gateway
 
 VPC Router is a highly available device available in every VPC which moves
 traffic from somewhere to somewhere else.
@@ -1925,7 +1924,7 @@ If you do associate a custom route table you create with a subnet, then the
 main route table is disassociated. A subnet can only have one route table
 associated at a time, but a route table can be associated by many subnets.
 
-#### Route Tables
+#### 1.5.5.1. Route Tables
 
 When traffic leaves the subnet that this route table is associated with, the
 VPC router reviews the IP packets looking for the destination address.
@@ -1936,7 +1935,7 @@ If the target says local, that means the destination is in the VPC itself.
 Local route can never be updated, they're always present and the local route
 always takes priority. This is the exception to the prefix rule.
 
-#### Internet Gateway
+#### 1.5.5.2. Internet Gateway
 
 A managed service that allows gateway traffic between the VPC and the internet
 or AWS Public Zones (S3, SQS, SNS, etc.)
@@ -1949,7 +1948,7 @@ or AWS Public Zones (S3, SQS, SNS, etc.)
 - IGW can be created and attached to no VPC.
 - Runs from within the AWS public zone.
 
-#### Using IGW
+#### 1.5.5.3. Using IGW
 
 In this example, an EC2 instance has:
 
@@ -1981,7 +1980,7 @@ about the private address and instead uses the instance's public IP address.
 If the instance uses an IPv6 address, that public address is good to go. The IGW
 does not translate the packet and only pushes it to a gateway.
 
-#### Bastion Host / Jumpbox
+#### 1.5.5.4. Bastion Host / Jumpbox
 
 It is an instance in a public subnet inside a VPC.
 These are used to allow incoming management connections.
@@ -1992,7 +1991,7 @@ This is an inbound management point. Can be configured to only allow
 specific IP addresses or to authenticate with SSH. It can also integrate
 with your on premise identification service.
 
-### Network Access Control List (NACL)
+### 1.5.6. Network Access Control List (NACL)
 
 Network Access Control Lists (NACLs) are a type of security filter
 (like firewalls) which can filter traffic as it enters or leaves a subnet.
@@ -2035,7 +2034,7 @@ The rule at the bottom with `*` is the **implicit deny**
 This cannot be edited and is defaulted on each rule list.
 If no other rules match the traffic being evaluated, it will be denied.
 
-#### NACLs example below
+#### 1.5.6.1. NACLs example below
 
 - Bob wants to view a blog using https(tcp/443)
 - We need a NACL rule to allow TCP on port 443.
@@ -2055,7 +2054,7 @@ as well as the inbound port. This is the ephemeral port.
 back on a different port.
 - This back and forth communication can be hard to configure for.
 
-#### NACL Exam PowerUp
+#### 1.5.6.2. NACL Exam PowerUp
 
 - NACLs are stateless
   - Initiation and response traffic are separate streams requiring two rules.
@@ -2074,7 +2073,7 @@ NACLs are processed in order starting at the lowest rule number until
 it gets to the catch all. A rule with a lower rule number will be processed
 before another rule with a higher rule number.
 
-### Security Groups
+### 1.5.7. Security Groups
 
 - SGs are boundaries which can filter traffic.
 - Attached to a resource and not a subnet.
@@ -2092,7 +2091,7 @@ before another rule with a higher rule number.
 - SG cannot explicit deny anything.
   - NACLs are used in conjunction with SGs to do explicit denys.
 
-#### SGs vs NACL
+#### 1.5.7.1. SGs vs NACL
 
 - NACLs are used when products cannot use SGs, e.g. NAT Gateways.
 - NACLs are used when adding explicit deny, such as bad IPs or bad actors.
@@ -2100,7 +2099,7 @@ before another rule with a higher rule number.
 - NACLs are associated with a subnet and only filter traffic that crosses
 that boundary. If the resource is in the same subnet, it will not do anything.
 
-### Network Address Translation (NAT) Gateway
+### 1.5.8. Network Address Translation (NAT) Gateway
 
 Set of different processes that can address IP packets by changing
 their source or destination addresses.
@@ -2120,6 +2119,14 @@ returned.
   - If that AZ fails, there is no recovery.
 - For a fully region resilient service, you must deploy one NATGW in each AZ
 with a Route Table in each AZ with NATGW as target.
+- NAT instance is limited by capabilities of the instance it is running on and that instance is also general purpose, so won't offer the same level of custom design performance as NAT Gateway.
+- NAT instance is single instance running in single AZ it'll fail if EC2 hardware fails, network fails, storage fails or AZ itself fails.
+- NAT Gateway has benefit over NAT instance, inside one AZ it is highly available.
+- You can connect to NAT instance just like any other instance, you can use them as Bastion host or can use them for port forwarding.
+- With NAT Gateway it is not possible, it is managed service. NAT Gateway cannot be used as Bastion host and it cannot do port forwarding.
+- You cannot use SG with NAT instance, you can only use NACLs.
+- NAT is not required for IPv6. Inside AWS all IPv6 addresses are publicly routable. IG works with all IPv6 addresses directly.
+- That means if you choose to make an instance in private subnet that have a default IPv6 route to IG, it'll become public instance.
 - Managed service, scales up to 45 Gbps. Can deploy multiple NATGW to increase
 bandwidth.
 - AWS charges on usage per hour and data volume processed.
@@ -2129,11 +2136,11 @@ be necessary to run a NAT EC2 instance instead.
 
 ---
 
-## Elastic-Cloud-Compute-EC2
+## 1.6. Elastic-Cloud-Compute-EC2
 
 EC2 provides Infrastructure as a Service (IaaS Product)
 
-### Virtualization 101
+### 1.6.1. Virtualization 101
 
 Servers are configured in three sections without virtualization.
 
@@ -2147,7 +2154,7 @@ Servers are configured in three sections without virtualization.
   - If an app tries to interact with the hardware without a system call, it
   will cause a system error and can crash the server or at minimum the app.
 
-#### Emulated Virtualization - Software Virtualization
+#### 1.6.1.1. Emulated Virtualization - Software Virtualization
 
 Host OS operated on the HW and included a hypervisor (HV).
 SW ran in privileged mode and had full access to the HW.
@@ -2163,14 +2170,14 @@ The HV performs **binary translation**.
 System calls are intercepted and translated in SW on the way. The guest OS needs
 no modification, but slows down a lot.
 
-#### Para-Virtualization
+#### 1.6.1.2. Para-Virtualization
 
 Guest OS are modified and run in HV containers, except they do not use slow
 binary translation. The OS is modified to change the **system calls** to
 **user calls**. Instead of calling on the HW, they call on the HV using
 **hypercalls**. Areas of the OS call the HV instead of the HW.
 
-#### Hardware Assisted Virtualization
+#### 1.6.1.3. Hardware Assisted Virtualization
 
 The physical HW itself is virtualization aware. The CPU has specific
 functions so the HV can come in and support. When guest OS tries to run
@@ -2181,14 +2188,14 @@ What matters for a VM is the input and output operations such
 as network transfer and disk IO. The problem is multiple OS try to access
 the same piece of hardware but they get caught up on sharing.
 
-#### SR-IOV (Singe Route IO virtualization)
+#### 1.6.1.4. SR-IOV (Singe Route IO virtualization)
 
 Allows a network or any card to present itself as many mini cards.
-As far as the HW is concerned, they are real dedicated cards for their
+As far as the HV is concerned, they are real dedicated cards for their
 use. No translation needs to be done by the HV. The physical card
 handles it all. In EC2 this feature is called **enhanced networking**.
 
-### EC2 Architecture and Resilience
+### 1.6.2. EC2 Architecture and Resilience
 
 EC2 instances are virtual machines run on EC2 hosts.
 
@@ -2238,7 +2245,7 @@ A migration is taking a **copy** of an instance and moving it to a different AZ.
 In general instances of the same type and generation will occupy the same host.
 The only difference will generally be their size.
 
-#### EC2 Strengths
+#### 1.6.2.1. EC2 Strengths
 
 Long running compute needs. Many other AWS services have run time limits.
 
@@ -2251,7 +2258,7 @@ Server style applications
 - migrating application workloads or disaster recovery
   - existing applications running on a server and a backup system to intervene
 
-### EC2 Instance Types
+### 1.6.3. EC2 Instance Types
 
 - **General Purpose** (T, M) - default steady state workloads with even resources
 - **Compute Optimized** (C) - Media processing, scientific modeling and gaming
@@ -2260,7 +2267,7 @@ Server style applications
 - **Storage Optimized** (H, I, D) - Large amounts of super fast local storage.
   Massive amounts of IO per second. Elastic search and analytic workloads.
 
-#### Naming Scheme
+#### 1.6.3.1. Naming Scheme
 
 R5dn.8xlarge - whole thing is the instance type. When in doubt give the
 full instance type
@@ -2275,7 +2282,7 @@ full instance type
   - n: network optimized
   - e: extra capacity for ram or storage
 
-### Storage Refresher
+### 1.6.4. Storage Refresher
 
 - **Instance Store**
   - Direct (local) attached storage
@@ -2286,7 +2293,7 @@ full instance type
   - Volumes delivered over the network
   - Persistent storage lives on past the lifetime of the instance
 
-#### Three types of storage
+#### 1.6.4.1. Three types of storage
 
 - Block Storage: Volume presented to the OS as a collection of blocks. No
 structure beyond that. These are mountable and bootable. The OS will
@@ -2304,7 +2311,7 @@ with or without attached metadata. To retrieve the object, you need to provide
 the key and then the value will be returned. This is not mountable or
 bootable. It scales very well and can have simultaneous access.
 
-#### Storage Performance
+#### 1.6.4.2. Storage Performance
 
 - IO Block Size: Determines how to split up the data.
 - IOPS: How many reads or writes a system can accommodate per second.
@@ -2316,7 +2323,7 @@ This isn't the only part of the chain, but it is a simplification.
 A system might have a throughput cap. The IOPS might decrease as the block
 size increases.
 
-### Elastic Block Store (EBS)
+### 1.6.5. Elastic Block Store (EBS)
 
 - Allocate block storage **volumes** to instances.
 - Volumes are isolated to one AZ.
@@ -2336,7 +2343,7 @@ size increases.
     - maximum t-put for logs or media storage
   - Cold HDD (sc1)
 
-#### General Purpose SSD (gp2)
+#### 1.6.5.1. General Purpose SSD (gp2)
 
 Uses a performance bucket architecture based on the IOPS it can deliver.
 The GP2 starts with 5,400,000 IOPS allocated. It is all available instantly.
@@ -2351,7 +2358,7 @@ This is the **baseline performance**
 Default for boot volumes and should be the default for data volumes.
 Can only be attached to one EC2 instance at a time.
 
-#### Provisioned IOPS SSD (io1)
+#### 1.6.5.2. Provisioned IOPS SSD (io1)
 
 You pay for capacity and the IOPs set on the volume.
 This is good if your volume size is small but need a lot of IOPS.
@@ -2362,7 +2369,7 @@ This is good if your volume size is small but need a lot of IOPS.
 Good for latency sensitive workloads such as mongoDB.
 Multi-attach allows them to attach to multiple EC2 instances at once.
 
-#### HDD Volume Types
+#### 1.6.5.3. HDD Volume Types
 
 - great value
 - great for high throughput vs IOPs
@@ -2389,7 +2396,7 @@ Two types
   - Burst of 80 MB/s per TiB
   - Max t-put of 250 MB/s
 
-#### EBS Exam Power Up
+#### 1.6.5.4. EBS Exam Power Up
 
 - Volumes are created in an AZ, isolated in that AZ.
 - If an AZ fails, the volume is impacted.
@@ -2400,7 +2407,7 @@ if the whole AZ fails.
 - EBS maxes at 80k IOPS per instance and 64k vol (io1)
 - Max 2375 MB/s per instance, 1000 MiB/s (vol) (io1)
 
-### EC2 Instance Store
+### 1.6.6. EC2 Instance Store
 
 - Local **block storage** attached to an instance.
 - Physically connected to one EC2 host.
@@ -2424,7 +2431,7 @@ The number, size, and performance of instance store volumes vary based on the
 type of instance used. Some instances do not have any instance store volumes
 at all.
 
-#### Instance Store Exam PowerUp
+#### 1.6.6.1. Instance Store Exam PowerUp
 
 - Instance store volumes are local to EC2 host.
 - Can only be added at launch time. Cannot be added later.
@@ -2433,7 +2440,7 @@ at all.
 - You pay for it anyway, it's included in the price.
 - TEMPORARY
 
-### EBS vs Instance Store
+### 1.6.7. EBS vs Instance Store
 
 If the read/write can be handled by EBS, that should be default.
 
@@ -2458,7 +2465,7 @@ When to use Instance Store
 - Rigid lifecycle link between storage and the instance.
   - This ensures the data is erased when the instance goes down.
 
-### EBS Snapshots, restore, and fast snapshot restore
+### 1.6.8. EBS Snapshots, restore, and fast snapshot restore
 
 - Efficient way to backup EBS volumes to S3.
   - The data becomes region resilient.
@@ -2476,7 +2483,7 @@ Volumes can be created (restored) from snapshots.
 Snapshots can be used to move EBS volumes between AZs.
 Snapshots can be used to migrate data between volumes.
 
-#### Snapshot and volume performance
+#### 1.6.8.1. Snapshot and volume performance
 
 - When creating a new EBS volume without a snapshot, the performance is
 available immediately.
@@ -2494,7 +2501,7 @@ able to do instant restores to. Each combination of Snapshot and AZ counts
 as one FSR set. You can have 50 FSR sets per region.
 FSR is not free and can get expensive with lost of different snapshots.
 
-#### Snapshot Consumption and Billing
+#### 1.6.8.2. Snapshot Consumption and Billing
 
 Billed using a GB/month metric.
 20 GB stored for half a month, represents 10 GB-month.
@@ -2506,7 +2513,7 @@ This is not how EBS itself works.
 The data is incrementally stored which means doing a snapshot every 5 minutes
 will not necessarily increase the charge as opposed to doing one every hour.
 
-#### EBS Encryption
+#### 1.6.8.3. EBS Encryption
 
 Provides at rest encryption for block volumes and snapshots.
 
@@ -2519,9 +2526,9 @@ This can be the EBS default (CMK) which is referred to as `aws/ebs` or it
 could be a customer managed CMK which you manage yourself.
 
 That key is used by EBS when an encrypted volume is created. The CMK
-generates an encrypted data encryption key which is stored on the volume with
-the physical disk. This key can only be encrypted by KMS when a role with
-the proper permissions makes the request.
+generates an encrypted **data encryption key (DEK)** which is stored with the volume with
+on the physical disk. This key can only be decrypted using KMS when a role with
+the proper permissions to decrypt that DEK.
 
 When the volume is first used, EBS asks CMS to decrypt the key and stores
 the decrypted key in memory on the EC2 host while it's being used. At all
@@ -2543,7 +2550,7 @@ encrypted in the same way.
 Every time you create a new EBS volume from scratch, it creates a new
 data encryption key.
 
-##### EBS Encryption Exam Power Up
+##### 1.6.8.3.1. EBS Encryption Exam Power Up
 
 - AWS accounts can be set to encrypt EBS volumes by default.
   - It will use the default CMK unless a different one is chosen.
@@ -2561,7 +2568,7 @@ data encryption key.
 encrypt or hold the keys, then you need to perform full disk encryption
 at the operating system level.
 
-### EC2 Network Interfaces, Instance IPs and DNS
+### 1.6.9. EC2 Network Interfaces, Instance IPs and DNS
 
 An EC2 instance starts with at least one ENI - elastic network interface.
 An instance may have ENIs in separate subnets, but everything must be
@@ -2570,7 +2577,7 @@ within one AZ.
 When you launch an instance with Security Groups, they are on the
 network interface and not the instance.
 
-#### Elastic Network Interface (ENI)
+#### 1.6.9.1. Elastic Network Interface (ENI)
 
 Has these properties
 
@@ -2618,7 +2625,7 @@ address will be lost. There is no way to recover the original address.
 Secondary interfaces function in all the same ways as primary interfaces except
 you can detach interfaces and move them to other EC2 instances.
 
-#### ENI Exam PowerUp
+#### 1.6.9.2. ENI Exam PowerUp
 
 - Legacy software is licensed using a mac address.
   - If you provision a secondary ENI to a specific license, you can move
@@ -2635,7 +2642,7 @@ address in a VPC. If you have instance to instance communication within
 the VPC, it will never leave the VPC. It does not need to touch the internet
 gateway.
 
-### Amazon Machine Image (AMI)
+### 1.6.10. Amazon Machine Image (AMI)
 
 Images of EC2 instances that can launch more EC2 instance.
 
@@ -2650,7 +2657,7 @@ Images of EC2 instances that can launch more EC2 instance.
   - Can have specific AWS accounts on the AMI.
 - Can create an AMI from an existing EC2 instance to capture the current config.
 
-#### AMI Lifecycle
+#### 1.6.10.1. AMI Lifecycle
 
 1. Launch: EBS volumes are attached to EC2 devices using block IDs.
 
@@ -2673,7 +2680,7 @@ Images of EC2 instances that can launch more EC2 instance.
 4. Launch: When launching an instance, the snapshots are used to create new EBS
 volumes in the AZ of the EC2 instance and contain the same block device mapping.
 
-#### AMI Exam PowerUps
+#### 1.6.10.2. AMI Exam PowerUps
 
 - AMI can only be used in one region
 - AMI Baking: creating an AMI from a configuration instance.
@@ -2683,9 +2690,9 @@ make changes, then make new AMI
 - Remember permissions by default are your account only
 - Billing is for the storage capacity for the EBS snapshots the AMI references.
 
-### EC2 Pricing Models
+### 1.6.11. EC2 Pricing Models
 
-#### On-Demand Instances
+#### 1.6.11.1. On-Demand Instances
 
 - Hourly rate based on OS, size, options, etc
 - Billed in seconds (60s min) or hourly
@@ -2695,7 +2702,7 @@ make changes, then make new AMI
 - New or uncertain application requirements
 - Short-term, spiky, or unpredictable workloads which can't tolerate disruption.
 
-#### Spot Instances
+#### 1.6.11.2. Spot Instances
 
 Up to 90% off on-demand, but depends on the spare capacity.
 You can set a maximum hourly rate in a certain AZ in a certain region.
@@ -2705,7 +2712,7 @@ As the spot price increases, you pay more.
 Once this price increases past your maximum, it will terminate the instance.
 Great for data analytics when the process can occur later at a lower use time.
 
-#### Reserved Instance
+#### 1.6.11.3. Reserved Instance
 
 Up to 75% off on-demand.
 The trade off is commitment.
@@ -2724,17 +2731,7 @@ Can perform scheduled reservation when you can commit to specific time windows.
 Great if you have a known stead state usage, email usage, domain server.
 Cheapest option with no tolerance for disruption.
 
-**Regional and zonal Reserved Instances**
-
-|                               | **Regional Reserved Instances**                              | **Zonal Reserved Instances**                                 |
-| :---------------------------: | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| Availability Zone flexibility | The Reserved Instance discount applies to instance usage in any Availability Zone in the specified Region. | No Availability Zone flexibility—the Reserved Instance discount applies to instance usage in the specified Availability Zone only. |
-|     Capacity reservation      | No capacity reservation—a regional Reserved Instance does *not* provide a capacity reservation. | A zonal Reserved Instance provides a capacity reservation in the specified Availability Zone. |
-|   Instance size flexibility   | The Reserved Instance discount applies to instance usage within the instance family, regardless of size. Only supported on Amazon Linux/Unix Reserved Instances with default tenancy. | No instance size flexibility—the Reserved Instance discount applies to instance usage for the specified instance type and size only. |
-
-
-
-### Instance Status Checks and Autorecovery
+### 1.6.12. Instance Status Checks and Autorecovery
 
 Every instance has two high level status checks
 
@@ -2753,53 +2750,66 @@ Autorecovery can kick in and help,
   - useful in a cluster
 - Reboot this instance
 
-### Horizontal and Vertical Scaling
+### 1.6.13. Horizontal and Vertical Scaling
 
-#### Vertical Scaling
+#### 1.6.13.1. Vertical Scaling
 
 As customer load increases, the server may need to grow to handle more data.
 The server can increase in capacity, but this will require a reboot.
 
 - Often times vertical scaling can only occur during planned outages.
-- Larger instances also carry a $ premium compared to smaller instances.
+- Larger instances also carry a **$ premium** compared to smaller instances.
 - Instance size is an upper cap on performance.
 - No application modification is needed.
   - Works for all applications, even monoliths (all code in one app)
 
-#### Horizontal Scaling
+#### 1.6.13.2. Horizontal Scaling
 
 As the customer load increases, this adds additional capacity.
 Instead of one running copy of an application, you can have multiple versions
 running on each server.
 This requires a load balancer.
+
+> A load balancer is an _appliance_ that sits in between your servers -- in this case instances -- and your customers.
+
 When customers try to access an application, the load balancer ensures the
 servers get equal parts of the load.
 
 - Sessions are everything.
+  - When you log into youtube, netflix or your email, the state of your interaction with that application is called a *session*.
 - With horizontal scaling you can shift between instances equally.
-- This requires either application support or off-host sessions.
-- Servers are **stateless**, the app stores session data elsewhere.
+- This requires either *application support* or *off-host* sessions.
+  - If you use off-host sessions, then your session data is stored in another place, an external database.
+  - This means that the servers are what's called **stateless**, they are just dump instances of your application.
+  - The application does care which instance you are connected to because your session is externally hosted somewhere else.
+
+#### 1.6.13.3. Benefits of Horizontal Scaling
+
 - No disruption while scaling up or down.
 - No real limits to scaling.
-- Uses smaller instances so you pay less, allows for better granularity.
+- Uses smaller instances is less expensive.
+- Allows for better granularity.
 
-### Instance Metadata
+### 1.6.14. Instance Metadata
 
-EC2 service provides data to instances
-Accessible inside all instances
+> A service EC2 provides to instances. It is data about the instance that can be used to configure or manage a running instance. It is a way an instance or anything running inside an instance can access information about the environment it wouldn't be able to access otherwise.
 
-Memorize `http://169.254.169.254/latest/meta-data/`
+- Accessible inside all instances using the same access method.
 
-Meta-data contains information on the environment the instance is in.
-You can find out about the networking or user-data among other things.
-This is not authenticated or encrypted. Anyone who can gain access to the
+Memorize [instance metadata](http://169.254.169.254/latest/meta-data/) -> `http://169.254.169.254/latest/meta-data/`
+
+Meta-data contains information on the:
+
+- environment the instance is in.
+- You can find out about the networking or user-data among other things.
+- This is not authenticated or encrypted. Anyone who can gain access to the
 instance can see the meta-data. This can be restricted by local firewall
 
 ---
 
-## Containers-and-ECS
+## 1.7. Containers-and-ECS
 
-### Intro to Containers
+### 1.7.1. Intro to Containers
 
 Virtualization Problems
 
@@ -2808,30 +2818,30 @@ the OS can consume 60-70% of the disk and much of the available memory.
 Containers leverage the similarities of multiple guest OS by removing duplicate
 resources. This allows applications to run in their own isolated environments.
 
-#### Image Anatomy
+#### 1.7.1.1. Image Anatomy
 
-A Docker image is composed of multiple layers and not a monolithic disk image.
-Each line of a Docker image creates a new filesystem layer on top of the
-previous. Images are created from scratch or a base image.
+A Docker image is composed of multiple independent layers. Docker images are stacks of these layers and not a single, monolithic disk image. Docker images are created initially using a _docker file_.
+Each line in a docker file is processed one by one and each line creates a new filesystem layer inside the docker image it creates.
+Images are created from scratch or a base image.
 Images contain read only layers, images are layer onto images.
 
-Docker container is the same as a Docker image, except it
-has an additional READ/WRITE layer of the container.
+![Anatomy of a docker image](Learning-Aids/09-Containers-and-ECS/ImageAnatomy.png)
 
-If you have lots of containers with very similar base
-structures, they will share the parts that overlap.
-The other layers are reused between containers.
+##### 1.7.1.1.1. What are images used for
 
-#### Container Registry
+1. A docker image is actually how we create a docker container. In fact a ocker container is just a running copy of a docker image with one crucial difference: a docker container has an additional *read/write* file system layer. File system layers --  the layers that make up the docker image -- by default are _read_ only; they never change after they are created. And so, the special read/write layer is added which allows containers to run. If you have lots of containers with very similar base structures, they will share the parts that overlap. The other layers are reused between containers.
 
-Registry or hub of container images.
+2. The reuse architecture that is offered by the way containers do their disk images scales really well. Disk space when you have lots of containers is minimized because of this layered architecture. The base layer -- the OS -- they are generally made available by the OS vendors through something called a _container registry_ and a popular one is _docker hub_.
+
+#### 1.7.1.2. Container Registry
+
+A container registry or hub is a hub of container images. As a developer or solution architect, you use a dockerfile to create a container image. Then you upload that image to a private/public repository such as the docker hub. In the case of a public hub, other people will likely do the same including vendors of the base OS such as the CentOS example shown above. From there, these container images can then be deployed to docker hosts, which are just services running a container engine (e.g. docker).
+
+A docker host can run many containers based on or more images. A single image can be to generate containers on many docker hosts.
 Dockerfile can create a container image where it gets stored
 in the container registry.
 
-Docker hosts can run many containers based on one or more images.
-A single image can generate Containers on many different Docker hosts.
-
-#### Container Key Concepts
+#### 1.7.1.3. Container Key Concepts
 
 - Docker files are used to build Docker images
 - Containers are portable and always run as expected.
@@ -2842,25 +2852,32 @@ A single image can generate Containers on many different Docker hosts.
 - Ports need to be **exposed** to allow outside access from the host and beyond.
 - Application stacks can be multi container
 
-### Elastic Container Service (ECS) Concepts
+### 1.7.2. Elastic Container Service (ECS) Concepts
 
-- Accepts containers and instructions you provide.
+- Accepts containers and instructions you provide. It orchestrates where and how to run the containers. It is a managed container-based compute service.
+
+ECS runs into two modes: 1. Using EC2; 2. Using Fargate.
+
 - ECS allows you to create a cluster.
   - Clusters are where containers run from.
 - Container images will be located on a registry.
-  - AWS provides ECR (elastic container registry)
+  - AWS provides a registry called **Elastic Container Registry** (ECR).
   - Dockerhub can be used as well.
-- **Container definition** gives ECS just enough info about the single container.
+- **Container definition** tell ECS where your container is. It tells ECS which port your container uses (e.g. port 80, which is http). Container definition gives ECS just enough info about a single container.
   - A pointer to which image to use and the ports that will be exposed.
 - **Task definitions** store the resources used by the task.
-  - Stores **task role**, an IAM role that allows the task access to other
-  AWS resources.
-- Task is not by itself highly available.
+  - It also stores the **task role**, an IAM role that allows the task access to other AWS resources.
+
+> Task roles are the best practice way for giving containers within ECS permissions to access AWS products and services.
+
+- Task does not scale on its own and it is not highly available.
+
+See the [AWS documentation on container definition](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html) and [task definition](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_TaskDefinition.html) for more information.
 
 ECS **Service** is configured via Service Definition and represents
 how many copies of a task you want to run for scaling and HA.
 
-### ECS Cluster Types
+### 1.7.3. ECS Cluster Types
 
 ECS Cluster manages:
 
@@ -2868,20 +2885,20 @@ ECS Cluster manages:
 - Cluster manager
 - Placement engine
 
-#### EC2 mode
+#### 1.7.3.1. EC2 mode
 
 ECS cluster is created within a VPC. It benefits from the multiple AZs that
 are within that VPC.
 You specify an initial size which will drive an **auto scaling group**.
 
 ECS using EC2 mode is not a serverless solution, you need to worry about
-capacity for your cluster.
+capacity and availability for your cluster.
 
 The container instances are not delivered as a managed service, they
 are managed as normal EC2 instances.
 You can use spot pricing or prepaid EC2 servers.
 
-#### Fargate mode
+#### 1.7.3.2. Fargate mode
 
 Removes more of the management overhead from ECS, no need to manage EC2.
 
@@ -2891,19 +2908,19 @@ to access from the same pool of resources.
 Fargate deployment still uses a cluster with a VPC where AZs are specified.
 
 For ECS tasks, they are injected into the VPC. Each task is given an
-elastic network interface which has an IP address within the VPC. They then
+_elastic network interface_ which has an IP address within the VPC. They then
 run like a VPC resource.
 
 You only pay for the container resources you use.
 
-#### EC2 vs ECS(EC2) vs Fargate
+#### 1.7.3.3. EC2 vs ECS(EC2) vs Fargate
 
 If you already are using containers, use **ECS**.
 
 **EC2 mode** is good for a large workload if you are price conscious.
 This allows for spot pricing and prepayment.
 
-**Fargate** is great if you,
+**Fargate** is great if you:
 
 - Have a large workload but are overhead conscious.
 - Have small or burst style workloads.
@@ -2911,9 +2928,9 @@ This allows for spot pricing and prepayment.
 
 ---
 
-## Advanced-EC2
+## 1.8. Advanced-EC2
 
-### Bootstrapping EC2 using User Data
+### 1.8.1. Bootstrapping EC2 using User Data
 
 Bootstrapping is a process where scripts or other config steps can be run when
 an instance is first launched. This allows an instance to be brought to service
@@ -2927,14 +2944,14 @@ This could perform some software installs and post install configs.
 Bootstrapping is done using **user data** and is injected into the instance
 in the same way that meta-data is. It is accessed using the meta-data IP.
 
-<http://169.254.169.254/latest/>
+<http://169.254.169.254/latest/user-data>
 
-Anything you pass in is executed by the instance OS only once on launch!
+Anything you pass in is executed by the instance OS **only once on launch!** It is for launch time configuration only.
 
 EC2 doesn't validate the user data. You can tell EC2 to pass in trash data
 and the data will be injected. The OS needs to understand the user data.
 
-#### Bootstrapping Architecture
+#### 1.8.1.1. Bootstrapping Architecture
 
 An AMI is used to launch an EC2 instance in the usual way to create
 an EBS volume that is attached to the EC2 instance. This is based on the
@@ -2952,20 +2969,20 @@ the script, the instance will be in:
   - The instance will probably still pass its checks.
   - It will not be configured as you expected.
 
-#### User Data Key Points
+#### 1.8.1.2. User Data Key Points
 
 EC2 doesn't know what the user data contains, it's just a block of data.
 The user data is not secure, anyone can see what gets passed in. For this
 reason it is important not to pass passwords or long term credentials.
 
-User data is limited to 16 KB in size. Anything larger than this will
+**User data is limited to 16 KB in size**. Anything larger than this will
 need to pass a script to download the larger set of data.
 
 User data can be modified if you stop the instance, change the user
 data, then restart the instance. This won't be executed since the instance
 has already started.
 
-#### Boot-Time-To-Service-Time
+#### 1.8.1.3. Boot-Time-To-Service-Time
 
 How quickly after you launch an instance is it ready for service?
 This includes the time for EC2 to configure the instance and any software
@@ -2974,7 +2991,12 @@ When looking at an AMI, this can be measured in minutes.
 
 AMI baking will front load the time needed by configuring as much as possible.
 
-### AWS::CloudFormation::Init
+- Use AMI backing for any part of the process that is time intensive.
+- Use bootstrap for the final configuration.
+
+This way you reduce the post-launch time and thus the boot-time-to-service.
+
+### 1.8.2. AWS::CloudFormation::Init
 
 **cfn-init** is a helper script installed on EC2 OS.
 This is a simple configuration management system.
@@ -2991,7 +3013,7 @@ of the user data and retrieves its directives from the CloudFormation
 stack and you define this data in the CloudFormation template called
 `AWS::CloudFormation::Init`.
 
-#### cfn-init explained
+#### 1.8.2.1. cfn-init explained
 
 Starts off with a **CloudFormation template**.
 This has a logical resource within it which is to create an EC2 instance.
@@ -3002,7 +3024,7 @@ cfn-init gets variables passed into the user data by CloudFormation.
 It knows the desired state and can work towards a final configuration.
 This can monitor the user data and change things as the EC2 data changes.
 
-#### CreationPolicy and Signals
+#### 1.8.2.2. CreationPolicy and Signals
 
 If you pass in user data, there is no way for CloudFormation to know
 if the EC2 instance was provisioned properly. It may be marked as complete,
@@ -3014,7 +3036,7 @@ inside a CloudFormation template. You create it and supply a timeout value.
 This waits for a signal from the resource itself before moving to a create
 complete state.
 
-### EC2 Instance Roles
+### 1.8.3. EC2 Instance Roles
 
 IAM roles are the best practice ways for services to be granted permissions.
 EC2 instance roles are roles that an instance can assume and anything
@@ -3042,7 +3064,7 @@ Key facts
 - Should always use roles compared to storing long term credentials
 - CLI tools use role credentials automatically
 
-### AWS System Manager Parameter Store
+### 1.8.4. AWS System Manager Parameter Store
 
 Passing secrets into an EC2 instance is bad practice because anyone
 who has access to the meta-data has access to the secrets.
@@ -3060,7 +3082,7 @@ Parameter Store:
 - Can store plaintext and ciphertext.
   - This integrates with **kms** to encrypt passwords.
 - Allows for public parameters such as the latest AMI parameter to be stored
-and referenced for EC2 creating.
+and referenced during EC2 creation
 - Is a public service so any services needs access to the public sphere or
 to be an AWS public service.
 - Applications, EC2 instances, lambda functions can all request access to
@@ -3069,7 +3091,7 @@ parameter store.
   - Long term credentials such as access keys.
   - Short term use of IAM roles.
 
-### System and Application Logging on EC2
+### 1.8.5. System and Application Logging on EC2
 
 CloudWatch and CloudWatch Logs cannot natively capture data inside an instance.
 
@@ -3091,13 +3113,13 @@ management.
 
 We can use parameter store to store the configuration for the CW agent.
 
-### EC2 Placement Groups
+### 1.8.6. EC2 Placement Groups
 
-#### Cluster Placement
+#### 1.8.6.1. Cluster Placement -> Pack Instances Close Together
 
-Pack instances close together
+Designed so that instances within the same cluster are physically close together.
 
-Achieves the highest level of performance available with EC2.
+Achieves the highest level of performance possible inside EC2.
 
 Best practice is to launch all of the instances within that group at the
 same time.
@@ -3110,20 +3132,21 @@ EC2 host.
 
 All members have direct connections to each other. They can achieve
 **10 Gbps single stream** vs 5 Gbps normally. They also have the lowest
-latency and max PPS possible in AWS.
+latency and max packets-per-second (PPS) possible in AWS.
 
 If the hardware fails, the entire cluster will fail.
 
-##### Cluster Placement Exam PowerUp
+##### 1.8.6.1.1. Cluster Placement Exam PowerUp
 
-- Clusters can't span AZs. The first AZ used will lock down the cluster.
+- **Clusters can't span AZs**. The first AZ used will lock down the cluster.
 - They can span VPC peers.
 - Requires a supported instance type.
-- Best practice to use the same type of instance and launch all at once.
-- This is the only way to achieve **10Gbps SINGLE stream**, other data metrics
-assume multiple streams.
+- Best practice to use the same type of instance (not mandatory).
+- Best practice to launch all instances at once (not mandatory).
+- This is the only way to achieve **10Gbps SINGLE stream performance**, other data metrics assume multiple streams.
+- Use cases: Performance, fast transfer speeds, and low consistent latency.
 
-#### Spread Placement
+#### 1.8.6.2. Spread Placement -> Keep Instances Separated
 
 Keep instances separated
 
@@ -3133,17 +3156,17 @@ racks with their own network or power supply. There is a limit of 7 instances
 per AZ. The more AZs in a region, the more instances inside a spread placement
 group.
 
-##### Spread Placement Exam PowerUp
+##### 1.8.6.2.1. Spread Placement Exam PowerUp
 
 - Provides the highest level of availability and resilience.
   - Each instance by default runs from a different rack.
-- 7 instances per AZ is a hard limit.
+- **7 instances per AZ is a hard limit**.
 - Not supported for dedicated instances or hosts.
 
-Use case: small number of critical instances that need to be kept separated
-from each other. Several mirrors of an application
+- Use case: small number of critical instances that need to be kept separated
+from each other. Several mirrors of an application; different nodes of an application; etc.
 
-#### Partition Placement
+#### 1.8.6.3. Partition Placement -> Groups of Instances Spread Apart
 
 Groups of instances spread apart
 
@@ -3156,14 +3179,14 @@ as you desire.
 When you launch a partition group, you can allow AWS decide or you can
 specifically decide.
 
-##### Partition Placement Exam PowerUp
+##### 1.8.6.3.1. Partition Placement Exam PowerUp
 
 - 7 partitions maximum for each AZ
 - Instances can be placed into a specific partition, or AWS can pick.
 - This is not supported on dedicated hosts.
 - Great for HDFS, HBase, and Cassandra
 
-### EC2 Dedicated Hosts
+### 1.8.7. EC2 Dedicated Hosts
 
 EC2 host allocated to you in its entirety.
 Pay for the host itself which is designed for a family of instances.
@@ -3173,20 +3196,19 @@ You can pay for a host on-demand or reservation with 1 or 3 year terms.
 The host hardware has physical sockets and cores. This dictates how
 many instances can be run on the HW.
 
-Hosts are designed for a specific size and family. If you purchase one host, you
-configure what type of instances you want to run on it. With the older VM
+Hosts are designed for a specific size and family. If you purchase one host, you configure what type of instances you want to run on it. With the older VM
 system you cannot mix and match. The new Nitro system allows for mixing and
 matching host size.
 
-#### Dedicated Hosts Limitations
+#### 1.8.7.1. Dedicated Hosts Limitations
 
 - AMI Limits, some versions can't be used
 - Amazon RDS instances are not supported
 - Placement groups are not supported for dedicated hosts.
-- Hosts can be shared with other organization accounts using **RAM**
+- Hosts can be shared with other organization accounts using **Resource Access Manager (RAM)**
 - This is mostly used for licensing problems related to ports.
 
-### Enhanced Networking
+### 1.8.8. Enhanced Networking
 
 Enhanced networking uses SR-IOV.
 The physical network interface is aware of the virtualization.
@@ -3198,7 +3220,7 @@ It allows for higher IO and lower host CPU usage
 This provides more bandwidth and higher packet per seconds.
 In general this provides lower latency.
 
-#### EBS Optimized
+#### 1.8.8.1. EBS Optimized
 
 Historically network on EC2 was shared with the same network stack used
 for both data networking and EBS storage networking.
@@ -3210,9 +3232,9 @@ Most new instances support this and have this enabled by default for no charge.
 
 ---
 
-## Route-53
+## 1.9. Route-53
 
-### Public Hosted Zones
+### 1.9.1. Public Hosted Zones
 
 A hosted zone is a DNS database for a given section of global DNS data.
 A public hosted zone is a type of R53 hosted zone which is hosted on
@@ -3235,7 +3257,7 @@ records. A hosted zone, when referenced in this way by the DNS system, is known
 as being authoritative for a domain.
 It becomes the single source of truth for a domain.
 
-### Route 53 Health Checks
+### 1.9.2. Route 53 Health Checks
 
 Route checks will allow for periodic health checks on the servers.
 If one of the servers has a bug, this will be removed from the list.
@@ -3256,10 +3278,10 @@ complete multiple checks per second.
 
 There could be one of three checks
 
-- TCP checks: R53 tries to establish TCP with end point within 10 seconds.
+- TCP checks: R53 tries to establish TCP with end point within 10 (fast) or 30 seconds (standard).
 - HTTP/HTTPS: Same as TCP but within 4 seconds. The end point must respond
 with a 200 or 300 status code within 3 seconds of checking.
-- String matching: Same as above, the body must have a string within the first
+- HTTP/HTTPS String matching: Same as above, the body must have a string within the first
 5120 bytes. This is chosen by the user.
 
 It will be deemed healthy or unhealthy.
@@ -3268,23 +3290,23 @@ There are three types of checks.
 
 - Endpoint checks
 - CloudWatch alarms
-- Checks of checks
+- Checks of checks (calculated)
 
-### Route 53 Routing Policies Examples
+### 1.9.3. Route 53 Routing Policies Examples
 
-- Simple: Route traffic to a single resource. Client queries the resolver
+- **Simple**: Route traffic to a single resource. Client queries the resolver
 which has one record. It will respond with 3 values and these get forwarded
 back to the client. The client then picks one of the three at random.
 This is a single record only. No health checks.
 
-- Failover: Create two records of the same name and the same type. One
+- **Failover**: Create two records of the same name and the same type. One
 is set to be the primary and the other is the secondary. This is the same
 as the simple policy except for the response. Route 53 knows the health of
 both instances. As long as the primary is healthy, it will respond with
 this one. If the health check with the primary fails, the backup will be
 returned instead. This is set to implement active - passive failover.
 
-- Weighted: Create multiple records of the same name within the hosted zone.
+- **Weighted**: Create multiple records of the same name within the hosted zone.
 For each of those records, you provide a weighted value. The total weight
 is the same as the weight of all the records of the same name. If all of the
 parts of the same name are healthy, it will distribute the load based
@@ -3292,12 +3314,12 @@ on the weight. If one of them fails its health check, it will be skipped over
 and over again until a good one gets hit. This can be used for migration
 to separate servers.
 
-- Latency-based: Multiple records in a hosted zone can be created with
+- **Latency-based**: Multiple records in a hosted zone can be created with
 the same name and same type. When a client request arrives, it knows which
 region the request comes from. It knows the lowest latency and will respond
 with the lowest latency.
 
-- Geolocation: Focused to delivering results matching the query of your
+- **Geolocation**: Focused to delivering results matching the query of your
 customers. The record will first be matched based on the country if possible.
 If this does not happen, the record will be checked based on the continent.
 Finally, if nothing matches again it will respond with the default response.
@@ -3305,7 +3327,7 @@ This can be used for licensing rights. If overlapping regions occur,
 the priority will always go to the most specific or smallest region. The US
 will be chosen over the North America record.
 
-- Multi-value: Simple records use one name and multiple values in this record.
+- **Multi-value**: Simple records use one name and multiple values in this record.
 These will be health checked and the unhealthy responses will automatically
 be removed. With multi-value, you can have multiple records with the same
 name and each of these records can have a health check. R53 using this method
@@ -3319,13 +3341,13 @@ the complexity or the overhead of weighted routing.
 
 ---
 
-## Relational-Database-Service-RDS
+## 1.10. Relational-Database-Service-RDS
 
-### Database Refresher
+### 1.10.1. Database Refresher
 
 Systems to store and manage data.
 
-#### Relational (SQL)
+#### 1.10.1.1. Relational (SQL)
 
 - Structured Query Language (SQL) is a feature of most RDS.
 - Structure to the data known as a **schema**.
@@ -3350,19 +3372,19 @@ are defined.
 The Table schema and relationships must be defined in advance which can be
 hard to do.
 
-#### Non-Relational (NoSQL)
+#### 1.10.1.2. Non-Relational (NoSQL)
 
 Not a single thing, and is a catch all for everything else.
 There is generally no schema or a weak one.
 
-##### Key-Value databases
+##### 1.10.1.2.1. Key-Value databases
 
 This is just a list of keys and value pairs.
 So long as every key is unique, there is no real schema or structure needed.
 These are really fast and highly scalable.
 This is also used for **in memory caching**.
 
-##### Wide Column Store
+##### 1.10.1.2.2. Wide Column Store
 
 DynamoDB is an example of wide column store database.
 
@@ -3379,7 +3401,7 @@ the same between values.
 The only requirements is that every item inside the table has to use the same
 key structure and it has to have a unique key.
 
-##### Document
+##### 1.10.1.2.3. Document
 
 Documents are generally formatted using JSON or XML.
 
@@ -3391,7 +3413,7 @@ Good for order databases, or collections, or contact stale databases.
 
 Great for nested data items within a document structure such as user profiles.
 
-##### Row Database (MySQL)
+##### 1.10.1.2.4. Row Database (MySQL)
 
 Often called OLTP (Online Transactional Processing Databases).
 
@@ -3402,7 +3424,7 @@ need to check for each row.
 Great for things which deal in rows and items where they are constantly
 accessed, modified, and removed.
 
-##### Column Database (Redshift)
+##### 1.10.1.2.5. Column Database (Redshift)
 
 Instead of storing data in rows on disk, they store it based on columns.
 The data is the same, but it's grouped together on disk, based on
@@ -3412,7 +3434,7 @@ size, and price are all grouped together.
 This is bad for transactional style processing, but great for reporting or when
 all values for a specific size are required.
 
-##### Graph
+##### 1.10.1.2.6. Graph
 
 Relationships between things are formally defined and stored along in the
 database itself with the data.
@@ -3429,7 +3451,7 @@ We might want to store the start date of any employment relationship.
 Can store massive amounts of complex relationships between data or between
 nodes in a database.
 
-### Databases on EC2
+### 1.10.2. Databases on EC2
 
 It is always a bad idea to do this.
 
@@ -3437,7 +3459,7 @@ It is always a bad idea to do this.
   - Adds reliability consideration between the AZs
   - Adds a cost to move the data between AZs
 
-#### Reasons EC2 Database might make sense
+#### 1.10.2.1. Reasons EC2 Database might make sense
 
 - Need access to the OS of the Database.
   - You should question if a client requests this, it rarely is needed.
@@ -3447,7 +3469,7 @@ It is always a bad idea to do this.
 - DB or DB version that AWS doesn't provide.
 - You might need a specific version of an OS and DB that AWS doesn't provide.
 
-#### Reasons why you really shouldn't run a database on EC2
+#### 1.10.2.2. Reasons why you really shouldn't run a database on EC2
 
 - **Admin overhead** is intense to manage the EC2 host.
 - Backup and Disaster Management adds complexity.
@@ -3457,7 +3479,7 @@ It is always a bad idea to do this.
 - **Replication** can be tricky to manage on your own.
 - Performance will be slower than other AWS options.
 
-### Relational Database Service (RDS)
+### 1.10.3. Relational Database Service (RDS)
 
 - Database-as-a-service (DBaaS)
   - Not entirely true more of DatabaseServer-as-a-service.
@@ -3467,7 +3489,7 @@ It is always a bad idea to do this.
 
 Amazon Aurora. This is so different from normal RDS, it is a separate product.
 
-#### RDS Database Instance
+#### 1.10.3.1. RDS Database Instance
 
 Runs one of a few types of database engines and can contain multiple
 user created databases. Create one when you provision the instance, but
@@ -3500,7 +3522,7 @@ magnetic - compatibility mostly for long term historic uses
 Billing is per instance and hourly rate for that compute. You are billed
 for storage allocated.
 
-### RDS Multi AZ (High-Availability)
+### 1.10.4. RDS Multi AZ (High-Availability)
 
 This is an option that you can enable on RDS instances.
 Secondary hardware is allocated inside another AZ. This is referred to as
@@ -3527,13 +3549,14 @@ failover within 60 to 120 seconds to change to the new database.
 
 This does not provide fault tolerance as there will be some impact during change.
 
-#### RDS Exam PowerUp
+#### 1.10.4.1. RDS Exam PowerUp
 
 - Multi-AZ feature is not free tier, extra infrastructure for standby.
   - Generally two times the price.
 - The standby replica cannot be accessed directly unless a fail occurs.
    - Can't be used for scaling. It's an availability improvement not performance one.
 - Failover is highly available, not fault tolerant.
+- Offers only high availability and minimizes disruptions associated with software updates, backups, and instance type changes not performance improvement or scalability. (Don't for exam questions that try to trick you into choosing options that say Multi-AZ can improve performance.)
 - Same region only (others AZ in the VPC).
 - Backups are taken from standby which removes performance impacts.
 - Failover can happen for a number of reasons.
@@ -3543,7 +3566,7 @@ This does not provide fault tolerance as there will be some impact during change
   - If you change the type of a RDS instance, it will failover as part of
   changing that type.
 
-### RDS Backup and Restores
+### 1.10.5. RDS Backup and Restores
 
 RPO - Recovery Point Objective
 
@@ -3567,7 +3590,7 @@ between the compute resource and the storage. If you are using single AZ, this
 can impact your application. If you are using Multi-AZ, the snapshot occurs
 on the standby replica.
 
-Manual snapshots don't expire, you have to clean them yourself.
+**Manual snapshots don't expire**, you have to clean them yourself.
 Automatic Snapshots can be configured to make things easier.
 
 In addition to automated backup, every 5 minutes database transaction logs are
@@ -3575,7 +3598,7 @@ saved to S3. Transaction logs store the actual data which changes inside a
 database so the actual operations that are executed. This allows a database
 to be restored to a point in time often with 5 minute granularity.
 
-Automatic cleanups can be anywhere from 0 to 35 days.
+Automatic cleanups can be anywhere from *0 to 35* days.
 This means you can restore to any point in that time frame.
 This will use both the snapshots and the translation logs.
 
@@ -3585,7 +3608,7 @@ based on their retention period.
 The only way to maintain backups is to create a final snapshot which will not
 expire automatically.
 
-#### RDS Backup Exam PowerUp
+#### 1.10.5.1. RDS Backup Exam PowerUp
 
 - When performing a restore, RDS creates a new RDS with a new endpoint address.
 - When restoring a manual snapshot, you are setting it to a single point
@@ -3595,7 +3618,7 @@ in time. This influences the RPO value.
 desired point in time.
 - Restores aren't fast, think about RTO.
 
-### RDS Read-Replicas
+### 1.10.6. RDS Read-Replicas
 
 Kept in sync using **asynchronous replication**
 
@@ -3606,9 +3629,9 @@ These can be created in the same region or a different region.
 This is known as **cross region replication**. AWS handles all of the
 encryption, configuration, and networking without intervention.
 
-#### Why do these matter
+#### 1.10.6.1. Why do these matter
 
-READ performance
+(READ Replicas) Performance Improvements
 
 - 5 direct read-replicas per DB instance.
 - Each of these provides an additional instance of read performance.
@@ -3618,16 +3641,26 @@ READ performance
 - Provides global resilience by using cross region replication.
 - They don't improve RTO
 
-Read Replicas provide near 0 RPO
+(Read Replicas) Availability Improvements
 
-- If the primary instance fails, you can promote a read-replica to take over.
+- Snapshots & backups improve recovery-point-objective (time difference between the last backup and the occurrence of a failure).
+- Provide near 0 RPO; RTOs still remain a problem.
+- If the primary instance fails, you can promote a read-replica (RR) quickly to take over thus resulting in a low RTO (the time between a failure and full recovery).
 - Once it is promoted, it allows for read and write.
 - Only works for failures.
   - Read-replicas will replicate data corruption.
   - In this case you must default back to snapshots and backups.
 - Promotion cannot be reversed.
+- RRs are for reads only until promoted.
+- Offers global availability improvements and global resilience.
 
-### Amazon Aurora
+### 1.10.7. Enhanced Monitoring
+
+CloudWatch gathers metrics about CPU utilization from the hypervisor for a DB instance, and Enhanced Monitoring gathers its metrics from an agent on the instance. As a result, you might find differences between the measurements, because the hypervisor layer performs a small amount of work. The differences can be greater if your DB instances use smaller instance classes, because then there are likely more virtual machines (VMs) that are managed by the hypervisor layer on a single physical instance. 
+
+> Enhanced Monitoring metrics are useful when you want to see how different processes or threads on a DB instance use the CPU.
+
+### 1.10.8. Amazon Aurora
 
 Aurora architecture is VERY different from RDS.
 
@@ -3677,7 +3710,7 @@ it doesn't have to make any storage modifications.
 - Storage is for the cluster and not the instances which means Replicas can be
 added and removed without requiring storage, provisioning, or removal.
 
-#### Aurora Endpoints
+#### 1.10.8.1. Aurora Endpoints
 
 Aurora clusters like RDS use endpoints, so these are DNS addresses which
 are used to connect to the cluster. Unlike RDS, Aurora clusters have
@@ -3693,7 +3726,7 @@ Minimum endpoints
   - Additional replicas which are used for reads will be load balanced
   automatically.
 
-#### Costs
+#### 1.10.8.2. Costs
 
 - No free-tier option
 - Aurora doesn't support micro instances
@@ -3704,7 +3737,7 @@ Minimum endpoints
 - 100% DB size in backups are included for free.
   - 100 GB cluster will have 100 GB of storage for backups.
 
-#### Aurora Restore, Clone and Backtrack
+#### 1.10.8.3. Aurora Restore, Clone and Backtrack
 
 Backups in Aurora work in the same way as RDS.
 Restores create a brand new cluster.
@@ -3715,11 +3748,11 @@ your data base to a previous point in time. This helps for data corruption.
 You can adjust the window backtrack will work for.
 
 Fast clones make a new database much faster than copying all the data.
-It references the original storage and only write the differences between
+It references the original storage and only stores the differences between
 the two. It uses a tiny amount of storage and only stores data that's changed
 in the clone or changed in the original after you make the clone.
 
-### Aurora Serverless
+### 1.10.9. Aurora Serverless
 
 Provides a version of Aurora database product without managing the resources.
 You still create a cluster, but it uses ACUs or Aurora Capacity Units.
@@ -3742,7 +3775,7 @@ they are actually communicating with the proxy fleet. The proxy fleet
 brokers an application with the ACU and ensures you can scale in and out
 without worrying about usage. This is managed by AWS on your behalf.
 
-#### Aurora Serverless - Use Cases
+#### 1.10.9.1. Aurora Serverless - Use Cases
 
 - Infrequently used applications.
   - Low volume blog site.
@@ -3755,13 +3788,13 @@ It can scale in and out based on demand
   - Billing a user a set dollar amount per month per license.
   - If your incoming load is directly tied to more revenue this makes sense.
 
-### Aurora Global Database
+### 1.10.10. Aurora Global Database
 
 Introduces the idea of secondary regions with up to 16 read only replicas.
 Replication from primary region to secondary regions happens at the storage
 layer and typically occurs within one second.
 
-- Great for cross region disaster recovery and business continuity.
+- Great for *cross region disaster recovery and business continuity*.
 - Global read scaling
   - Low latency performance improvements for international customers.
 - The application can perform read operations against the read replicas.
@@ -3772,7 +3805,7 @@ layer and typically occurs within one second.
   - All can be promoted to Read or Write in a DR situation.
 - Maximum of 5 secondary regions.
 
-### Aurora Multi-Master Writes
+### 1.10.11. Aurora Multi-Master Writes
 
 Allows an aurora cluster to have multiple instances capable of reads and writes.
 
@@ -3801,7 +3834,7 @@ This also ensures storage is updated on in-memory cache's of other nodes.
 If a writer goes down in a multi-master cluster, the application will shift
 all future load over to a new writer with little if any disruption.
 
-### Database Migration Service (DMS)
+### 1.10.12. Database Migration Service (DMS)
 
 A managed database migration service.
 Starts with a replication instance which runs on top of an EC2 instance.
@@ -3828,9 +3861,9 @@ Schema Conversion Tool or SCT can perform conversions between database types.
 
 ---
 
-## Network-Storage-EFS
+## 1.11. Network-Storage-EFS
 
-### EFS Architecture
+### 1.11.1. EFS Architecture
 
 EFS moves the instances closer to being stateless.
 
@@ -3848,7 +3881,7 @@ EFS moves the instances closer to being stateless.
   - VPN connections
   - AWS direct connect
 
-#### Elastic File System Explained
+#### 1.11.1.1. Elastic File System Explained
 
 EFS runs inside a VPC. Inside EFS you create file systems and these use POSIX
 permissions. EFS is made available inside a VPC via mount targets.
@@ -3858,15 +3891,15 @@ targets in each AZ the system runs in.
 
 You can use hybrid networking to connect to the same mount targets.
 
-#### EFS Exam PowerUp
+#### 1.11.1.2. EFS Exam PowerUp
 
 - EFS is Linux Only
 - Two performance modes:
-  - General purpose is good for latency sensitive use cases.
+  - **General purpose** is good for _latency sensitive_ use cases.
     - General purpose should be default for 99.9% of uses.
-  - Max I/O performance mode can scale to higher levels of aggregate t-put
+  - **Max I/O performance** mode can scale to higher levels of aggregate t-put
   and IOPS but it does have increased latencies.
-- Two t-put modes:
+- Two throughput modes:
   - Bursting works like GP2 volumes inside EBS with a burst pool.
   The more data you store in the FS, the better performance you get.
   - Provisioned t-put modes can specify t-put requirements separately from size.
@@ -3877,9 +3910,9 @@ You can use hybrid networking to connect to the same mount targets.
 
 ---
 
-## HA-and-Scaling
+## 1.12. HA-and-Scaling
 
-### Load Balancing Fundamentals
+### 1.12.1. Load Balancing Fundamentals
 
 Using one server is risky because that server can have performance issues
 or be completely unavailable, thus bringing down an application.
@@ -3892,7 +3925,7 @@ Without load balancing, this could bring additional problems.
 - Failed instances will still show up in DNS cache.
   - Due to TTL values, a user can be directed toward a dead server.
 
-#### Load Balancers Architecture
+#### 1.12.1.1. Load Balancers Architecture
 
 The user connects to a load balancer that is set to listens on port 80 and 443.
 
@@ -3913,7 +3946,7 @@ to that server. From the users client, the application always works.
 As long as 1+ servers are operational, the LB is operational.
 Clients shouldn't see errors that occur with one server.
 
-#### LB Exam PowerUp
+#### 1.12.1.2. LB Exam PowerUp
 
 - Clients connect to the **listener** of the load balancer.
 - The load balancer connects to one or more **targets** or servers.
@@ -3923,38 +3956,29 @@ Clients shouldn't see errors that occur with one server.
 - The LB abstracts the client away from individual servers.
 - Used for high availability, fault tolerance, and scaling
 
-### Application Load Balancer (ALB)
+### 1.12.2. Application Load Balancer (ALB)
 
-ALB is a layer 7 or Application Layer Load Balancer.
-It is capable of inspecting data that passes through.
-It can understand the application layer `http` and `https` and
-take actions based on things in those protocols like paths, headers,
-and hosts.
+ALB is a layer 7 or Application Layer Load Balancer. It is capable of inspecting data that passes through it. It can understand the application layer `http` and `https` and
+take actions based on things in those protocols like paths, headers, and hosts.
 
-Capacity that you have as part of an ALB increases automatically based
-on the load which passes through that ALB. This is made of multiple ALB nodes
-each running in different AZs. This makes them scalable and highly available.
+![OSI Model](/Learning-Aids/14-HA-and-Scaling/OSINetworkModel.png)
 
-Load balancing can be internet facing or internal.
-The difference is whether the nodes of the LB, the things which
-run in the AZs have public IP addresses or not.
+All AWS load balancers are scalable and highly available. Capacity that you have as part of an ALB increases automatically based on the load which passes through that ALB. This is made of multiple ALB nodes each running in different AZs. This makes them scalable and highly available.
 
-Internet facing LB is designed to be connected to, from public internet based
-clients, and load balance them across targets.
+Load balancing can be internet facing or internal. The difference is whether the nodes of the LB, the things which run in the AZs have public IP addresses or not.
 
-Internal load balancer is not accessible from the internet and is used to load
-balance inside a VPC only.
+Internet facing LB is designed to be connected to, from public internet based clients, and load balance them across targets.
 
-Load balancer sits between a client and one or more servers.
-Front end or listening side, accepts connections from a client.
-Back end is used for distribution to the targets.
+Internal load balancer is not accessible from the internet and is used to load balance inside a VPC only.
 
-LB billed on hourly rate and **Load Balancer Capacity Unit** LCU.
-LCU that you consume is based on the highest value for all of the
-individual measurements. You pay a certain number of LCUs based on your
-load over that hour.
+Load balancer sits between a client and one or more servers. Front end or listening side, accepts connections from a client. Back end is used for distribution to the targets.
 
-#### Cross zone load balancing
+LB billed based on two things:
+
+1. A standard hourly rate.
+2. An LCU (**Load Balancer Capacity Unit**) rate. One LCU allows 25 connections per second, 3,000 active connections per minute, 1GB per hour for EC2 instances and IP addresses as targets, and 0.4GB per hour for Lambda functions as targets, and 1,000 rule evaluations per second. LCU that you consume is based on the highest value for all of the individual measurements. You pay a certain number of LCUs based on your load over that hour.
+
+#### 1.12.2.1. Cross zone load balancing
 
 Each node that is part of the load balancer is able to distribute load
 across all instances across all AZ that are registered with that LB,
@@ -3969,56 +3993,62 @@ groups and an individual target can be a member of multiple groups. It's the
 groups which ALBs distribute connections to. You could create rules
 to direct traffic to different Target Groups based on their DNS.
 
-#### ALB Exam PowerUp
+#### 1.12.2.2. ALB Exam PowerUp
 
-- Targets are one single compute resource that connections are connected
-towards.
+- Targets are one single compute resource that connections are directed
+towards. Targets represents Lambda functions, EC2 instances, ECS containers.
 - Target groups are groups of targets which are addressed using rules.
-- Rules are
-  - path based `/cat` or `/dog`
-  - host based if you want to use different DNS names.
+- Rules are:
+  - path-based `/cat` or `/dog`
+  - host-based if you want to use different DNS names.
 - Support EC2, EKS, Lambda, HTTPS, HTTP/2 and websockets.
-- ALB can use SNI for multiple SSL certs attached to that LB.
+- ALB can use Server Name Indication (SNI)[^1] for multiple SSL certs attached to that LB.
   - LB can direct individual domain names using SSL certs at different target
   groups.
 - AWS does not suggest using Classic Load Balancer (CLB), these are legacy.
   - This can only use one SSL certificate.
 
-### Launch Configuration and Templates
+### 1.12.3. Launch Configuration and Templates
 
-They are documents which allow you to config an EC2 instance in advance.
-Anything you usually define at the point of launching an instance can be
-selected with a Launch Configuration (LC) or Launch Template (LT).
+They are documents which allow you to define the configuration of an EC2 instance in advance.
 
-LTs are newer and provide more features than LCs like versioning.
+They allow you to configure:
 
-Both of these are not editable. You define them once and that configuration
-is locked.
-If you need to adjust a configuration, you must make a new one and launch it.
+- AMIs to use; Instance Type; Storate and Key Pairs.
+- Networking and Security Groups
+- Userdata & IAM Role
 
-LTs can be used to save time when provisioning EC2 instances
-from the console UI / CLI.
+Anything you usually define at the point of launching an instance can be selected with a Launch Configuration (LC) or Launch Template (LT).
 
-### Autoscaling Groups
+LTs are newer and provide more features than LCs such as T2/T3 unlimited, placement groups, capacity reservations, elastic graphics, and versioning.
+
+Both of these are not editable. You define them once and that configuration is locked. If you need to adjust a configuration, you must make a new one and launch it.
+
+LTs can be used to save time when provisioning EC2 instances from the console UI / CLI.
+
+### 1.12.4. Autoscaling Groups
 
 - Automatic scaling and self-healing for EC2
 - They make use of LCs or LTs to know what to provision.
 - Autoscaling group uses one LC or one version of a LT which it's linked with.
 - Three values to control
-  - minimum
-  - desired
-  - maximum
+  - minimum size
+  - desired capacity
+  - maximum size
 
 Provision or terminate instances to keep at the desired level
 Scaling Policies can trigger this based on metrics.
 
 Autoscaling Groups will distribute EC2 instances to try and keep the AZs equal.
 
-#### Scaling Policies
+#### 1.12.4.1. Scaling Policies
 
-Manual Scaling - manually adjust the desired capacity
-Scheduled Scaling - time based adjustments
-Dynamic Scaling
+Scaling policies are rules that you can use to define autoscaling of instances.
+There are three types of scaling policies:
+
+1. Manual Scaling - manually adjust the desired capacity
+2. Scheduled Scaling - useful for known periods of high or low usage. They are time based adjustments e.g. Sales Periods.
+3. Dynamic Scaling:
 
 - Simple: If CPU is above 50%, add one to capacity
 - Stepped: If CPU usage is above 50%, add one, if above 80% add three
@@ -4038,35 +4068,33 @@ the status of HTTP and HTTPS requests. This makes them more application aware.
 
 - Autoscaling Groups are free, only billed for the resources deployed.
 - Always use cool downs to avoid rapid scaling.
-- Try and use more smaller instances to allow granularity.
-- You should use ALB with autoscaling groups.
-- ASG defines when and where, Launch Template defines what.
+- Think about implementing more and smaller instances to allow granularity.
+- Generally, for anything client-facing you should always use Auto Scaling Groups (ASG) with Application Load Balancers (ALB) with autoscaling because they allow you to provide elasticity by abstracting the user away from individual servers. Since, the customers will be connecting through an ALB, they don't have any visibility of individual servers.
+- ASG defines WHEN and WHERE; Launch Templates defines WHAT.
 
-### Network Load Balancer (NLB)
+### 1.12.5. Network Load Balancer (NLB)
 
 Part of AWS Version 2 series of load balancers.
-NLBs are Layer 4, only understand TCP and UDP.
 
-Can't interpret HTTP or HTTPs, but this makes it much faster in latency.
-If you see anything about latency and HTTP and HTTPS are not involved, this
-should default to a NLB.
+1. NLBs are Layer 4, only understand TCP and UDP.
 
-There is nothing stopping NLB from load balancing on HTTP just by routing data.
-They would do this really fast and can deliver millions of requests per second.
+2. Can't interpret HTTP or HTTPs, but this makes it much faster in latency.
+[**EXAM HINT]** => If you see anything about latency and HTTP and HTTPS are not involved, this should default to a NLB.
 
-Only member of the load balancing family that can be provided a static IP.
-There is 1 interface per AZ. Can also use Elastic IPs (whitelisting) and should
-be used for this purpose.
+3. Rapid Scaling: There is nothing stopping NLB from load balancing on HTTP just by routing data. They would do this really fast and can deliver millions of requests per second.
 
-Can perform SSL pass through.
+4. Only member of the load balancing family that can be provided a static IP.
+There is 1 interface per AZ. Can also use Elastic IPs (whitelisting on firewalls) and should be used for this purpose.
 
-NLB can load balance non HTTP/S applications, doesn't care about anything
+5. Can perform SSL pass through.
+
+6. NLB can load balance non-HTTP/S applications, doesn't care about anything
 above TCP/UDP. This means it can handle load balancing for FTP or things
 that aren't HTTP or HTTPS.
 
-### SSL Offload and Session Stickiness
+### 1.12.6. SSL Offload and Session Stickiness
 
-#### Bridging - Default mode
+#### 1.12.6.1. Bridging - Default mode
 
 One or more clients makes one or more connections to a load balancer.
 The load balancer is configured so its **listener** uses HTTPS, SSL connections
@@ -4092,7 +4120,9 @@ The main benefit is the elastic load balancer gets to see the unencrypted
 HTTP and can take actions based on what's contained in this plain text
 protocol.
 
-#### Pass-through - Network Load Balancer
+![SSL Offload](Learning-Aids/14-HA-and-Scaling/SSLOffload.png)
+
+#### 1.12.6.2. Pass-through - Network Load Balancer
 
 The client connects, but the load balancer passes the connection along without
 decrypting the data at all. The instances still need the SSL certificates,
@@ -4107,7 +4137,7 @@ Negative is you don't get any load balancing based on the HTTP part
 because that is never exposed to the load balancer. The EC2 instances
 still need the compute cryptographic overhead.
 
-#### Offload
+#### 1.12.6.3. Offload
 
 Clients connect to the load balancer using HTTPS and are terminated on the
 load balancer. The LB needs an SSL certificate to decrypt the data, but
@@ -4116,14 +4146,18 @@ required on the load balancer, this is not needed on the LB.
 
 Data is in plaintext form across AWS's network. Not a problem for most.
 
-#### Connection Stickiness
+#### 1.12.6.4. Connection Stickiness
 
 If there is no stickiness, each time the customer logs on they will have
 a stateless experience. If the state is stored on a particular server,
 sessions can't be load balanced across multiple servers.
 
 There is an option available within elastic load balancers called Session
-Stickiness. And within an application load balancer this is enabled on a
+Stickiness.
+
+![Session Stickiness](Learning-Aids/14-HA-and-Scaling/SessionStickiness.png)
+
+And within an application load balancer this is enabled on a
 target group. If enabled, the first time a user makes a request, the load
 balancer generates a cookie called AWSALB with a duration. A valid duration
 is between one second and seven days. For this time, sessions will be sent to
@@ -4135,26 +4169,28 @@ new cookie
 
 This could cause backend unevenness because one user will always be forced
 to the same server no matter what the distributed load is. Applications
-should be designed to hold session stickiness somewhere other than EC2.
+should be designed to hold session stickiness somewhere other than EC2. You can hold session state in, for instance, DynamoDB. If store session state data externally, this means EC2 instances will be completely stateless.
 
 ---
 
-## Serverless-and-App-Services
+## 1.13. Serverless-and-App-Services
 
-### Architecture Evolution
+### 1.13.1. Architecture Evolution
 
-#### Monolithic
+#### 1.13.1.1. Monolithic
 
-- Fails together.
+Think of this as a single black box with all of the components of the architecture within it.
+
+- Fails together as an entity.
   - One error will bring the whole system down.
-- Scales together.
+- Scales together. Systems are highly coupled.
   - Everything expects to be running on the same compute hardware
 - Bills together.
   - All components are always running and always incurring charges.
 
 This is the least cost effective way to architect systems.
 
-#### Tiered
+#### 1.13.1.2. Tiered
 
 - Different components can be on the same server or different servers.
 - Components are coupled together because the endpoints connect together.
@@ -4167,7 +4203,7 @@ This is the least cost effective way to architect systems.
 - Tiers must be operational and send responses even if they are not processing
 anything of value otherwise the system fails.
 
-#### Evolving with Queues
+#### 1.13.1.3. Evolving with Queues
 
 - Data no longer moves between tiers to be processed and instead uses a queue.
   - Often are **FIFO** (first in, first out)
@@ -4181,7 +4217,28 @@ anything of value otherwise the system fails.
 - The queue has the location of the S3 bucket and passes this onto the
 processing tier.
 
-#### Event Driven Architecture
+#### 1.13.1.4. Microservices Architecture
+
+A collection of microservices. Microservices are tiny, self sufficient application. It has its own logic; its own store of data; and its own input/output components. Microservices do individual things very well. In this example you have the upload microservice, process microservice, and the store and manage microservice. The upload process is a **producer**; the processing process is a **consumer**; and the store and manage process does both. Logically, producers produce data or messages; consumers consume data or messages; and then there are microservices that can do both things. Now the things that services produce or consume architecturally are events. Queues can be used to communicate events.
+
+#### 1.13.1.5. Event Driven Architecture
+
+Event-driven architecture are just collection of event producers which might be components of your application which directly interacts with customers. Or, they might be part of your infrastructure such as EC2; or they might be system-monitoring components. They are pieces of software which generate or produce events in reaction to something. If a customer click submit, that might be an event. If an error occurs while packing a customer order, that is another event.
+
+Event consumers are pieces of software which are ready and waiting for events to occur. If they see an event they care about they will do something to that event. They will take an action. It might displaying something for a customer or despatching a human to resolve an order-packing issue or it might be to retry an upload.
+
+Components within an architecture can be producers and consumers. Sometimes a component can generate an event, for example, a failed upload and then consume events to force a retry of that upload.
+
+Best practice event architecture have **event routers**: an highly available, central exchange point for events. The event router has an **event bus**: a constant flow of information. When events are generated by producers they are added to the event bus and the router can deliver this to event consumers.
+
+With event driven architectures:
+
+1. There is nothing constantly running or waiting for things.
+2. Producers generate events when something happens.
+3. Events can be clicks, errors, criteria met, uploads, actions, etc.
+4. Events are delivered to consumers
+
+A mature event-driven architecuture only consumes resources while handling events i.e. they are serverless.
 
 - Event producers
   - Interact with customers or systems monitoring components.
@@ -4196,7 +4253,7 @@ processing tier.
 an event bus.
 - Only consumes resources while handling events.
 
-### AWS Lambda
+### 1.13.2. AWS Lambda
 
 - Function-as-a-service (FaaS)
   - Service accepts functions.
@@ -4204,11 +4261,11 @@ an event bus.
 - **Lambda function** is piece of code in one language.
 - Lambda functions use a **runtime** (e.g. Python 3.6)
 - Runs in a **runtime environment**.
-  - Virtual environment that is ready to go to run code in that language.
+  - Virtual environment that is ready to go to run code in that language. Think of it as a _container_.
   - You are billed only for the duration a function runs.
   - There is no charge for having lambda functions waiting and ready to go.
 
-#### Lambda Architecture
+#### 1.13.2.1. Lambda Architecture
 
 Best practice is to make it very small and very specialized.
 Lambda function code, when executed is known as being **invoked**.
@@ -4240,7 +4297,7 @@ it gets details of the event given to it at startup.
 
 Lambda functions can run up to 15 minutes. That is the max limit.
 
-#### Key Considerations
+#### 1.13.2.2. Key Considerations
 
 - Currently 15 min execution limit.
 - Assume each execution gets a new runtime environment.
@@ -4249,14 +4306,14 @@ Lambda functions can run up to 15 minutes. That is the max limit.
 - Store data to other services (e.g. S3).
 - 1M free requests and 400,000 GB-seconds of compute per month.
 
-### CloudWatch Events and EventBridge
+### 1.13.3. CloudWatch Events and EventBridge
 
 Delivers near real time stream of system events that describe changes in AWS
 products and services. EventBridge will replace CW Events.
 EventBridge can also handle events from third parties. Both share the same
 underlying architecture. AWS is now encouraging a migration to EB.
 
-#### CloudWatch Events Key Concepts
+#### 1.13.3.1. CloudWatch Events Key Concepts
 
 They can observe if X happens at Y time(s), do Z.
 
@@ -4292,20 +4349,21 @@ is executed and moves that event that it matched through to one or more targets.
 The events themselves are JSON structures and the data can be used by the
 targets.
 
-### Application Programming Interface (API) Gateway
+### 1.13.4. Application Programming Interface (API) Gateway
 
-- A way applications or services can communicate with each other.
-- API gateway is an AWS managed service.
+API stands for Application Programming Interface. It's a way that you can take an application you developed and provide its functionality either directly to users, system utlities, or other applications to include that functionality inside their code. It's a way applications or services can communicate with each other.
+
+- API gateway is an AWS managed service:
   - Provides managed AWS endpoints.
   - Can also perform authentication to prove you are who you claim.
   - You can create an API and present it to your customers for use.
-- Allows you to create, publish, monitor, and secure APIs.
+- Allows you to create, publish, monitor, and secure APIs (and it does these tasks as a service).
 - Billed based on:
   - number of API calls
   - amount of data transferred
   - additional performance features such as caching
 - Serve as an entry point for serverless architecture.
-- If you have on premises legacy services that use APIs, this can be integrated.
+- They come in handy during architecture evolution. For instance, if you have on premises legacy services that use APIs, this can be integrated.
 
 Great during an architecture evolution because the endpoints don't change.
 
@@ -4314,28 +4372,19 @@ Great during an architecture evolution because the endpoints don't change.
 This might move some of the data to fargate and aurora architecture.
 3. Move to a full serverless architecture with DynamoDB.
 
-### Serverless
+### 1.13.5. Serverless
 
-This is not one single thing, you manage few if any servers.
-This aims to remove overhead and risk as much as possible.
-Applications are a collection of small and specialized functions that do
-one thing really well and then stop.
+This is not one single thing, you manage few if any servers. This aims to remove overhead and risk as much as possible. Applications are a collection of small and specialized functions that do one thing really well and then stop.
 
-These functions are stateless and run in ephemeral environments.
-Every time they run, they obtain the data that they need, they do something
-and then optionally, they store the result persistently somehow or deliver
-the output to something else.
+These functions are stateless and run in ephemeral environments. Every time they run, they obtain the data that they need, they do something and then optionally, they store the result persistently somehow or deliver the output to something else.
 
-Generally, everything is event driven. Nothing is running until it's required.
-While not being used, there should be little to no cost.
+Serverless architecture should use function-as-a-service (FaaS) products such as Lambda for any general processing need. Lambda as a service is billed based on execution duration and functions only run when there a form of execution is happening. Because serverless is event-driven, it means while not being used a serverless architecture should be very close to zero cost until something in that environment generates an event. Serverless architectures generally have no persistent usage of compute within that system.
 
-Should use managed services when possible.
+Serverless environments should use, where possible, managed services. It shouldn't re-invent the wheel. Examples include using S3 for any persistent object storage or dynamoDB for any persistent data storage and third party identity providers such as Google, Twitter, Facebook, or even corporate identities such as LDAP & Active Directory instead of building your own. Other services that AWS provides such as Elastic Transcoder can be used to convert media files or manipulate these files in other ways.
 
-Aim is to consume as a service whatever you can, code as little as possible,
-and use function as a service for any general purpose compute needs, and
-then use all of those building blocks together to create your application.
+Your aim should be to use as-a-Service offerings as much as you can; code as little as possible and use function-as-a-service (FaaS) for any general compute needs. You all of those building blocks together to create your application.
 
-#### Example of Serverless
+#### 1.13.5.1. Example of Serverless
 
 A user wants to upload videos to a website for transcoding.
 
@@ -4354,19 +4403,20 @@ DynamoDB.
 8. User can interact with another Lambda to pull the media from the
 transcode bucket using the DynamoDB entry.
 
-### Simple Notification Service (SNS)
+### 1.13.6. Simple Notification Service (SNS)
 
 - HA, Durable, PUB/SUB messaging service.
 - Public AWS service meaning to access it, you need network connectivity
-with the Public AWS endpoints.
-- Coordinates sending and delivering of messages up to 256KB in size.
+with the Public AWS endpoints. The benefit of this is that it becomes accessible from anywhere that has that network connectivity.
+- Coordinates sending and delivering of messages: payloads that are up to 256KB in size.
   - Messages are not designed for large binary files.
 - SNS topics are the base entity of SNS.
   - Permissions are controlled and configuration for SNS is defined.
-- Publisher sends messages to a topic.
+- Publisher sends messages to a **topic**.
   - Topics have subscribers which receive messages.
 - Subscribers receive all of the messages sent to the Topic.
-  - Subscribers can be HTTP and HTTPS endpoints, emails, or SQS queues.
+  - Subscribers can be HTTP and HTTPS endpoints, emails, or SQS queues, Mobile Push Notifications, SMS Messages and Lambda.
+- SNS is used across AWS products and services for notifications. For instance, CloudWatch uses it when alarms change state; CloudFormation uses it when stacks change state; Auto Scaling Groups can even be configured to send notifications to a topic when a scaling event occurs.
   - Filters can be applied to limit messages sent to subscribers.
 - Fanout allows for a single SNS topic with multiple SQS queues as subscribers.
   - Can create multiple related workflows.
@@ -4375,22 +4425,23 @@ with the Public AWS endpoints.
 
 Offers:
 
-- Delivery Status including HTTP, Lambda, SQS
+- Delivery Status including HTTP/s, Lambda, SQS
 - Delivery retries which ensure reliable delivery
 - HA and Scalable (Regional)
 - SSE (server side encryption)
 - Topics can be used cross-account via Topic Policy
 
-### AWS Step Functions
+### 1.13.7. AWS Step Functions
 
-There are many problems with lambdas limitations that can be solved with
-a state machine. A state machine is a workflow. It has a start point, end point
-and in between there are states. States are things inside a State Machine which
-can do things. States can do things, and take in data, modify data, and output
-data.
+There are some crucial lambdas limitations:
+- Lambda is a FaaS product
+- There is a 15-minute maximum execution time
+- Lambda functions can, theoretically, be chained together but, this can get messy at scale
+- Runtime environments are _stateless_. Each environment is isolated; cleaned each time and any data needs to be transferred between environments if you want to maintain any form of state. This is why you cannot hold a state through different Lambda function invocations.
 
-State machine is designed to perform an activity or workflow with lots of
-individual components and maintain the idea of data between those states.
+Step funtions allow you to create state machines. A state machine is a workflow. It has a *start point*, *end point*, and in between there are *states*. States are things inside a State Machine which can do things. States can do things, and take in data, modify data, and output data.
+
+State machine is designed to perform an activity or workflow with lots of individual components and maintain the idea of data between those states.
 
 Maximum duration for a state machine execution is 1 year.
 
@@ -4398,24 +4449,20 @@ Two types of workflow
 
 - Standard
   - Default
-  - 1 year workflow
+  - 1 year workflow exeution limit
 
 - Express
   - Designed for IOT or other high transaction uses
   - 5 minute workflow
   - Provides better processing guarantees
 
-Started via API Gateway, IOT Rules, EventBridge, Lambda. Generally used for
-back end processing.
+Started via API Gateway, IOT Rules, EventBridge, Lambda. Generally used for back end processing.
 
-With State machines you can use a template to create and export State Machines
-once they're configured to your liking, it's called Amazon States Language or
-ASL. It's based on JSON.
+With State machines you can use a template to create and export State Machines once they're configured to your liking, it's called **Amazon States Language or ASL**. It's based on JSON.
 
-State machines are provided permission to interact with other AWS services via
-IAM roles.
+State machines are provided permission to interact with other AWS services via IAM roles.
 
-#### Step Function States
+#### 1.13.7.1. Step Function States
 
 States are the things inside a workflow, the things which occur. These states
 are available.
@@ -4426,7 +4473,7 @@ are available.
   - will wait for a certain period of time
   - will wait until specific date and time
 - Choice
-  - different path is determined based on an import
+  - different paths is determined based on an input. This is useful if you want a different set of behavior based on that input. For example, you might want the state machine to react differently depending on the stock level of an item in an order.
 - Parallel
   - will create parallel branches based on a choice
 - Map
@@ -4434,12 +4481,11 @@ are available.
   - for each item in that list, performs an action or set of actions based on
   that particular item.
 - Task
-  - represents a single unit of work performed by the State Machine.
+  - represents a single unit of work performed by a State Machine.
   - it allows the state machine to actually do things.
-  - can be integrated with many different services such as lambda, AWS batch,
-   dynamoDB, ECS, SNS, SQS, Glue, SageMaker, EMR, and lots of others.
+  - can be integrated with many different services such as Lambda, AWS batch, dynamoDB, ECS, SNS, SQS, Glue, SageMaker, EMR, and lots of others.
 
-### Simple Queue Service (SQS)
+### 1.13.8. Simple Queue Service (SQS)
 
 Public service that provides fully managed highly available message queues.
 
@@ -4461,12 +4507,18 @@ Public service that provides fully managed highly available message queues.
   puts it into a different workload to try and fix the corruption.
 - ASG can scale and lambdas can be invoked based on queue length.
 - Standard queue
-  - multi-lane HW
+  - multi-lane highway. 
   - guarantee the order and at least once delivery.
 - FIFO queue
   - single lane road with no way to overtake
   - guarantee the order and at exactly once delivery
   - 3,000 messages p/s with batching or up to 300 messages p/s without
+
+    Standard Queue| FIFO Queue |
+    ---------|----------|---------
+    Multi lane highway | Single lane road with no way to overtake | 
+    guarantee the order and at least one delivery | guarantee the order and at exactly one delivery | 
+    empty| 3000 messages p/s with batching or up to 300 messages p/s without | 
 
 Billed on **requests** not messages. A request is a single request to SQS.
 One request can return 0 - 10 messages up to 64KB data in total.
@@ -4489,11 +4541,11 @@ clients.
 Access to a queue is based on identity policies or a queue policy. Queue
 policies only can allow access from an outside account. This is a resource policy.
 
-### Kinesis
+### 1.13.9. Kinesis
 
 - Scalable streaming service. It is designed to inject data from
 lots of devices or lots of applications.
-- Many producers send data into a Kinesis Stream.
+- Many producers send data into a Kinesis Stream. Streams are the basic unit of Kinesis. 
 - The stream can scale from low to near infinite data rates.
 - Highly available public service by design.
 - Streams store a 24-hour moving window of data.
@@ -4511,10 +4563,9 @@ that can be ingested during a 24 hour period. However much you ingest during
 **Kinesis data records (1MB)** are stored across shards and are the blocks
 of data for a stream.
 
-**Kinesis Data Firehose** connects to a Kinesis stream. It can move the data
-from a stream onto S3 or another service.
+**Kinesis Data Firehose** connects to a Kinesis stream. It can move the data from a stream onto S3 or another service. Kinesis Firehose allows for the long term persistence of storage of kinesis data into services like S3. 
 
-### SQS vs Kinesis
+### 1.13.10. SQS vs Kinesis
 
 Kinesis
 
@@ -4530,24 +4581,31 @@ SQS
 - Allow for async communications
 - Once the message is processed, it is deleted
 
+  Kinesis | SQS |
+  ---------|----------|
+  Large throughout or large numbers of devices| One thing or one group of things sending messages to the queue
+  Huge scale ingestion with multiple consumers| One consumption group from that tier| C2
+  Rolling window for multiple consumers | Allow for async communications | C3
+  Designed for data ingestion, analytics, monitoring, and app clicks | Once the message is processed, it is deleted | C3
+
 ---
 
-## CDN-and-Optimization
+## 1.14. CDN-and-Optimization
 
-### Architecture Basics
+### 1.14.1. Architecture Basics
 
 - CloudFront is a global object cache (CDN)
 - Download caching only
 - Content is cached in locations close to customers.
 - If the content is not available on the local cache when requested, CloudFront
 will fetch the item and cache it and deliver it locally.
-- This provides lower latency and higher throughput for customers.
+- This provides lower latency (more responsiveness) and higher throughput (faster page loads) for customers.
 - Can handle static and dynamic content.
-- **Origin** the original location of your content, can be an S3 bucket or LB.
+- **Origin** the original location of your content, can be an S3 bucket or ALB. In theory it can be anywhere on the internet accessible by CloudFront.
 - **Distribution** the configuration unit of CloudFront.
 - **Edge locations** global infrastructure which hosts a cache of your data.
   - There are over 200 edge locations.
-  - They can be one or more racks in a third party server system.
+  - They are generally one or more racks in a 3rd party data center.
   - Normally 90% storage with some small compute.
 - **Regional Edge Cache**
   - Larger version of an edge location.
@@ -4555,7 +4613,7 @@ will fetch the item and cache it and deliver it locally.
   - Designed to hold more data to cache things which are accessed less often.
   - Provides another layer of caching.
 
-#### Caching Optimization
+#### 1.14.1.1. Caching Optimization
 
 Parameters can be passed on the url such as query string parameter.
 An example is `?language=en` and `?language=es`
@@ -4567,24 +4625,24 @@ them and the object is not caching it will need to be fetched first.
 If string parameters aren't involved in the caching, you can select no
 to forward them to the origin.
 
-If the application does use query string parameters, you can use all of them for
+If the application does use **query string parameters**, you can use all of them for
 caching or just selected ones.
 
-### AWS Certificate Manager (ACM)
+### 1.14.2. AWS Certificate Manager (ACM)
 
 - HTTP lacks encryption and is insecure
-- HTTPS uses SSL/TLS layer of encryption added to HTTP
-- Data is encrypted in-transit
-- Certificates allow servers to prove their identity
-- Signed by a trusted authority (CA).
+- HTTPS (HyperText Transfer Protocol Secure) uses SSL/TLS to create a secure tunnel over which normal http can be transferred.  
+- Data is encrypted in-transit from the perspective of an outside observer.
+- HTTPS Certificates also allows for servers to prove their identity
+- Signed by a trusted authority (a Certificate Authority [CAs]), which are trusted by your browser.
 - To be secure, a website generates a certificate, and has a CA sign it. The
 website then uses that certificate to prove its authenticity.
 - ACM allows you to create, renew, and deploy certificates.
-- Supported AWS services ONLY (CloudFront and ALB, NOT EC2)
+- Supported AWS services ONLY (CloudFront, ALB and API Gateway, Elastic Beanstalk, CloudFormation, **NOT EC2**)
 - If it's not a managed service, ACM doesn't support it.
 - CloudFront must have a trusted and signed certificate. Can't be self signed.
 
-### Origin Access Identity (OAI)
+### 1.14.3. Origin Access Identity (OAI)
 
 1. Identity can be associated with a CloudFront distribution.
 2. The edge locations gain this identity.
@@ -4599,7 +4657,7 @@ will only get the implicit deny.
 Best practice is to create one OAI per CloudFront distribution to manage
 permissions.
 
-### Lambda@Edge
+### 1.14.3.(1/2) Lambda@Edge
 
 - Permits to run lightweight Labda functions at Edge Locations
  - Adjust data between Viewer & Origin
@@ -4615,10 +4673,12 @@ permissions.
  - Different objects based on Device - Origin Request
  - Content By Country - Origin Request
 
-### AWS Global Accelerator
+
+### 1.14.4. AWS Global Accelerator
 
 - Move the AWS network closer to customers.
 - Designed to optimize the flow of data from users to your AWS infrastructure.
+- While CloudFront caches your application at Edge Locations, Global Accelerator moves the AWS infrastructure closer to your customers. 
 - Generally customers who are further away from your infrastructure go through
 more internet based hops and this means a lower quality connection.
 - Normal IP addresses are unicast IP addresses. These refer to one thing.
@@ -4628,16 +4688,17 @@ more internet based hops and this means a lower quality connection.
   - Traffic initially uses public internet and enters Global Accelerator at
   the closest edge location.
   - Traffic then flows globally across the AWS global backbone network.
-- Global accelerator is a network product, can use TCP/UDP.
+- Global accelerator is a network product, and it uses non HTTP/S (TCP/UDP) protocols.
+- If you see questions that mention _caching_ that will most likely be CloudFront but, if you see questions that mention TCP or UDP and the requirement for _global performance optimization_ then possibly it's going to be global accelerator which is the right answer.
 
 ---
 
-## Advanced-VPC
+## 1.15. Advanced-VPC
 
-### VPC Flow Logs
+### 1.15.1. VPC Flow Logs
 
-- Capture packet metadata, not packet contents.
-  - Things like source IP
+- Capture packet metadata, not packet contents. For packet contents you need a packet sniffer. Flow logs only capture things like:
+  - Source IP
   - Destination IP
   - Packet size
   - Anything which could be observed from the outside of the packet.
@@ -4645,28 +4706,54 @@ more internet based hops and this means a lower quality connection.
   - VPC: all interfaces in that vpc
   - Subnets: interfaces in that subnet
   - Interface directly
-- VPC flow logs are not realtime
-- Destination can be S3 or CloudWatch logs
+- VPC flow logs are **NOT** realtime
+- Destination can be [S3](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-s3.html) or [CloudWatch logs](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs-cwl.html)
 - Flow log inheritance is downwards starting at the VPC.
 - RDS can use VPC flow logs
 - The packet will always have source, then destination, then response.
+- ICMP protocol number is 1; TCP is 6; UDP is 17.
+- The following are excluded from VPC Flow Logs:
+  - Instance metadata: http://169.254.169.254/latest/metadata
+  - AWS Time Synchronization Server: http://169.254.169.123
+  - Amazon DNS Server
+  - Amazon Windows Licensing Server
 
-### Egress-Only Internet Gateway
+Example of Flow Logs
+
+```html
+<version>
+<account>
+<interface-id>
+<srcaddr>
+<dstaddr>
+<srcport>
+<dstport>
+<protocol>
+<packets>
+<bytes>
+<start>
+<end>
+<action>
+<log-status>
+```
+
+### 1.15.2. Egress-Only Internet Gateway
 
 - IPv4 addresses are private or public
-- NAT allows private IPs to access public networks and receive responses.
-- NAT will not allow externally initiated connections IN.
-- Using IPv6, all IPs are public.
+- NAT allows IPv4 private IPs with a way to access public internet or public AWS services and receive responses.
+- NAT does this in a way that will not allow externally initiated connections (from the public internet) IN.
+- NAT process exists because of the limitation of IPv4; it does not work with IPv6.
+- Using IPv6, all IPs are publicly routable.
   - Internet Gateway (IPv6) allows all IPs **in** and **out**
 - Egress-only is **outbound only** for IPv6. It is exactly the same as
 NAT, only outbound only.
 - To configure the Egress-only gateway, you must add default IPv6 route `::/0`
 added to RT with `eigw-id` as target.
 
-### VPC Endpoints (Gateway)
+### 1.15.3. VPC Gateway Endpoints
 
-Allow a private only resource inside a VPC or any resource inside a private
-only VPC access to S3 and DynamoDB.
+- Provide _private_ access to S3 and DynamoDB
+  - Allow a private only resource inside a VPC or any resource inside a private-only VPC access to S3 and DynamoDB. (Remember that both S3 and DynamoDB are public services)
 
 Normally when you want to access a public service through a VPC, you
 need infrastructure. You would create an IGW and attach it to the VPC.
@@ -4674,25 +4761,21 @@ Resources inside need to be granted IP address or implement one or more
 NAT gateways which allow instances with private IP addresses to access
 these public services.
 
-When you allocate a gateway endpoint to a subnet, a prefix list is added
-to the route table. The target is the gateway endpoint.
-Any traffic destined for S3, goes via the gateway endpoint.
-The gateway endpoint is highly available for all AZs in a region by default.
+- When you allocate a gateway endpoint to a subnet, a ***prefix list*** is added
+to the route table. The target is the gateway endpoint. Any traffic destined for S3, goes via the gateway endpoint. The gateway endpoint is highly available for all AZs in a region by default.
 
-With a gateway endpoint you set which subnet will be used with it and
-it will configure automatically.
-A gateway endpoint is a VPC gateway object.
-Endpoint policy controls what things can be connected to by that endpoint.
+- With a gateway endpoint you set which subnet will be used with it and
+it will configure automatically. A gateway endpoint is a VPC gateway object.
+  - Endpoint policy controls what things can be connected to by that endpoint.
 
-Gateway endpoints can only be used to access services in the same region.
-Can't access cross-region services.
+- Gateway endpoints can only be used to access services in the same region.
+Can't access cross-region services. You cannot, for instance, access an S3 bucket located in the `ap-southeast-2` region from a gateway endpoint in the `us-east-1` region.
 
-S3 buckets can be set to private only by allowing access ONLY from
-a gateway endpoint. For anything else, the implicit deny will apply.
+- Prevent Leaky Buckets: S3 buckets can be set to private only by allowing access ONLY from a gateway endpoint. For anything else, the _implicit deny_ will apply.
 
-They are only accessible from inside that specific VPC.
+A limitation is that they are only accessible from inside that specific VPC.
 
-### VPC Endpoints (Interface)
+### 1.15.4. VPC Interface Endpoints
 
 - Provide private access to AWS Public Services.
   - Anything EXCEPT S3 and DynamoDB
@@ -4703,12 +4786,13 @@ They are only accessible from inside that specific VPC.
 - You can use Endpoint policies to restrict what can be accessed with
 the endpoint.
 - ONLY TCP and IPv4 at the moment.
-- Behind the scenes, it uses PrivateLink.
+- Behind the scenes, it uses ***PrivateLink***.
+  - PrivateLink allows external services to be injected into your VPC either from AWS or $3^{rd}$ parties.
 - Endpoint provides a **NEW** service endpoint DNS
   - e.g. `vpce-123-xyz.sns.us-east-1.vpce.amazonaws.com`
-- Regional DNS is one single DNS name that works whatever AZ you're using to
+- **Regional DNS** is one single DNS name that works whatever AZ you're using to
 access the interface endpoint. Good for simplicity and HA.
-- Zonal DNS resolved to that one specific interface in that one specific AZ.
+- **Zonal DNS** resolved to that one specific interface in that one specific AZ.
 - Either of those two points of endpoints can be used by applications to
 directly and immediately utilize interface endpoints.
 - PrivateDNS associates R53 private hosted zone with your VPC. This private
@@ -4716,35 +4800,36 @@ hosted zone carries a replacement DNS record for the default service
 endpoint DNS name. It overrides the default service DNS with a new version
 that points at your interface endpoint. Enabled by default.
 
-#### Gateway Endpoints vs Interface Endpoints
+#### 1.15.4.1. Gateway Endpoints vs Interface Endpoints
 
 **Gateway endpoints** work using prefix lists and route tables so they do not
 need changes to the applications. The application thinks it's communicating
 directly with S3 or DynamoDB and all we're doing by using a gateway endpoint
 is influencing the route that the traffic flow uses. Instead of using IGW,
 it goes via gateway endpoint and can use private IP addressing.
-**highly available**
+Gateway endpoints because they are VPC gateway logical object; they are **highly available by design**
 
 **Interface Endpoints** uses DNS and a private IP address for the interface
 endpoint. You can either use the endpoint specific DNS names or you can
 enable PrivateDNS which overrides the default and allows unmodified
 applications to access the services using the interface endpoint. This doesn't
 use routing and only DNS.
-**not highly available**
+Interface endpoints because they use normal VPC network interfaces are **not highly available**. 
+> Make sure as a Solutions Architect when you are designing an architecture if you are utilizing multiple AZs then you need to put interface endpoints in every AZ that you use inside that VPC.
 
-### VPC Peering
+### 1.15.5. VPC Peering
 
-Direct encrypted network link between two and only two VPCs.
-Peering connection can be in the same or cross region and in the same or
-across accounts.
+VPC Peering is a service that lets you create a private and encrypted network link between ***two and only two VPCs***.
 
-When you create a VPC peer, you can enable an option so that public hostnames
+- Peering connection can be in the same or cross region and in the same or across accounts.
+
+- When you create a VPC peer, you can enable an option so that public hostnames
 of services in the peered VPC resolve to the private internal IPs. You
 can use the same DNS names if its in peered VPCs or not. If you attempt
 to resolve the public DNS hostname of an EC2 instance, it will resolve
 to the private IP address of the EC2 instance.
 
-VPCs in the same region can reference each other by using security group id.
+- VPCs in the same region can reference each other by using security group id.
 You can do the same efficient referencing and nesting of security groups that
 you can do if you're inside the same VPC. This is a feature that only works
 with VPC peers inside the same region.
@@ -4763,19 +4848,28 @@ VPC Peering Connections CANNOT be created with overlapping VPC CIDRs.
 
 ---
 
-## Hybrid-and-Migration
+## 1.16. Hybrid-and-Migration
 
-### AWS Site-to-Site VPN
+### 1.16.1. AWS Site-to-Site VPN
 
 - A logical connection between a VPC and on-premise network encrypted in transit
-using IPSec, running over the public internet.
+using IPSec, running over the public internet (in most cases).
 - This can be fully Highly Available if you design it correctly
 - Quick to provision, less than an hour.
 - VPNs connect VPCs and private on-prem networks.
 - Virtual Private Gateway (VGW) is the target on one or more route tables
-- Customer Gateway (CGW)
-  - logical piece of configuration on AWS
-  - thing that configuration represents
+- Customer Gateway (CGW) can represent two things:
+  1. logical piece of configuration on AWS
+  2. A physical piece on-prem router which the VPN connects to.
+
+Differences between static and dynamic VPN.
+
+Static| Dynamic |
+---------|----------|
+ Uses static networking config | Uses border gateway protocol (BGP) | C1
+ Networks for remote side statically configured on the VPN connection | BGP is configured on both the customer and AWS side using (ASN). Networks are exchanged via BGP. | C2
+ Routes for remote side added to route tables as static routes | Routes can be added statically or configured dynamically by using a feature called ***route propagation*** on the route tables in the VPC| C3
+
 - VPN connection itself stores the config and links to one VGW and one CGW
 - Speed cap on VPN with two tunnels of 1.25 Gbps (gigabits per second).
   - AWS limit, will need to check speed supported by customer router.
@@ -4788,29 +4882,33 @@ using IPSec, running over the public internet.
   - on-premises internet connection costs
 - VPN setup of hours or less
 - Great as a backup especially for Direct Connect (DX)
+- Can be used with Direct Connect (DX)
 
-### AWS Direct Connect (DX)
+### 1.16.2. AWS Direct Connect (DX)
 
 - Port operating at a certain speed which belongs to a certain AWS account.
 - Allocated at a DX location which is a major data center.
 - Two speeds
   - 1 Gpbs: 1000-Base-LX
   - 10 Gbps: 10GBASE-LR
-- This is a cross connect to your customer router (requires VLANS/BGP)
+- This is a **cross connect** to your customer router (requires VLANs/BGP)
 - You can connect to a partner router if extending to your location.
   - The port needs to be arranged to connect somewhere else and connect to
   your hardware.
-- This is a single fiber optic cable from the DX port to your network.
-- VIFs are multiple virtual interfaces (VIFs) over one DX
+- This is a single fiber optic cable from the AWS Managed DX port to your network.
+- You can run Virtual Interfaces (VIFs) over a single DX connect fiber optic line.
+- There is a one-to-many relationship between a DX line and VIFs. Therefore, you can multiple VIFs running on a single DX line. 
+- VIFs are of two types:
   - Private VIF (VPC)
-    - Represents one VPC
+    - Connects to one AWS VPC
     - Can have as many Private VIFs as you want.
   - **Public VIF** (Public Zone Services)
     - Only public services, not public internet
+    - Can be used with a site-to-site VPN to enable a private encryption using IPSec.
 
-Has one physical cable with no high availability and no encryption.
-DX Port Provisioning is likely quick, the cross-connect takes longer.
-Can take weeks or month for physical cable to be installed.
+Has one physical cable with **no high availability and no encryption**.
+DX Port Provisioning is quick, the cross-connect takes longer.
+Physical installation of cross-connect network can take weeks or months
 Generally use a VPN first then bring a DX in and leave VPN as backup.
 
 - Up to 40 Gbps with aggregation, 4 x 10 Gbps ports.
@@ -4831,7 +4929,7 @@ You run an IPSEC VPN over the public VIF, over the Direct Connect connection,
 you get all of the benefits of Direct Connect such as high speeds, and all
 the benefits of IPSEC encryption.
 
-### AWS Transit Gateway (TGW)
+### 1.16.3. AWS Transit Gateway (TGW)
 
 - Network transit hub to connect VPCs to on premises networks
 - Significantly reduces network complexity.
@@ -4845,9 +4943,10 @@ the benefits of IPSEC encryption.
 is required.
 - Can be used to create global networks.
   - You can use these for cross-region peering attachments.
-- Can share between accounts using AWS RAM
+- Can share between accounts using AWS Resource Access Manager (RAM)
+- You achieve a less network complexity if you implement a transit gateway (TGW)
 
-### Storage Gateway
+### 1.16.4. Storage Gateway
 
 - Hybrid Storage Virtual Application (On-premise)
   - Can be run inside AWS as part of certain disaster recovery scenarios
@@ -4862,18 +4961,18 @@ is required.
   - Data is kept locally
   - Awesome for migrations
 - Volume Mode (Cache Mode)
-  - Data as added to gateway is not stored locally.
+  - Data added to gateway is not stored locally.
   - Backup to EBS Snapshots
   - Primarily stored on AWS
   - Great for limited local storage capacity.
 
-### Snowball / Edge / Snowmobile
+### 1.16.5. Snowball / Edge / Snowmobile
 
 Designed to move large amounts of data IN and OUT of AWS.
 Physical storage the size of a suitcase or truck.
 Ordered from AWS, use, then return.
 
-#### Snowball
+#### 1.16.5.1. Snowball
 
 - Any data on Snowball uses KMS at rest encryption.
 - 1 Gbps or 10 Gbps connection
@@ -4882,7 +4981,7 @@ Ordered from AWS, use, then return.
   - Good for multiple locations
 - No compute
 
-#### Snowball Edge
+#### 1.16.5.2. Snowball Edge
 
 - Includes both storage and compute
 - Larger capacity vs snowball.
@@ -4897,14 +4996,14 @@ Ordered from AWS, use, then return.
   - Compute with GPU
     - Same as compute, but with GPU
 
-#### Snowmobile
+#### 1.16.5.3. Snowmobile
 
 Portable data center within a shipping container on a truck.
 This is a special order and is not available in high volume.
 Ideal for single location where 10 PB+ is required.
 Max is 100 PB per snowmobile.
 
-### AWS Directory Service
+### 1.16.6. AWS Directory Service
 
 Directories stores objects, users, groups, computers, servers, file shares with
 a structure called a domain / tree. Multiple trees can be grouped into a forest.
@@ -4924,7 +5023,7 @@ One common directory is **Active Directory** by Microsoft and its full name is
 - Can be isolated inside AWS only or integrated with existing on-prem system.
 - Connect Mode allows you to proxy back to on-premises.
 
-#### Directory Modes
+#### 1.16.6.1. Directory Modes
 
 - **Simple AD**: should be default. Designed for simple requirements.
 - **Microsoft AD**: is anything with Windows or if it needs a trust relationship
@@ -4932,7 +5031,7 @@ with on-prem. This is not an emulation or adjusted by AWS.
 - **AD Connector**: Use AWS services without storing any directory info in the
 cloud, it proxies to your on-prem directory.
 
-### AWS DataSync
+### 1.16.7. AWS DataSync
 
 - Data transfer service TO and FROM AWS.
 - This is used for migrations or for large amounts of data processing transfers.
@@ -4947,7 +5046,7 @@ can handle 50 million files.
 - AWS service integration with S3, EFS, FSx for Windows servers.
 - Pay as you use product.
 
-#### AWS DataSync Components
+#### 1.16.7.1. AWS DataSync Components
 
 - Task
   - job within datasync
@@ -4963,7 +5062,7 @@ can handle 50 million files.
     - server message block (SMB), common in Windows environments
     - AWS storage services (EFS, FSx, and S3)
 
-### FSx for Windows File Server
+### 1.16.8. FSx for Windows File Server
 
 - Fully managed native windows file servers/shares
 - Designed for integration with Windows environments.
@@ -4978,12 +5077,12 @@ can handle 50 million files.
 - File systems can be access using VPC, Peering, VPN, Direct Connect. Native
 windows filesystem or Directory Services.
 
-#### Words to look for
+#### 1.16.8.1. Words to look for
 
 - VSS: User Driven Restores
 - Native File System (NFS) accessible over SMB
 - Windows permissions model
-- Product supports DFS, scale out file share.
+- Product supports Distribute File Systems (DFS), scale out file share.
 - Managed service, no file server admin
 - Integrates with DS and your own directory.
 
@@ -5000,9 +5099,9 @@ windows filesystem or Directory Services.
 
 ---
 
-## Security-Deployment-Operations
+## 1.17. Security-Deployment-Operations
 
-### AWS Secrets Manager
+### 1.17.1. AWS Secrets Manager
 
 - Share functionality with parameter store. Sometimes both are appropriate.
 - Designed specifically for secrets, passwords, API keys.
@@ -5013,7 +5112,7 @@ is invoked and changes a secret, the password can automatically change in RDS.
 - Secrets are encrypted at rest.
 - Integrates with IAM, can use IAM permissions to control access to secrets.
 
-#### Secrets Manager Example
+#### 1.17.1.1. Secrets Manager Example
 
 1. The Secrets Manager SDK retrieves database credentials.
 2. SDK uses IAM credentials to retrieve the secrets.
@@ -5024,7 +5123,7 @@ is invoked and changes a secret, the password can automatically change in RDS.
 Secrets are secured using KMS so you never risk any leakage via physical access
 to the AWS hardware and KMS ensures role separation.
 
-### AWS Shield and WAF (Web Application Firewall)
+### 1.17.2. AWS Shield and WAF (Web Application Firewall)
 
 Provides against DDoS attacks with AWS resources. This is a denial of
 service attack. Normally not possible to block them by using individual
@@ -5050,7 +5149,7 @@ against increased costs.
   - WEBACL integrated with Load Balancers, API gateways, and CloudFront.
     - Rules are added to WEBACL and evaluated when traffic arrives.
 
-#### Example of Architecture
+#### 1.17.2.1. Example of Architecture
 
 Shield standard automatically looks at the data before any data reaches
 past Route53.
@@ -5066,14 +5165,14 @@ already.
 
 Layer 7 filtering is only provided by WAF.
 
-### CloudHSM
+### 1.17.3. CloudHSM
 
 KMS is the key management service within AWS. It is used for encryption within
 AWS and it integrates with other AWS products. Can generate keys, manage
 keys, and can integrate for encryption. The problem is this is a shared
 service. You're using a service which other accounts within AWS also use.
 Although the permissions are strict, AWS still does manage the hardware for KMS.
-KMS is a hardware security module or HSM. These are industry standard pieces
+KMS is a **Hardware Security Module** or HSM. These are industry standard pieces
 of hardware which are designed to manage keys and perform cryptographic
 operations.
 
@@ -5093,7 +5192,7 @@ HSM will not integrate with AWS by design and uses industry standard APIs.
 - **Java Cryptography Extensions (JCE)**
 - **Microsoft CryptoNG (CNG) libraries**
 
-KMS can use CloudHSM as a custom key store, CloudHSM integrates with KMS.
+KMS can use CloudHSM as a **custom key store**, CloudHSM integrates with KMS.
 
 HSM is not highly available and runs within one AZ. To be HA, you need at least
 two HSM devices and one in each AZ you use. Once HSM is in a cluster, they
@@ -5104,21 +5203,21 @@ to the cluster.
 
 AWS has no access to the HSM appliances which store the keys.
 
-#### Cloud HSM Use Cases
+#### 1.17.3.1. Cloud HSM Use Cases
 
 - No native AWS integration with AWS products. You can't use S3 SSE with
 CloudHSM.
 - Can offload the SSL/TLS processing from webservers. CloudHSM
 is much more efficient to do these encryption processes.
-- Oracle Databases can use CloudHSM to enable transparent data encryption (TDE)
+- Oracle Databases can use CloudHSM to enable **transparent data encryption (TDE)**
 - Can protect the private keys an issuing certificate authority.
 - Anything that needs to interact with non AWS products.
 
 ---
 
-## NoSQL-and-DynamoDB
+## 1.18. NoSQL-and-DynamoDB
 
-### DynamoDB Architecture
+### 1.18.1. DynamoDB Architecture
 
 NoSQL Database as a Service (DBaaS)
 
@@ -5132,7 +5231,7 @@ NoSQL Database as a Service (DBaaS)
 - Supports backups with point in time recovery and encryption at rest.
 - Allows event-driven integration. Do things when data changes.
 
-#### Dynamo DB Tables
+#### 1.18.1.1. Dynamo DB Tables
 
 - **Table** a grouping of items which share the same primary key.
 - **Items** within a table are how you manage the data.
@@ -5155,7 +5254,7 @@ Capacity is set per WCU or RCU
 1 WCU means you can write 1KB per second to that table
 1 RCU means you can read 4KB per second for that table
 
-#### Dynamo DB Backups
+#### 1.18.1.2. Dynamo DB Backups
 
 **On-demand Backups**: Similar to manual RDS snapshots. Full backup of the table
 that is retained until you manually remove that backup. This can be used to
@@ -5166,7 +5265,7 @@ adjust encryption settings.
 default. This allows continuous record of changes for 35 days to allow you to
 replay any point in that window to a 1 second granularity.
 
-#### Dynamo DB Considerations
+#### 1.18.1.3. Dynamo DB Considerations
 
 - NoSQL, you should jump towards DynamoDB.
 - Relational data, this is NOT DynamoDB.
@@ -5183,9 +5282,9 @@ Billing based on:
 
 Can purchase reserved capacity with a cheaper rate for a longer term commit.
 
-### DynamoDB Operations, Consistency, and Performance
+### 1.18.2. DynamoDB Operations, Consistency, and Performance
 
-#### DynamoDB Reading and Writing
+#### 1.18.2.1. DynamoDB Reading and Writing
 
 **On-Demand**: Unknown or unpredictable load on a table. This is also good
 for as little admin overhead as possible. Pay a price per million
@@ -5201,7 +5300,7 @@ Every operation consumes at least 1 RCU/WCU
 Every single table has a WCU and RCU burst pool. This is 500 seconds
 of RCU or WCU as set by the table.
 
-#### Query
+#### 1.18.2.2. Query
 
 You have to pick one Partition Key (PK) value to start.
 
@@ -5223,7 +5322,7 @@ response of that query operation.
 If you filter data and only look at one attribute, you will still be
 charged for pulling all the attributes against that query.
 
-#### Scan
+#### 1.18.2.3. Scan
 
 Least efficient when pulling data from Dynamo, but the most flexible.
 
@@ -5232,7 +5331,7 @@ of every item. Even if you consume less than the whole table, it will
 charge based on that. It adds up all the values scanned and will charge
 rounding up.
 
-#### DynamoDB Consistency Model
+#### 1.18.2.4. DynamoDB Consistency Model
 
 **Eventually** Consistent: easier to implement and scales better
 **Strongly (Immediately)** Consistent: more costly to achieve
@@ -5255,20 +5354,41 @@ Not every application can tolerate eventual consistency. If you have a stock
 database or medical information, you must use strongly consistent reads.
 If you can tolerate the cost savings you can scale better.
 
-#### WCU Example Calculation
+#### 1.18.2.5. WCU Example Calculation
 
 - Store 10 items per second with 2.5K average size per item.
 - Calculate WCU per item, round up, then multiply by average per second.
 - (2.5 KB / 1 KB) = 3 * 10 p/s = 30 WCU
 
-#### RCU Example Calculation
+To calculate the Write Capacity Unit we need:
+
+1. The number of items to store. We represent this as $N_i$.
+2. Average size per item rounded up. We represent this as $S_i$.
+3. Multiply 1 & 2 above.
+
+Note: 1 WCU $=$ 1KB
+
+Example: What is the WCU of storing 10 items per second with 2.5K average size per item.
+
+Answer: $N_i \cdot S_i$ = $10 \cdot 3 = 30$ WCUs
+
+#### 1.18.2.6. RCU Example Calculation
 
 - Retrieve 10 items per second with 2.5K average size per item.
 - Calculate RCU per item, round up, then multiply by average per second.
 - (2.5 KB / 4 KB) = 1 * 10 p/s = 10 RCU for strongly consistent.
   - 5 RCU for eventually consistent.
 
-### DynamoDB Streams and Triggers
+Note: 1 RCU $=$ 4KB
+
+Example: What is the RCU of storing 10 items per second with 2.5K average size per item. 
+
+$N_i = 10$
+$S_i = 1$ $\Rightarrow$ how many 2.5 ($\sim$3) can you get in 4, which is 1.
+
+Answer: $N_i \cdot S_i$ = $10 \cdot 1 = 10$ RCUs
+
+### 1.18.3. DynamoDB Streams and Triggers
 
 DynamoDB stream is a time ordered list of changes to items in a DynamoDB
 table. A stream is a 24 hour rolling window of the changes.
@@ -5292,7 +5412,7 @@ There are four view types that it can be configured with:
 Pre or post change state might be empty if you use
 **insert** or **delete**
 
-#### Trigger Concepts
+#### 1.18.3.1. Trigger Concepts
 
 Allow for actions to take place in the event of a change in data
 
@@ -5308,7 +5428,7 @@ Good for data aggregation for stock or voting apps.
 This can provide messages or notifications and eliminates the
 need to poll databases.
 
-### DynamoDB Local (LSI) and Global (GSI) Secondary Indexes
+### 1.18.4. DynamoDB Local (LSI) and Global (GSI) Secondary Indexes
 
 - Great for improving data retrieval in DynamoDB.
 - Query can only work on 1 PK value at a time and optionally a single
@@ -5317,7 +5437,7 @@ or range of SK values.
 - You have the ability to choose which attributes are projected
 to the table.
 
-#### Local Secondary Indexes (LSI)
+#### 1.18.4.1. Local Secondary Indexes (LSI)
 
 - Choose alternative sort key with the same partition key on base table data.
   - If item does not have sort key it will not show on the table.
@@ -5332,7 +5452,7 @@ to the table.
   - KEYS_ONLY
   - INCLUDE
 
-#### Global Secondary Index (GSI)
+#### 1.18.4.2. Global Secondary Index (GSI)
 
 - Can be created at any time and much more flexible.
 - There is a default limit of 20 GSIs for each table.
@@ -5342,7 +5462,7 @@ to the table.
 - GSIs are **always** eventually consistent. Replication between
 base and GSI is Async
 
-#### LSI and GSI Considerations
+#### 1.18.4.3. LSI and GSI Considerations
 
 - Must be careful which projections are used to manage capacity.
 - If you don't project a specific attribute, then you require the attribute when
@@ -5355,7 +5475,7 @@ Indexes are designed when data is in a base table needs an alternative
 access pattern. This is great for a security team or data science team
 to look at other attributes from the original purpose.
 
-### DynamoDB Global Tables
+### 1.18.5. DynamoDB Global Tables
 
 - Global tables provide multi-master cross-region replication.
   - All tables are the same.
@@ -5371,7 +5491,7 @@ configure the links between all of the tables.
   - Replication is generally sub-second and depends on the region load.
 - Provides Global HA and disaster recovery or business continuity easily.
 
-### DynamoDB Accelerator (DAX)
+### 1.18.6. DynamoDB Accelerator (DAX)
 
 This is an in memory cache for Dynamo.
 
@@ -5388,7 +5508,7 @@ not it will talk to Dynamo and get the data. It will then cache it for future
 use. The benefit of this system is there is only one set of API calls using
 one SKD. It is tightly integrated and much less admin overhead.
 
-#### DAX Architecture
+#### 1.18.6.1. DAX Architecture
 
 This runs from within a VPC and is designed to be deployed to multiple
 AZs in that VPC. Must be deployed across AZs to ensure it is highly available.
@@ -5425,7 +5545,7 @@ the primary node to the replica nodes.
 When writing data to DAX, it can use write-through. Data is written to the
 database, then written to DAX.
 
-#### DAX Considerations
+#### 1.18.6.2. DAX Considerations
 
 - Primary node which writes and Replicas which support read operations.
 - Nodes are HA, if the primary node fails there will be an election and
@@ -5442,7 +5562,7 @@ and also storing that data inside the cache.
 that uses that data many times will benefit from DAX.
 - Any questions which talk about caching with DynamoDB, assume it is DAX.
 
-### Amazon Athena
+### 1.18.7. Amazon Athena
 
 - You can take data stored in S3 and perform Ad-hoc queries on data. Pay
 only for the data consumed.
@@ -5457,7 +5577,7 @@ a relational style way without changing the data.
 - The output of a query can be sent to other services and can be
 performed in an event driven fully serverless way.
 
-#### Athena Explained
+#### 1.18.7.1. Athena Explained
 
 The source data is stored on S3 and Athena can read from this data.
 In Athena you are defining a way to get the original data and defining
@@ -5470,4 +5590,6 @@ the data itself.
 This can be saved in the console or fed to other visualization tools.
 
 You can optimize the original data set to reduce the amount of space uses
-for the data and reduce the costs for querying that data.
+for the data and reduce the costs for querying that data. For more information see the AWS [documentation.](https://aws.amazon.com/cloudtrail/pricing/)
+
+[^1]: For more information on Server Name Indication see the Cloudfare SNI [documentation.](https://www.cloudflare.com/learning/ssl/what-is-sni/)
