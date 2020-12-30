@@ -77,12 +77,13 @@ LC and LT key concepts. They are documents which allow you to config an EC2
 instance in advance. You can configure userdata and IAM role along with
 networking and security groups.
 
-Launch templates provide T2/T3 Unlimited, placement groups with more.
+Launch templates
+- Provide T2/T3 Unlimited, placement groups with more.  
+- Newer and recommended to use over launch configurations, they include the latest features and improvements.
+- Supports versioning of templates.
+- Can be used to save time when provisioning EC2 instances from the console UI / CLI.
 
 If you need to adjust a configuration, you must make a new one and launch it.
-
-Launch Templates can be used to save time when provisioning EC2 instances
-from the console UI / CLI.
 
 ### Auto Scaling Groups
 
@@ -96,7 +97,7 @@ Minimum, Desired, and Maximum Size.
 
 Provision or Terminate instances to keep at the desired level
 
-Scaling Policies automate based on metrics.
+Scaling Policies automate based on metrics or a schedule
 
 Auto Scaling Groups will try to keep the AZs equal with the number of EC2
 instances.
@@ -113,14 +114,13 @@ Dynamic Scaling
 - Stepped : If CPU usage is above 50%, add one, if above 80% add three
 - Target : Desired aggregate CPU = 40%, ASG will achieve this
 
-Cooldown Period
+Cooldown Period - How long to wait at the end of a scaling action before scaling again.
 
-How long to wait at the end of a scaling action before scaling again.
+Always use cool downs to avoid rapid scaling.
 
 AGS can use the load balancer health checks rather than EC2.
 
-Autoscaling Groups are free
-Always use cool downs to avoid rapid scaling.
+Autoscaling Groups are free  
 
 Think about more, smaller instances to allow granularity
 
