@@ -2,7 +2,7 @@
 
 ### Architecture Basics
 
-Cloudfront is a global object cache (CDN)
+Cloudfront is a global object cache, also known as a content delivery network (CDN)
 
 Content is cached in locations close to customers.
 If the content is not available on the local cache when requested, ClouldFront
@@ -27,7 +27,7 @@ Parameters can be passed on the url such as query string parameter.
 An example is `?language=en` and `?language=es`
 
 To get the cached copy, you need to use the same query strings. If you do
-use them, ensure the strings
+use them, ensure the strings are in the same order.
 
 ### AWS Certificate Manager (ACM)
 
@@ -65,7 +65,7 @@ Starts with 2 **anycast** IP address
 Anycast IP's allow a single IP to be in multiple locations.
 Routing moves traffic to closest location.
 
-Traffuc initially uses public internet and enters a global
+Traffic initially uses public internet and enters a global
 accelerator edge location.
 
 #### Key concepts
@@ -77,6 +77,6 @@ Global Accelerator moves the AWS network as close as possible.
 Connections enter at edge, using anycast IPs. Transit over AWS backbone to 1+
 locations.
 
-Global accelerator is a network product. Can use TCP, UDP.
+Global Accelerator is a network product. Can use TCP, UDP.
 
-Caching is mostly cloudfront. TCP and UDP is mostly global accelerator
+Caching is mostly CloudFront. TCP and UDP is mostly Global Accelerator

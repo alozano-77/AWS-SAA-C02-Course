@@ -28,7 +28,7 @@ The Table Scehmas and relationships must be defined in advance.
 #### Non-Relational (NoSQL)
 
 Not a single thing, and is a catch all for everything else. There is generally
-a week or no schema.
+a weak or no schema.
 
 ##### Key-Value databases
 
@@ -43,7 +43,7 @@ This is also used for **in memory caching**
 
 DynamoDB is one type of database.
 
-Parition key - The search key
+Parition key - The search key  
 Other Key - sort or range key
 
 Each needs to have one key or more keys.
@@ -66,7 +66,7 @@ interations.
 
 Row Store (MySQL) - If you needed to read the price of one item you need that
 row first. If you wanted to query all of the sizes of every order, you will
-need to check for each row. Often called OLTP.
+need to check for each row. Often called Online Transactional Processing (OLTP).
 
 Column Store (Redshift) - Columns are stored together. Bad for sales style
 but good for reporting or when all values for a specific size are required.
@@ -105,7 +105,7 @@ You might need a specific version of an OS and DB that AWS doesn't provide.
 
 #### Reasons why you really shouldn't run a database on EC2
 
-**Admin overhead** is intense to manage EC2 and DBHost compatable
+**Admin overhead** is intense to manage EC2 and DBHost compatible
 
 Backup and Disaster Management adds complexity.
 
@@ -138,21 +138,21 @@ Database connects with a CNAME. RDS uses standard database engines.
 
 The database can be optimized for:
 
-db.m5 general
-db.r5 memory
-db.t3 burst
+- db.m5 general
+- db.r5 memory
+- db.t3 burst
 
 There is an associated size and AZ selected.
 
-When you provision an instance, you provision storage taht is dedicated
+When you provision an instance, you provision storage that is dedicated
 to that instance. This is EBS storage located in the same AZ. RDS is vulnerable
 to failures in that AZ.
 
 The storage can be allocated with SSD or magnetic.
 
-io1 - high IO
-gp2 - same burst pool
-magnetic - campatability
+io1 - high IO  
+gp2 - same burst pool  
+magnetic - compatibility
 
 Billing is per instance and hourly rate for that compute. You are billed
 for storage allocated.
@@ -201,14 +201,14 @@ RTO - Recovery Time Objective
 - Time between the DR event and full recovery
 - Influenced by process, staff, tech and documentation
 
-RDS Backups
+**RDS Backups**
 
 First snap is FULL size of consumed data. If you are you using single AZ
 
 Manual snapshots will remain in your AWS account even after the life of
 the snapshot. These need to be deleted manually.
 
-Automatic Snapshots
+**Automatic Snapshots**
 
 Every 5 minutes translation logs are saved to S3. A database can then be
 restored to a 5 min snapshot in time.
@@ -221,14 +221,14 @@ based on their retention period.
 
 #### RDS Exam Powerups
 
-When performing a restore RDS creates a new RDS with a new endpoint address.
+When performing a restore, RDS creates a new RDS with a new endpoint address.
 
 When restoring a manual snapshot, you are setting it to a single point
 in time. This influences the RPO value.
 
 Automated backups are different, any 5 minute point in time.
 
-Backups are restored and transation logs are replayed to bring DB to
+Backups are restored and transaction logs are replayed to bring DB to
 desired point in time.
 
 Restores aren't fast, think about RTO.
@@ -250,7 +250,7 @@ READ performance
 - Each of these provides an additional instance of read performance
 - This allows you to scale out read operations for an instance
 - Read-replicas can chain, but lag will become a problem
-- Can provide global performance improvements5
+- Can provide global performance improvements
 
 Availability Improvements
 
@@ -259,7 +259,7 @@ Availability Improvements
 - These offer near 0 RPO
 - If the primary instance fails, you can promote a read-replica to take over
 - Once it is promoted, it allows for read and write
-- Only works for failures, these can replica data corruption, default back
+- Only works for failures, these can replicate data corruption, default back
 to snapshots and backups
 - Promotion cannot be reversed
 - Global availability improvements provides global resilience
@@ -319,11 +319,11 @@ replicas.
 
 #### Costs
 
-No free-tier option
-Aurora doesn't support micro instances
-Beyond RDS singleAZ (micro) Aurora provides best value.
-Storage - GB-Month consumed, IO cost per request
-100% DB size in backups are included
+- No free-tier option
+- Aurora doesn't support micro instances
+- Beyond RDS singleAZ (micro) Aurora provides best value.
+- Storage - GB-Month consumed, IO cost per request
+- 100% DB size in backups are included
 
 #### Aurora Restore, Clone and Backtrack
 
@@ -438,4 +438,4 @@ A managed database migration service. This runs using a replication instance.
 Need to define the source and destination endpoints. These point at the
 physical source and target databases.
 
-One end point MUST be on AWS.
+One endpoint MUST be on AWS.

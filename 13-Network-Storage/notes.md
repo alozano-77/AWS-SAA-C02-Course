@@ -8,6 +8,8 @@ EFS is an implementation of NFSv4
 
 EFS Filesystems can be mounted in Linux.
 
+Using Amazon EFS with Microsoft Windows–based Amazon EC2 instances is not supported.
+
 Media can be shared between many EC2 instances.
 
 This is a private service, access is via mount targets inside a VPC.

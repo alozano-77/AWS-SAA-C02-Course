@@ -61,7 +61,7 @@ The autoscaling group will only bring up servers as their needed.
 #### Event Driven Architecture
 
 Event producers - interact with customers or systems monitoring components.
-They product events in reaction to something.
+They produce events in reaction to something.
 
 Event consumers - pieces of software waiting for events to occur.
 
