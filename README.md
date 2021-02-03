@@ -414,19 +414,19 @@ Time ordered set of data points such as:
 - Network IN/OUT
 - Disk IO
 
-This is not for a specific server. This could get things from different servers
+This is not for a specific server. This could get things from different servers.
 
-Anytime CPU Utilization is reported, the **datapoint** will report
+Anytime CPU Utilization is reported, the **datapoint** will report:
 
 - Timestamp = 2019-12-03
 - Value = 98.3
 
-**Dimensions** separate data points for different **things** or
-**perspectives** within the same metric
+**Dimensions** could be used to get metrics for a specific instance or type of instance, among others. They separate data points for different **things** or
+**perspectives** within the same metric.
 
 #### 1.2.9.3. Alarms
 
-Has two states `ok` or `alarm`.State can send an SNS or action.
+Has two states `ok` or `alarm`. A notification could be sent to an SNS topic or an action could be performed based on an alarm state.
 Third state can be insufficient data state. Not a problem, just wait.
 
 ### 1.2.10. Shared Responsibility Model
