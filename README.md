@@ -180,7 +180,9 @@ IP CIDR of a default VPC is always: **172.31.0.0/16**
 
 Configured to have one subnet in each AZ in the region by default.
 
-Subnets are given one section of the IP ranges for the default service.
+Subnets are given one section of the IP ranges for the default service. 
+They are configured to provide anything that is deployed inside those subnets with public IPv4 addresses. 
+
 In general do not use the Default VPC in a region because it is not flexible.
 
 Default VPC is large because it uses the /16 range.
