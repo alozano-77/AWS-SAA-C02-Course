@@ -197,19 +197,16 @@ Default compute service. Provides access to virtual machines called instances.
 
 #### 1.2.5.1. Infrastructure as as Service (IaaS)
 
-The unit of consumption is an instance
-EC2 instance is configured to launch into a single VPC subnet.
+The unit of consumption is an instance.
+An EC2 instance is configured to launch into a single VPC subnet.
 Private service by default, public access must be configured.
 The VPC needs to support public access. If you use a custom VPC then you must
 handle the networking on your own.
 
 EC2 deploys into one AZ. If it fails, the instance fails.
 
-Different sizes and capabilities all use On-Demand Billing - Per second.
+Different sizes and capabilities. All use On-Demand Billing - Per second.
 Only pay for what you consume.
-
-Charge for running the instance, CPU, memory and storage.
-Extra cost for any commercial software the instance deploys with.
 
 Local on-host storage or **Elastic Block Storage**
 
@@ -220,13 +217,15 @@ Pricing based on:
 - Storage
 - Networking
 
+Extra cost for any commercial software the instance deploys with.
+
 #### 1.2.5.2. Running State
 
 Charged for all four categories.
 
 - Running on a physical host using CPU.
 - Using memory even with no processing.
-- OS is stored on disk allocated
+- OS and its data are stored on disk, which is allocated to you.
 - Networking is always ready to transfer information.
 
 #### 1.2.5.3. Stopped State
@@ -236,7 +235,7 @@ Charged for EBS storage  only.
 - No CPU resources are being consumed
 - No memory is being used
 - Networking is not running
-- Storage is allocated to the instance for the OS.
+- Storage is allocated to the instance for the OS together with any applications.
 
 #### 1.2.5.4. Terminated State
 
@@ -249,19 +248,19 @@ AMIs in one region are not available from other regions.
 
 Contains:
 
-- Permissions: control which accounts can and can't use the AMI.
+- Permissions: controls which accounts can and can't use the AMI.
 
-  - Public: Anyone can launch it.
+  - Public - Anyone can launch it.
 
-  - Owner - Implicit allow, only the owner can use it  spin up new instances
+  - Owner - Implicit allow, only the owner can use it to spin up new instances
 
-  - Explicit - owner grants access to AMI for specific AWS accounts
+  - Explicit - Owner grants access to AMI for specific AWS accounts
 
-- Root Volume: contain the **Boot Volume**
+- Root Volume: contains the **Boot Volume**
 
 - Block Device Mapping: links the volumes that the AMI has and
 how they're presented to the operating system. Determines which volume is a
-boot volume and which volumes is a data volume.
+boot volume and which volume is a data volume.
 
 
 #### 1.2.5.6. Connecting to EC2
