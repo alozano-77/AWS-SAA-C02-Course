@@ -3260,6 +3260,10 @@ records. A hosted zone, when referenced in this way by the DNS system, is known
 as being authoritative for a domain.
 It becomes the single source of truth for a domain.
 
+VPC instances are already configured (if enabled) with the VPC +2 address as their
+DNS resolver - this allows querying of R53 public and internet hosted DNS zones from
+instances within that VPC.
+
 ### 1.9.2. Route 53 Health Checks
 
 Route checks will allow for periodic health checks on the servers.
