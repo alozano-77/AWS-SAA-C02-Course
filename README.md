@@ -3264,16 +3264,6 @@ VPC instances are already configured (if enabled) with the VPC +2 address as the
 DNS resolver - this allows querying of R53 public and internet hosted DNS zones from
 instances within that VPC.
 
-### 1.9.2. Private Hosted Zones
-
-Same as public hosted zones except these are not public.
-They are associated with VPCs and are only accesible within those VPCs via the R53 resolver.
-
-It's possible to use a technique called Split-view for public and internal use with the same
-zone name. A common architecure is to make the public hosted zone a subset of the private hosted zone
-containing only those records that are meant to be accessed from the Internet, while inside VPCs
-associated with the private hosted zone all resource records can be accessed.
-
 ### 1.9.2. Route 53 Health Checks
 
 Route checks will allow for periodic health checks on the servers.
