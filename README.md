@@ -496,17 +496,17 @@ Parts of the DNS system
 - DNS Client: Piece of software running on the OS for a device you're using.
 - Resolver: Software on your device or server which queries DNS on your behalf.
 - Zone: A part of the DNS database.
-  - This would be www.amazon.com
-  - What the data is, the substance
-- Zonefile: physical database for a zone
+  - This would be amazon.com
+  - What the data is, its substance
+- Zone file: physical database for a zone
   - How physically that data is stored
-- Nameserver: where zonefiles are hosted
+- Nameserver: where zone files are hosted
 
 Steps:
 
-Find the Nameserver which hosts a particular Zonefile.
-Query that Nameserver for a record with that Zone.
-It then passes the information back to the client.
+Find the Nameserver which hosts a particular zone file.
+Query that Nameserver for a record that is in that zone file.
+It then passes the information back to the DNS client.
 
 #### 1.2.12.1. DNS Root
 
@@ -515,11 +515,11 @@ DNS names are read right to left with multiple parts separated by periods.
 
 `www.netflix.com.`
 
-The period is assumed to be there in a browser when it's not present.
+The last period is assumed to be there in a browser when it's not present.
 The DNS Root is hosted on DNS Root Servers (13). These are hosted
 by 12 major companies.
 
-**Root Hints** is a pointer to the DNS Root server
+**Root Hints** is a pointer to the DNS Root servers provided by the OS vendor
 
 Process
 
@@ -542,13 +542,13 @@ a root hints file to know how to access a root server and query the root zone.
 - One piece can be authoritative for amazon.com
 - The root zone is the start and the only thing trusted in DNS.
 - The root zone can delegate a part of itself to another zone or entity.
-- That someone else then becomes authoritative for that piece of itself only.
+- That someone else then becomes authoritative for just the part that's delegated.
 - The root zone is just a database of the top level domains.
 
-The top level domains are the only things to the left of the DNS name.
+The top level domains are the only thing immediately to the left of the root in a DNS name.
 
-- `.com` or `.org` are generic top level domains (GTLD)
-- `.uk` is a country code top level domains (CCTLD)
+- `.com` or `.org` are generic top level domains (gTLD)
+- `.uk` is a country code top level domain (ccTLD)
 
 **Registry** maintains the zones for a TLD (e.g .ORG)
 **Registrar** has relationships with the .org TLD zone manager
@@ -557,39 +557,39 @@ allowing domain registration
 ### 1.2.13. Route53 Fundamentals
 
 - Registers domains
-- Can Host Zone Files on managed nameservers
+- Can host zone files on managed nameservers
 - This is a global service, no need to pick a region
 - Globally Resilience
   - Can operate with failure in one or more regions
 
 #### 1.2.13.1. Register Domains
 
-Has relationships with all major registries
+Has relationships with all major registries (registrar)
 
 - Route 53 will check with the top level domain to see if the name is available
-- Router 53 creates a zonefile for the domain to be registered
-- Allocates nameservice for that zone
+- Route 53 creates a zone file for the domain to be registered
+- Allocates nameservers for that zone
   - Generally four of these for one individual zone
   - This is a hosted zone
   - The zone file will be put on these four managed nameservers
-- Router 53 will communicate with the `.org` registry and add the nameserver
-records into the zone file for the top level domain.
-  - This is done with a nameserver record.
+- Route 53 will communicate with the `.org` registry and add the nameserver records 
+into the zone file for that top level domain.
+  - This is done with a nameserver record (NS).
 
 #### 1.2.13.2. Route53 Details
 
-**Zonefiles** in AWS
+**Zone files** in AWS
 Hosted on four managed name servers
 
-- Can be **public** or **private**
+- Can be **public** or **private** (linked to one or more VPCs)
 
 ### 1.2.14. DNS Record
 
 - Nameserver (NS): Allows delegation to occur in the DNS.
-- A and AAAA Records: Maps the host to a v4 or v6 host type. Most of the time
+- A and AAAA Records: Maps the host to a v4 or v6 host type respectively. Most of the time
 you will make both types of record, A and AAAA.
 - CNAME Record Type: Allows DNS shortcuts to reduce admin overhead.
-CNAMES cannot point directly at an IP address and only another name.
+CNAMES cannot point directly to an IP address, only another name.
 - MX records: How emails are sent. They have two main parts:
   - Priority: Lower values for the priority field are higher priority.
   - Value
