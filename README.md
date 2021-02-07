@@ -31,11 +31,11 @@ Cloud computing provides
 
 1. On-Demand Self-Service: Provision and terminate using a UI/CLI without
 human interaction.
-2. Broad Network Access: Access services over any networks on any devices using
+2. Broad Network Access: Access services over any networks, on any devices, using
 standard protocols and methods.
 3. Resource Pooling: Economies of scale, cheaper service.
-4. Rapid Elasticity: Scale up and down automatically in response to system load.
-5. Measured Service: Usage is measured. Pay only for what you consume.
+4. Rapid Elasticity: Scale up (out) and down (in) automatically in response to system load.
+5. Measured Service: Usage is measured. Pay for what you consume.
 
 ### 1.1.1. Public vs Private vs Multi Cloud
 
@@ -43,31 +43,44 @@ standard protocols and methods.
 - Private Cloud: using on-premises real cloud. Must meet 5 requirements.
 - Multi-Cloud: using more than 1 public cloud in one deployment.
 - Hybrid Cloud: using public and private clouds in one environment
-  - This is **NOT** using Public Cloud and Legacy on-premises hardware.
+  - This is **NOT** using Public Cloud and Legacy on-premises hardware, which is a *hybrid environment* or *hybrid network*.
 
 ### 1.1.2. Cloud Service Models
 
 The *Infrastructure Stack* or *Application Stack* contains multiple components
 that make up the total service. There are parts that **you** manage as well
-as portions the **vendor** manages. The portions the vendor manages and you
+as portions the **vendor** manages. The part (from that point upward) you manage and
 are charged for is the **unit of consumption**
 
-1. On-Premises: The individual manages all components from data to facilities.
+1. On-Premises: The individual manages all components from application to facilities.
 Provides the most flexibility, but also most IT intensive.
+
+Facilities -> Infrastructure -> Servers -> Virtualization -> O/S -> Container -> Runtime -> Data -> Application
+
 2. Data Center Hosting: Place equipment in a building managed by a vendor.
-You pay for the facilities only.
+You pay for rack space in the facility.
+
+~~Facilities~~ -> Infrastructure -> Servers -> Virtualization -> O/S -> Container -> Runtime -> Data -> Application
+
 3. Infrastructure as a Service (IaaS): Vendor manages facilities and everything
-else related to servers up to the OS. You pay per second or minute for the OS
-used to the vendor. Lose some flexibility, but big risk reductions.
-4. Platform as a Service (PaaS): Good for running an application only. The
+else related to servers up to the OS. An example on AWS is EC2. You pay per second or minute for the OS
+used to the vendor. Lose some flexibility, but big risk reductions. 
+
+~~Facilities -> Infrastructure -> Servers -> Virtualization~~ -> **O/S** -> Container -> Runtime -> Data -> Application
+
+4. Platform as a Service (PaaS): Good for running an application only. An AWS example is Elastic Beanstalk. The
 unit of consumption is the runtime environment. You manage the application
 and the data, but the vendor manges all else.
-5. Software as a Service (SaaS): You consume the software as a service. This
-can be Outlook or Netflix. There are almost no risks or additional costs, but
+
+~~Facilities -> Infrastructure -> Servers -> Virtualization -> O/S -> Container~~ -> **Runtime** -> Data -> Application
+
+5. Software as a Service (SaaS): You consume the software as a service. Examples include Netflix, Dropbox, Office 365, and Gmail. There are almost no risks or additional costs, but
 very little control.
 
-There are additional services such as *Function as a Service*,
-*Container as a Service*, and *DataBase as a Service* which be explained later.
+~~Facilities -> Infrastructure -> Servers -> Virtualization -> O/S -> Container -> Runtime -> Data~~ -> **Application**
+
+There are additional services such as *Function as a Service (FaaS)*,
+*Container as a Service (CaaS)*, and *DataBase as a Service (DBaaS)* which will be explained later.
 
 ---
 
