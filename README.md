@@ -3239,23 +3239,22 @@ Most new instances support this and have this enabled by default for no charge.
 
 ### 1.9.1. Public Hosted Zones
 
-A hosted zone is a DNS database for a given section of global DNS data.
-A public hosted zone is a type of R53 hosted zone which is hosted on
-R53 provided public DNS name servers. When creating a hosted zone, AWS provides
-at least 4 DNS name servers which host the zone.
+A hosted zone is a DNS database (zone file) for a given section of global DNS database (a domain).
 
-This is globally resilient service due to multiple DNS servers.
+It is hosted by R53 on public DNS name servers. When creating a hosted zone, AWS provides 4 DNS name servers.
+
+This is globally resilient service due to multiple DNS servers distributed globally.
 
 Hosted zones are created automatically when you register a domain using R53.
 
 Hosted zones can be created separately. If you want to register a domain
 elsewhere and use R53 to host the zone file and records for that domain, then
 you can specifically create a hosted zone and point at an externally
-registered domain at that zone.
+registered domain.
 There is a monthly fee to host each hosted zone within R53 and a fee for
 any queries made to that service.
 
-Hosted Zones are what the DNS system references via delegation and name server
+Hosted zones are what the DNS system references via delegation using name server
 records. A hosted zone, when referenced in this way by the DNS system, is known
 as being authoritative for a domain.
 It becomes the single source of truth for a domain.
@@ -3263,6 +3262,8 @@ It becomes the single source of truth for a domain.
 VPC instances are already configured (if enabled) with the VPC +2 address as their
 DNS resolver - this allows querying of R53 public and internet hosted DNS zones from
 instances within that VPC.
+
+Internet hosts reach the R53 public zone by walking the DNS tree.
 
 ### 1.9.2. Private Hosted Zones
 
