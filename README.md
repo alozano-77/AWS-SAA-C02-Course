@@ -3271,9 +3271,28 @@ Same as public hosted zones except these are not public.
 They are associated with VPCs and are only accesible within those VPCs via the R53 resolver.
 
 It's possible to use a technique called Split-view for public and internal use with the same
-zone name. A common architecure is to make the public hosted zone a subset of the private hosted zone
+zone name. A common architecture is to make the public hosted zone a subset of the private hosted zone
 containing only those records that are meant to be accessed from the Internet, while inside VPCs
 associated with the private hosted zone all resource records can be accessed.
+
+### 1.9.3. CNAME vs R53 Alias
+
+While an A record maps a NAME to an IP Address, a CNAME maps a NAME to another NAME
+(www.catagram.io => catagram.io).
+
+CNAME is invalid for the apex of a domain, also known as naked domain (catagram.io).
+
+Many AWS services use a DNS Name so pointing a naked domain at an ELB with just a CNAME would be invalid.
+
+ALIAS records map a NAME to an AWS resource. They can be used both for naked domains and normal records.
+
+There is no charge for ALIAS requests pointing at AWS resources.
+
+An ALIAS is a subtype. It should be the same record type as what the record is pointing at. If you are given an A record for an ELB you have to create an A record ALIAS if you want to point at the DNS name provided by the ELB.
+
+Used with API Gateway, CloudFront, Elastic Beanstalk, ELB, Global Accelerator and S3.
+
+Only used if R53 is hosting your domain.
 
 ### 1.9.2. Route 53 Health Checks
 
