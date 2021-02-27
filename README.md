@@ -3294,7 +3294,7 @@ Used with API Gateway, CloudFront, Elastic Beanstalk, ELB, Global Accelerator an
 
 Only used if R53 is hosting your domain.
 
-### 1.9.2. Route 53 Health Checks
+### 1.9.4. Route 53 Health Checks
 
 Route checks will allow for periodic health checks on the servers.
 If one of the servers has a bug, this will be removed from the list.
@@ -3309,25 +3309,27 @@ These are performed by a fleet of global health checkers. If you think
 they are bots and block them, this could cause alarms.
 
 Checks occur every 30 seconds by default. This can be increased to 10 seconds
-for additional costs. These checks are per health checker. Since there are many
+at an additional cost. These checks are per health checker. Since there are many (tipically 15)
 you will automatically get one every few seconds. The 10 second option will
 complete multiple checks per second.
 
-There could be one of three checks
+There could be one of three checks:
 
-- TCP checks: R53 tries to establish TCP with end point within 10 (fast) or 30 seconds (standard).
-- HTTP/HTTPS: Same as TCP but within 4 seconds. The end point must respond
-with a 200 or 300 status code within 3 seconds of checking.
-- HTTP/HTTPS String matching: Same as above, the body must have a string within the first
-5120 bytes. This is chosen by the user.
+- TCP checks: R53 tries to establish a TCP connection with the endpoint and it needs to be successful within 10 seconds.
+- HTTP/HTTPS: Same as TCP but within 4 seconds. In addition, the endpoint must respond
+with a status code in the 200 or 300 range within 2 seconds after connecting.
+- HTTP/HTTPS with String Matching: Same as above. In addition, the response body must have the string specified within the first
+5120 bytes.
 
-It will be deemed healthy or unhealthy.
+An endpoint will be deemed healthy or unhealthy based on these healthchecks.
+If 18% or more of health checkers report as healthy, the health check is healthy.
+In most cases an unhealthy record is not returned in queries.
 
-There are three types of checks.
+Checks themselves can be one of three types:
 
 - Endpoint checks
-- CloudWatch alarms
-- Checks of checks (calculated)
+- CloudWatch alarms checks
+- Checks of checks (calculated checks)
 
 ### 1.9.3. Route 53 Routing Policies Examples
 
