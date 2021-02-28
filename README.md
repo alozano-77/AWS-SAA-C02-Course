@@ -3331,50 +3331,59 @@ Checks themselves can be one of three types:
 - CloudWatch alarms checks
 - Checks of checks (calculated checks)
 
-### 1.9.3. Route 53 Routing Policies Examples
+### 1.9.5. Route 53 Routing Policies
 
-- **Simple**: Route traffic to a single resource. Client queries the resolver
-which has one record. It will respond with 3 values and these get forwarded
-back to the client. The client then picks one of the three at random.
-This is a single record only. No health checks.
+- **Simple**: Route traffic to a single resource. Supports 1 record per name,
+where each record can have multiple values. When a client makes a request to
+resolve a name all of the values are returned in the same query with a random order.
+The client then picks one of those. No health checks.
 
 - **Failover**: Create two records of the same name and the same type. One
-is set to be the primary and the other is the secondary. This is the same
-as the simple policy except for the response. Route 53 knows the health of
-both instances. As long as the primary is healthy, it will respond with
-this one. If the health check with the primary fails, the backup will be
-returned instead. This is set to implement active - passive failover.
+is set to be the primary and the other is the secondary. A health check is included
+generally on the primary. As long as the primary is healthy, it will respond with
+this one. Otherwise the backup will be returned instead. This is said to implement
+active - passive failover commonly with an S3 bucket as a bucket.
 
 - **Weighted**: Create multiple records of the same name within the hosted zone.
-For each of those records, you provide a weighted value. The total weight
-is the same as the weight of all the records of the same name. If all of the
-parts of the same name are healthy, it will distribute the load based
-on the weight. If one of them fails its health check, it will be skipped over
-and over again until a good one gets hit. This can be used for migration
-to separate servers.
+For each of those records, you provide a Record Weight. The total weight
+is the same as the weight of all the records of the same name. The load is distributed
+based on Record Weight vs the total weight. When they are combined with health checks,
+if one of them fails, it will be skipped over and over again until a good one gets hit
+without affecting the distribution calculation. This can be used for simple load balancing
+or testing new software versions.
 
-- **Latency-based**: Multiple records in a hosted zone can be created with
-the same name and same type. When a client request arrives, it knows which
-region the request comes from. It knows the lowest latency and will respond
-with the lowest latency.
+- **Latency-Based**: Multiple records in a hosted zone can be created with
+the same name and same type. In addition, a Record Region can be specified.
+It only supports one record with the same name in each AWS region.
+The record returned is the one which offers the lowest latency. If combined
+with health checks and it fails, the next lowest latency is returned instead.
+This routing policy is used for optimizing performance and user experience.
 
-- **Geolocation**: Focused to delivering results matching the query of your
-customers. The record will first be matched based on the country if possible.
-If this does not happen, the record will be checked based on the continent.
-Finally, if nothing matches again it will respond with the default response.
-This can be used for licensing rights. If overlapping regions occur,
-the priority will always go to the most specific or smallest region. The US
-will be chosen over the North America record.
+- **Geolocation**: With Geolocation records are tagged with location information.
+When clients make requests to resolve a name an IP check verifies their location.
+Records will first be matched based on US state if applicable.
+If this does not happen, they will be checked based on country. If no country
+is matched, they will be checked based on continent. Finally, if nothing matches again
+the default response will be returned. This routing policy can be used for licensing
+rights, regional restrictions, language specific content or load balancing across
+regional endpoints. If overlapping regions occur, the priority will always go to the
+most specific or smallest region. Geolocation doesnt't return "closest" records,
+only relevant location ones.
 
-- **Multi-value**: Simple records use one name and multiple values in this record.
-These will be health checked and the unhealthy responses will automatically
-be removed. With multi-value, you can have multiple records with the same
-name and each of these records can have a health check. R53 using this method
-will respond to queries with any and all healthy records, but it removes
-any records that are marked as unhealthy from those responses. This removes
-the problem with simple routing where a single unhealthy record can make it
-through to your customers. Great alternative to simple routing when
-you need to improve the reliability, and it's an alternative to failover
+- **Geoproximity**: It lets R53 route traffic to your resources based on the geographic
+location of your users and your resources. Records can be tagged with an AWS Region
+or latitude and longitude coordinates. Unlike Geolocation, routing is based on
+distance. An optional bias can be added to increase or decrease region size and
+influence routing decisions.
+
+- **Multi Value**: It supports multiple records with the same name and each of
+these can have an associated health check. R53 using this routing policy will
+respond to queries with up to 8 healthy records. If more exist, 8 will be randomly
+selected. Client then chooses and uses 1 value.
+Any record which fails health checks won't be returned when queried.
+This removes the problem with Simple Routing where a single unhealthy record can
+make it through to your customers. Great alternative to Simple Routing when
+you need to improve availability, and it's an alternative to failover
 when you have more than two records to respond with, but don't want
 the complexity or the overhead of weighted routing.
 
