@@ -3387,6 +3387,24 @@ you need to improve availability, and it's an alternative to failover
 when you have more than two records to respond with, but don't want
 the complexity or the overhead of weighted routing.
 
+### 1.9.6. Route 53 Interoperability
+
+R53 can act as a Domain Registrar and/or Domain Hosting.
+
+When acting as both roles, it first accepts an annual fee to register a domain.
+R53 Domain Registrar then liases with R53 Domain Hosting and a public hosted zone is
+created, which allocates 4 Name Servers (NS) to host that zone for a monthly fee.
+These NS are later returned to the Registrar, which passes them along to the TLD
+Registry. An entry for the registered domain is then added in the Registry using NS
+delegation records pointing at those 4 NS making the domain to become active in the
+public DNS system.
+
+When acting as a Registrar only, the domain is registered via R53 but the NS records
+are set to externally hosted NS. This architecture is rarely used.
+
+When acting as a Domain Hosting only, a third-party Domain Registrar registers
+the domain and communicates with the TLD Registry, while R53 allocates and host NS.
+
 ---
 
 ## 1.10. Relational-Database-Service-RDS
