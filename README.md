@@ -823,45 +823,47 @@ to AWS resources.
 
 ### 1.3.6. AWS Organizations
 
-Without an organization, each AWS account needs it's own set of IAM users
+Without an organization, each AWS account needs its own set of IAM users
 as well as individual payment methods.
 If you have more than 5 to 10 accounts, you would want to use an org.
 
-Take a single AWS account **standard AWS account** and create an org.
-The standard AWS account then becomes the **master account**.
-The master account can invite other existing standard AWS accounts. They will
-need to approve their joining to the org.
+Take a single AWS account (**standard AWS account**) and create an org.
+The standard AWS account then becomes the **management account**, previously known as
+**master account**. The management account can invite other existing standard AWS accounts.
+They will need to approve their joining to the org.
 
 When standard AWS accounts become part of the org, they
 become **member accounts**.
-Organizations can only have one **master accounts** and zero or more
+Organizations can only have one **management account** and zero or more
 **member accounts**
 
 #### 1.3.6.1. Organization Root
 
-This is a container that can hold AWS member accounts or the master account.
+This is a container that can hold AWS member accounts or the management account.
 It could also contain **organizational units** which can contain other
 units or member accounts.
 
 #### 1.3.6.2. Consolidated billing
 
 The individual billing for the member accounts is removed and they pass their
-billing to the master account.
-Inside an AWS organization, you get a single monthly bill for the master
-account which covers all the billing for each users.
-Can offer a discount with consolidation of reservations and volume discounts
+billing to the management account.
+Inside an AWS organization, you get a single monthly bill for the management
+account which covers all the billing for each account.
+Can benefit from consolidation of reservations and volume discounts.
 
 #### 1.3.6.3. Create new accounts in an org
 
 Adding accounts in an organization is easy with only an email needed.
-You no longer need IAM users in each accounts. You can use IAM roles
-to change these.
+You no longer need IAM users in each account. You can use IAM roles
+to switch between these.
+
 It is best to have a single AWS account only used for login.
-Some enterprises may use an AWS account while smaller ones may use the master.
+This can be the management account as in the case of smaller companies or
+another AWS account as in the case of larger ones.
 
 #### 1.3.6.4. Role Switching
 
-Allows you to switch between accounts from the command line
+Allows you to switch between accounts from the command line.
 
 ### 1.3.7. Service Control Policies
 
