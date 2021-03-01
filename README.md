@@ -641,14 +641,15 @@ Once authenticated, that identity is known as an **authenticated identity**
 
 #### 1.3.1.2. Priority Level
 
-- Explicit Deny: Denies access to a particular resource cannot be overruled.
+- Explicit Deny: Denies access to a particular resource. Cannot be overruled.
 - Explicit Allow: Allows access so long there is not an explicit deny.
 - Default Deny (Implicit): IAM identities start off with no resource access.
 
 #### 1.3.1.3. Inline Policies and Managed Policies
 
-- Inline Policy: grants access and assigned on each accounts individually.
+- Inline Policy: grants access and is assigned on each IAM identity individually.
 - Managed Policy (best practice): one policy is applied to all users at once.
+They are divided into AWS managed policies and customer managed policies.
 
 ### 1.3.2. IAM Users
 
