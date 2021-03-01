@@ -746,23 +746,22 @@ A single thing that uses an identity is an IAM User.
 IAM Roles are also identities that are used by large groups of individuals.
 If have more than 5000 principals, it could be a candidate for an IAM Role.
 
-IAM Roles are **assumed** you become that role.
+IAM Roles are **assumed**, you become that role.
 
 This can be used short term by other identities.
 
 IAM Users can have inline or managed policies which control which permissions
-the identity gets within AWS
+the identity gets within AWS. Policies which grant, allow or deny permissions
+based on their associations.
 
-Policies which grant, allow or deny, permissions based on their associations.
-
-IAM Roles have two types of roles can be attached.
+IAM Roles have two types of policies that can be attached:
 
 - Trust Policy: Specifies which identities are allowed to assume the role.
 - Permissions Policy: Specifies what the role is allowed to do.
 
 If an identity is allowed on the **Trust Policy**, it is given a set
 of **Temporary Security Credentials**. Similar to access keys except they
-are time limited to expire. The identity will need to renew them by
+are time limited. The identity will need to renew them by
 reassuming the role.
 
 Every time the **Temporary Security Credentials** are used, the access
@@ -771,7 +770,7 @@ permissions of the temp credentials also change.
 
 Roles are real identities and can be referenced within resource policies.
 
-Secure Token Service (sts:AssumeRole) this is what generates the temporary
+Secure Token Service (sts:AssumeRole) generates the temporary
 security credentials (TSC).
 
 ### 1.3.5. When to use IAM Roles
