@@ -946,28 +946,28 @@ active.
 
 ### 1.3.8. CloudWatch Logs
 
-This is a public service, this can be used from AWS VPC or on premise
+This is a public service. It can be used from an AWS VPC or an on premise
 environment.
 
-This allows to **store**, **monitor** and **access** logging data.
-
-- This is a piece of information data and a timestamp
-- Can be more fields, but at least these two
+This service allows to **store**, **monitor** and **access** logging data, which
+contains a piece of information data and a timestamp. It can contain more fields,
+but it contains at least these two.
 
 Comes with some AWS Integrations.
-Security is provided with IAM roles or Service roles
-Can generate metrics based on logs **metric filter**
+Security is provided with IAM roles (Service roles).
+Can generate metrics based on logs (**metric filter**). These metrics can have
+associated alarms that perform an action.
 
 #### 1.3.8.1. Architecture of CloudWatch Logs
 
-It is a regional service `us-east-1`
+It is a regional service.
 
-Need logging sources such as external APIs or databases. This sends
-information as **log events**. These are stored in **log streams**. This is a
-sequence of log events from the same source.
+Need logging sources such as external APIs or databases. These send
+information as **log events**, which are later stored in a sequence of log events
+from the same source as known as **log streams**.
 
 **Log Groups** are containers for multiple logs streams of the same
-type of logging. This also stores configuration settings such as
+type of logging. These also store configuration settings such as
 retention settings and permissions.
 
 Once the settings are defined on a log group, they apply to all log streams
