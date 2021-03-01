@@ -775,25 +775,26 @@ security credentials (TSC).
 
 ### 1.3.5. When to use IAM Roles
 
-Lambda Execution Role.
+Lambda Execution Role example:
+
 For a given lambda function, you cannot determine the number of principals
-which suggested a Role might be the ideal identity to use.
+which suggests a Role might be the ideal identity to use.
 
-- Trust Policy: to trust the Lambda Service
-- Permission Policy: to grant access to AWS services.
+A Trust Policy is created and AWS Lambda service is added to it.
+A Permissions Policy is created to grant access to other AWS services.
 
-When this is run, it uses the sts:AssumeRole to generate keys to
+When this is run, it uses the sts:AssumeRole to generate keys for
 CloudWatch and S3.
 
 It is better when possible to use an IAM Role versus attaching a policy.
 
 #### 1.3.5.1. Emergency or out of the usual situations
 
-Break Glass Situation - There is a key for something the team does not
+Break Glass Situation - There must be a key for something the team does not
 normally have access to. When you break the glass, you must have a reason
-to do.
-A role can have an Emergency Role which will allow further access if
-its really needed.
+to do it.
+A role can be an emergency role which will allow further access if
+it's really needed.
 
 #### 1.3.5.2. Adding AWS into existing corp environment
 
@@ -803,7 +804,7 @@ This is useful to reuse your existing identities for AWS.
 External accounts can't be used to access AWS directly.
 To solve this, you allow an IAM role in the AWS account to be assumed
 by one of the active directories.
-**ID Federation** allowing an external service the ability to assume a role.
+**ID Federation** allows an external service the ability to assume a role.
 
 #### 1.3.5.3. Making an app with 1,000,000 users
 
@@ -817,7 +818,7 @@ Can scale quickly and beyond.
 
 #### 1.3.5.4. Cross Account Access
 
-You can use a role in the partner account and use that to upload objects
+You can use a role in a partner account and use that to upload objects
 to AWS resources.
 
 ### 1.3.6. AWS Organizations
