@@ -869,16 +869,16 @@ Allows you to switch between accounts from the command line.
 
 Can be used to restrict what member accounts in an org can do.
 
-JSON policy document that can be attached:
+It is a JSON policy document that can be attached:
 
-- To the org as a whole by attaching to the root container.
+- To the org as a whole by attaching it to the root container.
 - A specific Organizational Unit
 - A specific member only.
 
-The master account cannot be restricted by SCPs which means this
+The management account cannot be restricted by SCPs which means this
 should not be used because it is a security risk.
 
-SCPs limit what the account, **including root** can do inside that account.
+SCPs limit what the account, **including root**, can do inside that account.
 They don't grant permissions themselves, just act as a barrier.
 
 #### 1.3.7.1. Allow List vs Deny List
@@ -886,7 +886,7 @@ They don't grant permissions themselves, just act as a barrier.
 Deny list is the default.
 
 When you enable SCP on your org, AWS applies `FullAWSAccess`. This means
-SCPs have no effect because nothing is restricted. It has zero influence
+SCPs have no effect because nothing is restricted. They have zero influence
 by themselves.
 
 ```json
@@ -900,10 +900,9 @@ by themselves.
 }
 ```
 
-SCPs by themselves don't grant permissions. When SCPs are enabled,
-there is an implicit deny.
+When SCPs are enabled, there is an default implicit deny.
 
-You must then add any services you want to Deny such as `DenyS3`
+You must then add any services you want to explicitly deny access to.
 
 ```json
 {
@@ -919,11 +918,10 @@ You must then add any services you want to Deny such as `DenyS3`
 **Deny List** is a good default because it allows for the use of growing
 services offered by AWS. A lot less admin overhead.
 
-**Allow List** allows you to be conscience of your costs.
+**Allow List** allows you to be conscious of your costs.
 
 - To begin, you must remove the `FullAWSAccess` list
 - Then, specify which services need to be allowed access.
-- Example `AllowS3EC2` is below
 
 ```json
 {
@@ -940,6 +938,11 @@ services offered by AWS. A lot less admin overhead.
   ]
 }
 ```
+
+SCPs by themselves don't grant permissions. They just control what an account
+can and cannot grant via identity policies. Only permissions which are allowed
+within identity policies in the account and are allowed by a SCP are actually
+active.
 
 ### 1.3.8. CloudWatch Logs
 
