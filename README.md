@@ -1788,11 +1788,11 @@ VPC Consideration
 - Are there any networks we can't use?
 - Be mindful of ranges other VPCs use or are used in other cloud environments
 - Try to predict the future uses.
-- VPC structure with tiers and resilience (availability) zones
+- VPC structure with tiers and resilience (availability zones)
 - VPC min /28 network (16 IP)
 - VPC max /16 network (65456 IP)
 - Avoid common range 10.0 or 10.1, include up to 10.10
-  - Suggest starting of 10.16 for a nice clean base 2 number.
+  - Suggest starting from 10.16
 
 Reserve 2+ network ranges per region being used per account.
 Think of the highest region you will operate in and add extra as a buffer.
