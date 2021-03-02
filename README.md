@@ -1689,7 +1689,7 @@ Dotted decimal notation for human readability.
 
 There are just over 4 billion addresses.
 This was not very flexible because it was either too small or large for
-some corporations. Some IP addresses was always left unused.
+some corporations. Some IP addresses were always left unused.
 
 #### 1.5.1.2. Classful Addressing
 
@@ -1748,8 +1748,8 @@ Contains:
 
 TCP and UDP are protocols built on top of IP.
 
-- TCPIP means TCP running with IP
-- UDPIP means UDP running with IP
+- TCP/IP means TCP running with IP
+- UDP/IP means UDP running with IP
 
 TCP/UDP Segment has a source and destination port number.
 This allows devices to have multiple conversations at the same time.
