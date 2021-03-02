@@ -1790,7 +1790,7 @@ VPC Consideration
 - Try to predict the future uses.
 - VPC structure with tiers and resilience (availability) zones
 - VPC min /28 network (16 IP)
-- VPC max /16 (65456 IP)
+- VPC max /16 network (65456 IP)
 - Avoid common range 10.0 or 10.1, include up to 10.10
   - Suggest starting of 10.16 for a nice clean base 2 number.
 
@@ -1809,7 +1809,7 @@ An example using 4 AWS accounts.
 
 A subnet is located in one availability zone.
 Try to split each subnet into tiers (web, application, db, spare).
-Since each Region has at least 3 AZ's, it is a good practice to start
+Since each Region has at least 3 AZs, it is a good practice to start
 splitting the network into 4 different AZs.
 This allows for at least one subnet in each AZ, and one spare.
 Taking a /16 subnet and splitting it 16 ways will make each a /20.
