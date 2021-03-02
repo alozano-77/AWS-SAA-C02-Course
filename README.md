@@ -1817,23 +1817,24 @@ Taking a /16 subnet and splitting it 16 ways will make each a /20.
 ### 1.5.3. Custom VPC
 
 - Regional Isolated and Resilient Service.
-  - Operates from all AZs in that region
+  - It is created in a region and operates from all AZs in that region
 - Allows isolated networks inside AWS.
-- Nothing IN or OUT of a VPC without explicit configuration.
+- Nothing is allowed IN or OUT of a VPC without explicit configuration.
   - Isolated blast radius. Any problems are limited to that VPC or anything
   connected to it.
 - Flexible configuration
 - Hybrid networking to allow connection to other cloud or on-prem networking.
-- Default or Dedicated Tenancy. This refers to how the hardware is configured.
-  - Default allows on a per resource decision later on.
-  - Dedicated locks any resourced created in that VPC to be on dedicated
+- Default or Dedicated Tenancy. This controls whether the resources created
+inside the VPC are provisioned on shared or dedicated hardware.
+  - Default allows to change tenancy on a per-resource basis later on.
+  - Dedicated locks any resources created in that VPC to be on dedicated
   hardware which comes at a cost premium.
 
 #### 1.5.3.1. Custom VPC Facts
 
 IPv4 private and public IPs
 
-- Allocated 1 mandatory private IPv4 CIDR blocks
+- VPCs are allocated 1 mandatory private IPv4 CIDR blocks
   - Min /28 prefix (16 IP)
   - Max /16 prefix (65,536 IP)
 - Can add secondary IPv4 Blocks after creation.
@@ -1845,7 +1846,7 @@ Single assigned IPv6 /56 CIDR block
 
 - Still being matured, not everything works the same as IPv4.
 - With increasing use of IPv6, this should be added as a default
-- Range is either allocated by AWS as in you have no choice on which range
+- Range is either allocated by AWS, which means you have no choice on which range
 to use, or you can select to use your own IPv6 addresses which you own.
 - IPv6 does not have private addresses, they are all routed as public by
 default.
@@ -1858,12 +1859,12 @@ If the VPC is `10.0.0.0` then the DNS IP will be `10.0.0.2`
 Two options that manage how DNS works in a VPC:
 
 - Edit DNS hostnames
-  - If true, instances with public IPs in a VPC are given public DNS hostnames.
-  - If false, this is not available.
+  - If enabled, instances with public IPs in a VPC are given public DNS hostnames.
+  - If not enabled, this is not available.
 
 - Edit DNS resolution
-  - If true, instances in the VPC can use the DNS IP address.
-  - If false, this is not available.
+  - If enabled, instances in the VPC can use the DNS IP address.
+  - If not enabled, this is not available.
 
 ### 1.5.4. VPC Subnets
 
