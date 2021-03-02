@@ -980,14 +980,15 @@ Concerned with who did what.
 Logs API calls or activities as **CloudTrail Event**
 
 Stores the last 90 days of events in the **Event History**. This is enabled
-by default and is no additional cost.
+by default at no additional cost.
 
 To customize the service you need to create a new **trail**.
-Two types of events. Default only logs Management Events
+There are two types of events:
 
 - Management Events:
-Provide information about management operations performed on resources
-in the AWS account. Create an EC2 instance or terminating one.
+Provides information about management operations performed on resources
+in the AWS account such as creating an EC2 instance or terminating one. Enabled by
+default.
 
 - Data Events:
 Objects being uploaded to S3 or a Lambda function being invoked. This is not
@@ -997,7 +998,7 @@ enabled by default and must be enabled for that trail.
 
 Logs events for the AWS region it is created in. It is a regional service.
 
-Once created, it can operate in two ways
+Once created, it can operate in two ways:
 
 - One region trail
 - All region trail
