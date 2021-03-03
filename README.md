@@ -1933,23 +1933,23 @@ associated at a time, but a route table can be associated by many subnets.
 When traffic leaves the subnet that this route table is associated with, the
 VPC router reviews the IP packets looking for the destination address.
 The traffic will try to match the route against the route table. If there
-are more than one routes found as a match, the prefix is used as a priority.
+are more than one route found as a match, the prefix is used as a priority.
 The higher the prefix, the more specific the route, thus higher priority.
 If the target says local, that means the destination is in the VPC itself.
-Local route can never be updated, they're always present and the local route
+Local routes can never be updated, they're always present and they
 always takes priority. This is the exception to the prefix rule.
 
 #### 1.5.5.2. Internet Gateway
 
 A managed service that allows gateway traffic between the VPC and the internet
-or AWS Public Zones (S3, SQS, SNS, etc.)
+or AWS Public Zones (S3, SQS, SNS, etc).
 
 - Regional resilient gateway attached to a VPC.
 - One IGW will cover all AZ's in a region the VPC is using.
 - A VPC can have either:
   - No IGW and be entirely private.
   - One IGW
-- IGW can be created and attached to no VPC.
+- IGW can be created and attached to no VPC or just 1.
 - Runs from within the AWS public zone.
 
 #### 1.5.5.3. Using IGW
@@ -1965,7 +1965,7 @@ to the public IP. This is why when an EC2 instance is created it only
 sees the private IP address. This is IMPORTANT. For IPv4 it is not configured
 in the OS with the public address.
 
-When the linux instance wants to communicate with the linux update service,
+When a linux instance wants to communicate with a linux update server,
 it makes a packet of data.
 The packet has a source address of the EC2 instance and a destination address
 of the linux update server. At this point the packet is not configured with
@@ -1974,15 +1974,15 @@ any public addressing and could not reach the linux update server.
 The packet arrives at the internet gateway.
 
 The IGW sees this is from the EC2 instance and analyzes the source IP address.
-It changes the packet source IP address from the linux EC2 server and puts
-on the public IP address that is routed from that instance. The IGW then
+It changes the packet source IP address from the linux EC2 server to the public
+IP address that is allocated to that instance. The IGW then
 pushes that packet on the public internet.
 
-On the return, the inverse happens. As far as it is concerned, it does not know
-about the private address and instead uses the instance's public IP address.
+When returning, the inverse happens. As far as the update server is concerned, it does
+not know about the private address and instead uses the instance's public IP address.
 
 If the instance uses an IPv6 address, that public address is good to go. The IGW
-does not translate the packet and only pushes it to a gateway.
+does not translate the packet and only pushes it to the internet server.
 
 #### 1.5.5.4. Bastion Host / Jumpbox
 
