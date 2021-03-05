@@ -2079,20 +2079,21 @@ before another rule with a higher rule number.
 ### 1.5.7. Security Groups
 
 - SGs are boundaries which can filter traffic.
-- Attached to a resource and not a subnet.
+- Attached to a resource and not a subnet, specifically to a network interface of an
+AWS product.
 - SGs have two sets of rules like NACLs.
 - SGs are stateful.
   - Only one inbound rule is needed.
-  - They see traffic and response as the same thing.
-- Understand AWS logical resources so they're not limit to IP traffic only.
+  - They see initiating traffic and the response as part of the same communication.
+- Understand AWS logical resources so they're not limited to IP traffic only.
   - Can have a source and destination referencing the instance and not the IP.
 - Default SG is created in a VPC to allow all traffic.
   - Does so by referencing itself. Anything this SG is attached to is matched
   by this rule.
-- SGs have a hidden implicit **Deny**.
+- SGs have a hidden implicit **Deny** and can explicitly allow.
   - Anything that is not allowed in the rule set for the SG is implicitly denied.
-- SG cannot explicit deny anything.
-  - NACLs are used in conjunction with SGs to do explicit denys.
+- SG cannot explicitly deny anything.
+  - NACLs are used in conjunction with SGs to do explicit denies.
 
 #### 1.5.7.1. SGs vs NACL
 
