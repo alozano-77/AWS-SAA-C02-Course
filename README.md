@@ -2105,7 +2105,7 @@ that boundary. If the resource is in the same subnet, it will not do anything.
 
 ### 1.5.8. Network Address Translation (NAT) Gateway
 
-Set of different processes that can address IP packets by changing
+Set of different processes that can adjust IP packets by changing
 their source or destination addresses.
 
 **IP masquerading**, hides CIDR block behind one IP. This allows many IPv4
@@ -2114,29 +2114,35 @@ Incoming connections don't work. Outgoing connections can get a response
 returned.
 
 - Must run from a public subnet to allow for public IP address.
-  - Internet Gateway subnets configure to allocate public IPv4 addresses
+  - Internet Gateway subnets are configured to allocate public IPv4 addresses
   and default routes for those subnets pointing at the IGW.
 - Uses Elastic IPs (Static IPv4 Public)
   - Don't change
   - Allocated to your account
-- AZ resilient service , but HA in that AZ.
+- AZ resilient service. HA only in that AZ.
   - If that AZ fails, there is no recovery.
 - For a fully region resilient service, you must deploy one NATGW in each AZ
 with a Route Table in each AZ with NATGW as target.
-- NAT instance is limited by capabilities of the instance it is running on and that instance is also general purpose, so won't offer the same level of custom design performance as NAT Gateway.
-- NAT instance is single instance running in single AZ it'll fail if EC2 hardware fails, network fails, storage fails or AZ itself fails.
-- NAT Gateway has benefit over NAT instance, inside one AZ it is highly available.
-- You can connect to NAT instance just like any other instance, you can use them as Bastion host or can use them for port forwarding.
-- With NAT Gateway it is not possible, it is managed service. NAT Gateway cannot be used as Bastion host and it cannot do port forwarding.
-- You cannot use SG with NAT instance, you can only use NACLs.
-- NAT is not required for IPv6. Inside AWS all IPv6 addresses are publicly routable. IG works with all IPv6 addresses directly.
-- That means if you choose to make an instance in private subnet that have a default IPv6 route to IG, it'll become public instance.
-- Managed service, scales up to 45 Gbps. Can deploy multiple NATGW to increase
-bandwidth.
-- AWS charges on usage per hour and data volume processed.
+- Managed service, scales up to 45 Gbps in terms of bandwidth. Can deploy multiple NATGW
+to increase bandwidth.
+- AWS charges on the number of NAT Gateways used, usage per hour and data volume processed.
 
-NATGW cannot do port forwarding or be a bastion server. In that case it might
-be necessary to run a NAT EC2 instance instead.
+#### 1.5.8.1. NAT Gateway vs NAT Instance
+
+- NAT instance is limited by capabilities of the instance it is running on and that instance is also general purpose, so won't offer the same level of custom design performance as NAT Gateway.
+- NAT instance is a single instance running in a single AZ. It'll fail if EC2 hardware fails, network fails, storage fails or AZ itself fails.
+- NAT Gateway has benefit over NAT instance in that inside one AZ it is highly available.
+- You can connect to a NAT instance just like any other instance, you can use them as Bastion host or can use them for port forwarding.
+- It is not possible to connect to a NAT Gateway since it is a managed service.
+It cannot be used as Bastion host and it cannot do port forwarding.
+- NAT instance is just an EC2 instance so you can filter traffic using NACLs on the subnet
+the instance is in or SGs directly associated with that instance.
+- You cannot use SGs with a NAT Gateway, you can only use NACLs.
+
+#### 1.5.8.2. NAT Gateway and IPv6
+
+- NAT is not required for IPv6. Inside AWS all IPv6 addresses are publicly routable. IG works with all IPv6 addresses directly.
+- That means if you choose to make an instance in a private subnet that has a default IPv6 route to IG, it'll become a public instance.
 
 ---
 
