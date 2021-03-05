@@ -2005,19 +2005,17 @@ by default.
 NACLs are used when traffic enters or leaves a subnet.
 Since they are attached to a subnet and not a resource, they only filter
 data as it crosses in or out.
-If two EC2 instances in a VPC communicate, the NACL does nothing because
+If two EC2 instances in the same subnet communicate, the NACL does nothing because
 it is not involved.
 
-NACLs have an inbound and outbound sets of rules.
+NACLs have two set of rules: inbound and outbound.
 
-When a specific rule set has been called, the one with the lowest
-rule number first.
-As soon as one rule is matched, the processing stops for
-that particular piece of traffic.
+Rules are processed in order and that processing starts with the lowest rule number.
+As soon as one rule is matched, the processing stops for that particular piece of traffic.
 
-The action can be for the traffic to **allow** or **deny** the traffic.
+The action on a particular NACL rule can be to explicitly **allow** or **deny** the traffic.
 
-Each rule has the following fields related to traffic
+Each rule has the following fields related to traffic:
 
 - type
 - protocol: tcp, udp, or icmp
@@ -2032,9 +2030,9 @@ Examples:
 - https: tcp port 443
 - ping traffic: icmp
 
-If all of those fields match, then the first rule will either allow or deny.
+If all of those fields match, then the first rule will either allow or deny the traffic.
 
-The rule at the bottom with `*` is the **implicit deny**
+The rule at the bottom with `*` is the **implicit deny**.
 This cannot be edited and is defaulted on each rule list.
 If no other rules match the traffic being evaluated, it will be denied.
 
@@ -2042,38 +2040,39 @@ If no other rules match the traffic being evaluated, it will be denied.
 
 - Bob wants to view a blog using https(tcp/443)
 - We need a NACL rule to allow TCP on port 443.
-- All IP communication has two parts
+- All IP communication has two parts:
   - Initiation
   - Response
 - Bob is initiating a connection to the server to ask for a webpage
-- Server will respond with an **Ephemeral** port
 - Bob talks to the webserver connecting to a port on that server (tcp/443)
   - This is a well known port number
-- Bob's PC tells the server it can talk to back to Bob on a specific port
-  - Wide range from port 1024, 65535
+- Bob's PC tells the server it can talk back to him on a specific port,
+an **ephemeral** port
+  - It could be any port between 1024 and 65535
   - That response is outbound traffic
 - When using NACLs, you must add an outbound port for the response traffic
 as well as the inbound port. This is the ephemeral port.
-- If the webserver is not managing the apps server, it may communicate
-back on a different port.
-- This back and forth communication can be hard to configure for.
+- If there is an app subnet that contains the application apart from the webserver
+Bob is communicating with, the webserver also have to initiate communication with the
+app server. This back and forth communication can be hard to manage.
 
 #### 1.5.6.2. NACL Exam PowerUp
 
 - NACLs are stateless
-  - Initiation and response traffic are separate streams requiring two rules.
+  - Initiation and response traffic are separate streams requiring two rule sets.
 - NACLs are attached to subnets and only filter data as it crosses the
 subnet boundary. Two EC2 instances in the same subnet will not check against
 the NACLs when moving data.
 - Can explicitly allow and deny traffic. If you need to block one particular
 thing, you need to use NACLs.
 - They only see IPs, ports, protocols, and other network connections.
-No logical resources can be changed with them.
+They do not have any visibility of AWS logical resources.
 - NACLs cannot be assigned to specific AWS resources.
 - NACLs can be used with security groups to add explicit deny (Bad IPs/nets)
-- One subnet can only be assigned to one NACL at a time.
+- You can associate a NACL with multiple subnets but one subnet can only be
+associated with one NACL at a time.
 
-NACLs are processed in order starting at the lowest rule number until
+NACLs are processed in order starting with the lowest rule number until
 it gets to the catch all. A rule with a lower rule number will be processed
 before another rule with a higher rule number.
 
