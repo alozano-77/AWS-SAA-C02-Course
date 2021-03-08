@@ -2145,14 +2145,14 @@ EC2 provides Infrastructure as a Service (IaaS Product)
 
 ### 1.6.1. Virtualization 101
 
-Servers are configured in three sections without virtualization.
+Before virtualization the architecture of a server looked like this:
 
-- CPU hardware
+- Phyical resources (CPU, memory, network card, devices)
 - Kernel
   - Operating system
   - Runs in **privileged mode** and can interact with the hardware directly.
-- User Mode
-  - Runs applications.
+- Applications
+  - Runs in **user mode**
   - Can make a **system call** to the Kernel to interact with the hardware.
   - If an app tries to interact with the hardware without a system call, it
   will cause a system error and can crash the server or at minimum the app.
@@ -2161,42 +2161,55 @@ Servers are configured in three sections without virtualization.
 
 Host OS operated on the HW and included a hypervisor (HV).
 SW ran in privileged mode and had full access to the HW.
-Guest OS wrapped in a VM and had devices mapped into their OS to emulate real
+Guest OS was wrapped in a VM and had devices mapped into them to emulate real
 HW. Drivers such as graphics cards were all SW emulated to allow the process
 to run properly.
 
 The guest OS still believed they were running on real HW and tried
-to take control of the HW. The areas were not real and only allocated
-space to them for the moment.
+to take control of the HW. Areas of physical memory and disk were not real and only
+allocated to them by the HV. Without a special arrangement, this system would at best
+crash and at worst all the guests would overwrite each other's memories and disk areas.
 
-The HV performs **binary translation**.
-System calls are intercepted and translated in SW on the way. The guest OS needs
+To avoid this, the HV performs **binary translation**.
+System calls are intercepted and translated in SW on the fly. The guest OS needs
 no modification, but slows down a lot.
 
 #### 1.6.1.2. Para-Virtualization
 
-Guest OS are modified and run in HV containers, except they do not use slow
-binary translation. The OS is modified to change the **system calls** to
-**user calls**. Instead of calling on the HW, they call on the HV using
-**hypercalls**. Areas of the OS call the HV instead of the HW.
+Guest OS are modified and run in the same VMs, except they do not use slow
+binary translation anymore. The OS is modified to change the **system calls** to
+**user calls** but instead of calling on the HW, they call on the HV using
+**hypercalls**. So areas of the OS that would traditionally make priviledged calls
+directly to the HW are modified to call the HV instead. The OS needed to be
+modified specifically for the particular HV that was in use.
+
+The OS became almost virtualization aware which massively improved performance but
+it was still a set of software processes designed to trick the OS and other HW into
+believing that nothing had changed.
 
 #### 1.6.1.3. Hardware Assisted Virtualization
 
-The physical HW itself is virtualization aware. The CPU has specific
-functions so the HV can come in and support. When guest OS tries to run
-privileged instructions, they are trapped by the CPU and do not halt
+The physical HW itself is virtualization aware, primarily the CPU. The CPU has specific
+instructions so the HV can directly control and configure this support. When guest OS
+tries to run privileged instructions, they are trapped by the CPU and do not halt
 the process. They are redirected to the HV from the HW.
 
-What matters for a VM is the input and output operations such
-as network transfer and disk IO. The problem is multiple OS try to access
-the same piece of hardware but they get caught up on sharing.
+What matters for a VM is the input and output operations such as network transfer and disk
+IO. VMs have what they think is physical hardware as in the case of a network card but
+these cards are just logical devices using a driver that actually connect back to a single
+piece of physical hardware which sits in the host but, unless there is a physical network
+card per VM, there always going to be some level of software getting in the way.
+This hugely impacts performance and consumes a lot CPU cycles on the host when performing
+highly transactional activities.
 
-#### 1.6.1.4. SR-IOV (Singe Route IO virtualization)
+#### 1.6.1.4. SR-IOV (Single Route IO virtualization)
 
-Allows a network or any card to present itself as many mini cards.
-As far as the HV is concerned, they are real dedicated cards for their
-use. No translation needs to be done by the HV. The physical card
-handles it all. In EC2 this feature is called **enhanced networking**.
+HW devices themselves become virtualization aware. Allows a network or any card to
+present itself as many mini cards. As far as the HW is concerned, they are real dedicated
+cards for each guest OS' use. No translation needs to be done by the HV. The physical card
+which supports SR-IOV handles it all. In EC2 this feature is called **enhanced networking**.
+It means faster speeds, consistent lower latency even at high loads and less CPU usage for
+the host CPU even when the guest OS is consuming high amounts of consistent I/O.
 
 ### 1.6.2. EC2 Architecture and Resilience
 
