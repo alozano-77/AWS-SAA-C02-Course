@@ -2213,36 +2213,31 @@ the host CPU even when the guest OS is consuming high amounts of consistent I/O.
 
 ### 1.6.2. EC2 Architecture and Resilience
 
-EC2 instances are virtual machines run on EC2 hosts.
+EC2 instances are virtual machines and run on EC2 hosts.
 
-Tenancy:
+These hosts can be classified into:
 
-- **Shared** - Instances are run on shared hardware, but isolated from other customers.
-- **Dedicated** - Instances are run on hardware that's dedicates to a single customer.
-  Dedicated instances may share hardware with other instances from the same AWS account
-  that are not Dedicated instances.
-- **Dedicated host** - Instances are run on a physical server fully dedicated for your use.
-  Pay for entire host, don't pay for instances.
+- **Shared hosts**: Instances are run on shared hardware, but isolated from other customers.
+Pay for the individual instances based on how they have been running for and what resources
+they have allocated.
+- **Dedicated hosts**: Instances are run on hardware that's dedicated to a single AWS
+account. Pay for entire host, don't pay for instances.
 
-- AZ resilient service. They run within only one AZ system.
-  - You can't access them cross zone.
+EC2 is an AZ resilient service. Instances run within only one AZ. You can't access them cross
+zone.
 
-EC2 host contains
+EC2 hosts contain:
 
 - Local hardware such as CPU and memory
-- Also have temporary instance store
+- Temporary local storage called Instance Store
   - If instance moves hosts, the storage is lost.
-- Can use remote storage, Elastic Block Store (EBS).
+- Remote storage: Elastic Block Store (EBS).
   - EBS allows you to allocate volumes of persistent storage to instances
 within the same AZ.
-- 2 types of networking
-  - Storage networking
-  - Data networking
-
-EC2 Networking (ENI)
+- 2 types of networking: Storage networking and data networking
 
 When instances are provisioned within a specific subnet within a VPC
-A primary elastic network interface is provisioned in a subnet which
+a primary elastic network interface (ENI) is provisioned in a subnet which
 maps to the physical hardware on the EC2 host. Subnets are also within
 one specific AZ. Instances can have multiple network interfaces, even within
 different subnets so long as they're within the same AZ.
@@ -2256,22 +2251,22 @@ it will stay on that host until either:
 The instance will be relocated to another host in the same AZ. Instances
 cannot move to different AZs. Everything about their hardware is locked within
 one specific AZ.
-A migration is taking a **copy** of an instance and moving it to a different AZ.
 
-In general instances of the same type and generation will occupy the same host.
+There is a way a migration could be done but it would mean taking a **copy** of an instance
+and creating a brand new one in a different AZ.
+
+In general, instances of the same type and generation will occupy the same host.
 The only difference will generally be their size.
 
 #### 1.6.2.1. EC2 Strengths
 
-Long running compute needs. Many other AWS services have run time limits.
-
-Server style applications
-
-- things waiting for network response
-- burst or stead-load
-- monolithic application stack
-  - middle ware or specific run time components
-- migrating application workloads or disaster recovery
+- Traditional OS+Application compute
+- Long running compute needs. Many other AWS services have run time limits.
+- Server style applications such as those that wait for incoming connections
+- Applications that have burst or steady-state load requirements
+- Monolithic application stacks
+  - database, middleware or specific run time components
+- Migrated application workloads or Disaster Recovery
   - existing applications running on a server and a backup system to intervene
 
 ### 1.6.3. EC2 Instance Types
