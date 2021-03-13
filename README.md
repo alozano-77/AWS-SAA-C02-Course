@@ -2271,27 +2271,42 @@ The only difference will generally be their size.
 
 ### 1.6.3. EC2 Instance Types
 
-- **General Purpose** (T, M) - default steady state workloads with even resources
-- **Compute Optimized** (C) - Media processing, scientific modeling and gaming
+Choosing an instance type influences the following:
+
+- Raw amount of resources that you get
+  - CPU, memory, local storage capacity and the type of that storage
+- Resource Ratios
+  - Instance types suited to compute applications might give you more CPU and less memory
+for a given dollar spent
+- Storage and data network bandwidth
+- Architecture of the hardware instances run on
+  - ARM vs x86 architectures, Intel vs AMD CPUs
+- Additional features and capabilities
+  - GPU and FPGA
+
+- **General Purpose** (T, M) - Default. Diverse (occasional peaks) and steady-state
+workloads with even resource ratios.
+- **Compute Optimized** (C) - Media processing, HPC, scientific modelling, gaming and ML.
 - **Memory Optimized** (R, X) - Processing large in-memory data sets
 - **Accelerated Computing** (P, G, F) - Hardware GPU, FPGAs
 - **Storage Optimized** (H, I, D) - Large amounts of super fast local storage.
-  Massive amounts of IO per second. Elastic search and analytic workloads.
+  Sequential and random IO. Data warehousing, Elasticsearch search and analytic workloads.
 
 #### 1.6.3.1. Naming Scheme
 
-R5dn.8xlarge - whole thing is the instance type. When in doubt give the
-full instance type
+Example: R5dn.8xlarge
+
+Full string represents the instance type
 
 - 1st char: Instance family.
 - 2nd char: Instance generation. Generally always select the newest generation.
-- char after period: Instance size. Memory and CPU considerations.
-  - Often easier to scale system with a larger number of smaller instance sizes.
-- 3rd char - before period: additional capabilities
-  - a: amd cpu
+- 3rd and 4th chars: Additional capabilities
+  - a: AMD cpu
   - d: NVMe storage
   - n: network optimized
-  - e: extra capacity for ram or storage
+  - e: extra capacity for RAM or storage
+- String after period: Instance size. Memory and CPU considerations.
+  - Often easier to scale system with a larger number of smaller instance sizes.
 
 ### 1.6.4. Storage Refresher
 
