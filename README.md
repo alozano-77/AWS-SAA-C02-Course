@@ -2519,28 +2519,40 @@ at all.
 
 ### 1.6.7. EBS vs Instance Store
 
-If the read/write can be handled by EBS, that should be default.
+- If you need **persistent storage** you should choose EBS since there are many reasons data
+can be lost in Instance Store volumes such as hardware failure, rebooting, maintenance,
+anything that moves instances between hosts. An exception to this happens if your
+application supports **built-in** replication. In that case you can use lots of Instance
+Store volumes on lots of instances and that way you get their performance benefits without
+the negative risks.
 
-When to use EBS
+- If you need **resilient storage** you should choose EBS since it provides hardware that is
+resilient within an AZ and you also have the ability to snapshot volumes to S3, which is
+regionally resilient.
 
-- Highly available and reliable in an AZ. Can self correct against HW issues.
-- Persist independently from EC2 instances.
-  - Can be removed or reattached.
-  - You can terminated instance and keep the data.
-- Multi-attach feature of **io1**
-  - Can create a multi shared volume.
-- Region resilient backups.
-- Require up to 64,000 IOPS and 1,000 MiB/s per volume
-- Require up to 80,000 IOPS and 2,375 MB/s per instance
+- If you need storage that needs to be **isolated from instance lifecyle** you should choose
+EBS. For example, if you need a volume which you can attach to one instance, use it for
+a while, unattach it and then reattach it to something else.
 
-When to use Instance Store
+- If you need **high performance** you can choose both EBS and Instance Store.
 
-- Great value, they're included in the cost of an instance.
-- More than 80,000 IOPS and 2,375 MB/s
-- If you need temporary storage, or can handle volatility.
-- Stateless services, where the server holds nothing of value.
-- Rigid lifecycle link between storage and the instance.
-  - This ensures the data is erased when the instance goes down.
+- If you need **super high performance** you will need to default to using Instance Store
+volumes.
+
+- If **cost** is a primary concern you should look at using Instance Store volumes since
+they are included with the price of many EC2 instances. If you are forced to use EBS you
+should default to st1 or sc1 volume types.
+
+- If you need **up to 16000 IOPS** choose gp2 or gp3.
+
+- If you need **between 16000 and 64000 IOPS** you need to pick io1 or io2.
+
+- If you need **up to 260000 IOPS** (maximum IOPS per instance) you can take lots of
+indivual EBS volumes and you can create a RAID 0 set from those volumes to get up to the
+combined performance of all the individual volumes.
+
+- If you need **more than 260000 IOPS** and your application can tolerate storage which is
+not persistent then you can decide to use Instance Store volumes.
 
 ### 1.6.8. EBS Snapshots, restore, and fast snapshot restore
 
