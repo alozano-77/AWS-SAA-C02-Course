@@ -2316,37 +2316,40 @@ Full string represents the instance type
   - Ephemeral storage or temporary storage
 - **Elastic Block Store (EBS)**
   - Network attached storage
-  - Volumes delivered over the network
+  - Volumes delivered and attached to devices over the network
   - Persistent storage lives on past the lifetime of the instance
 
 #### 1.6.4.1. Three types of storage
 
-- Block Storage: Volume presented to the OS as a collection of blocks. No
-structure beyond that. These are mountable and bootable. The OS will
-create a file system on top of this, NTFS or EXT3 and then it mounts
-it as a drive or a root volume on Linux. Spinning hard disks or SSD. This
-could also be delivered by a physical volume. Has no built in structure.
-You can mount an EBS volume or boot off an EBS volume.
+- **Block Storage**: Volume presented to the OS as a collection of uniquely addressable blocks.
+Has no built in structure. These are mountable and bootable. The OS will
+create a file system on top of this such as NTFS or EXT3 and then it mounts
+it as a drive on Windows or a root volume on Linux. Spinning hard disks or SSD. This
+could also be delivered as a logical volume. You can mount an EBS volume or boot off an EBS
+volume.
 
-- File Storage: Presented as a file share with a structure. You access the
-files by traversing the storage. You cannot boot from storage, but you
-can mount it.
+- **File Storage**: Presented as a file share (a ready made file system) with a structure.
+You access the files by traversing the structure. You can create folders and store files
+on them. You cannot boot from storage, but you can mount it.
 
-- Object Storage: It is a flat collection of objects. An object can be anything
-with or without attached metadata. To retrieve the object, you need to provide
+- **Object Storage**: It is a flat collection of objects. No structure. An object can be
+anything. It can have attached metadata. To retrieve the object, you need to provide
 the key and then the value will be returned. This is not mountable or
 bootable. It scales very well and can have simultaneous access.
 
 #### 1.6.4.2. Storage Performance
 
-- IO Block Size: Determines how to split up the data.
-- IOPS: How many reads or writes a system can accommodate per second.
-- Throughput: End rate achieved, expressed in MB/s (megabyte per second).
+- **IO (Block) Size**: It is the size of the blocks of data that you are writing to or reading
+from disk per IO operation. Determines how to split up the data. If your storage block size
+is 16 kb and you write 64 kb of data, it will use 4 blocks.
+- **IOPS**: How many reads or writes a system can accommodate per second.
+- **Throughput**: Rate of data a storage system can store on a particular device,
+expressed in MB/s (megabyte per second).
 
 `Block Size * IOPS = Throughput`
 
-This isn't the only part of the chain, but it is a simplification.
-A system might have a throughput cap. The IOPS might decrease as the block
+These aren't the only part of the storage chain. It is a simplification.
+A system might have a throughput capacity. The IOPS might decrease as the block
 size increases.
 
 ### 1.6.5. Elastic Block Store (EBS)
