@@ -2354,87 +2354,135 @@ size increases.
 
 ### 1.6.5. Elastic Block Store (EBS)
 
-- Allocate block storage **volumes** to instances.
+- Provides block storage
+  - It takes raw physical disks and it presents an allocation of these physical disks
+known as volumes
+  - Instances see block devices and create a file system on these
 - Volumes are isolated to one AZ.
   - The data is highly available and resilient for that AZ.
   - All of the data is replicated within that AZ. The entire AZ must have
   a major fault to go down.
-- Two physical storage types available (SSD/HDD)
-- Varying level of performance (IOPS, T-put)
-- Billed as GB/month.
-  - If you provision a 1TB for an entire month, you're billed as such.
-  - If you have half of the data, you are billed for half of the month.
-- Four types of volumes, each with a dominant performance attribute.
-  - General purpose SSD (gp2)
-  - Provisioned IOPS SSD (io1)
+- Generally, attached to one EC2 instance (or other service) over a storage network
+  - Can be detached from one instance and reattached to another
+  - Only io1 volume types have a multi-attach feature that allows them to be attached
+to multiple EC2 instances at the same type.
+- A backup of a volume can be created into S3 in the form of a snapshot
+  - Snapshots can be used to migrate volumes between AZs
+- Different physical storage types, different sizes and different performance profiles
+- Billed using GB-month.
+  - The price for 1GB for 1 month would be the same as 2GB for half a month and the same
+as half a GB for 2 months.
+  - There are some extra charges for certain types of volumes with specific enhanced
+performance characteristics.
+- There is a maximum per instance performance that can be achieved between the EBS service
+and a single EC2 instance.
+  - Influenced by the type of volume, the type of the instance and the size of the instance.
+  - These are more than one volume can provide on its own so multiple volumes would
+be needed to saturate these maximums.
+- Four types of volumes, each with a dominant performance attribute:
+  - General purpose SSD (gp2, gp3)
+  - Provisioned IOPS SSD (io1, io2, io2 Block Express) 
     - maximum IOPS such as databases
-  - T-put optimized HDD (st1)
-    - maximum t-put for logs or media storage
+  - Throughput optimized HDD (st1)
+    - maximum throughput for logs or media storage
   - Cold HDD (sc1)
 
-#### 1.6.5.1. General Purpose SSD (gp2)
+#### 1.6.5.1. General Purpose SSD (gp2, gp3)
 
-Uses a performance bucket architecture based on the IOPS it can deliver.
-The GP2 starts with 5,400,000 IOPS allocated. It is all available instantly.
+Two types:
+- gp2
+- gp3
 
-You can consume the capacity quickly or slowly over the life of the volume.
-The capacity is filled back based upon the volume size.
-Min of 100 IOPS added back to the bucket per second.
+gp2 and gp3 volumes can be as small as 1GB or as large as 16TB
 
-Above that, there are 3 IOPS/GiB of volume size. The max is 16,000 IOPS.
-This is the **baseline performance**
+gp2 volumes are created with IO credit allocation. An IO credit allows you to use an
+IO operation.
 
-Default for boot volumes and should be the default for data volumes.
-Can only be attached to one EC2 instance at a time.
+gp2 volumes can be thought of as IO Buckets with a capacity of 5.4 million IO credits that
+fill at the **Baseline Performance** rate of the volume. All volumes start with their
+maximum capacity.
 
-#### 1.6.5.2. Provisioned IOPS SSD (io1)
+An IO Bucket fills with a minimun of 100 IO credits per second regardless of volume size.
+Beyond this, it fills with 3 IO credits per second per GB of volume size. These rates 
+constitute the **Baseline Performance**, which can go up to a maximum of 16000 IO credits
+per second.
 
-You pay for capacity and the IOPs set on the volume.
-This is good if your volume size is small but need a lot of IOPS.
+Can burst up to 3000 IOPS for volumes smaller than 1 TB. Great for boots and initial
+workloads.
 
-50:1 IOPS to GiB Ratio
-64,000 is the max IOPS per volume assuming 16 KiB I/O.
+If you are consuming more IO credits than the rate at which the bucket is refilling then
+you are depleting the bucket.
 
-Good for latency sensitive workloads such as mongoDB.
-Multi-attach allows them to attach to multiple EC2 instances at once.
+gp3 volumes are not based on a credit bucket architecture as gp2.
 
-#### 1.6.5.3. HDD Volume Types
+Every gp3 volume regardless of size starts with a standard 3000 IOPS and a throughput
+of 125 MB/s.
 
-- great value
-- great for high throughput vs IOPs
-- 500 GiB - 16 TiB
-- Neither can be used for EC2 boot volumes.
-- Good for streaming data on a hard disk.
-  - Media conversion with large amounts of storage.
-- Frequently accessed high throughput intensive workload
-  - log processing
-  - data warehouses
-- The access patterns should be sequential
-  - Massive inefficiency for small reads and writes
+The base price for gp3 is approximately 20% cheaper than gp2 and you can pay extra cost
+for up to 16000 IOPS or 1000 MB/s. This throughput is 4 times faster than gp2 whose maximum
+is 250 MB/s.
 
-Two types
+With gp2 and gp3 volumes you can achieve a maximum of 260000 IOPS per instance and a
+throughput of 70000 MB/s per instance.
 
+#### 1.6.5.2. Provisioned IOPS SSD (io1, io2, io2 Block Express)
+
+Three types:
+- io1
+- io2
+- io2 Block Express
+
+IOPS can be adjusted independently of the size of the volume and are designed for super
+high performance situations.
+
+With io1 and io2 you can achieve a maximum of 64000 IOPS per volume and a maximum of
+1000 MB/s of throughput per volume. With io2 Block Express you can achieve 256000 IOPS per
+volume and 4000 MB/s of throughput per volume.
+
+io1 and io2 volumes can be as small as 4 GB or as large as 16TB. io2 Block Express volumes
+can be as small as 4 GB or as large as 64 TB.
+
+For these types of volumes you pay for both the size and the provisioned IOPS that you need.
+
+There is a maximum at the size to performance ratio. For io1 it is 50 IOPS per GB of volume
+size which is bigger than the 3 IOPS per GB for gp2. For io2 this increases to 500 IOPS
+per GB of volume size. For io2 Block Express it is 1000 IOPS per GB of volume size.
+
+With io1 and io2 Block Express volumes you can achieve a maximum of 260000 IOPS per instance
+and a throughput of 7500 MB/s per instance. With io2 volumes these decrease to 160000 IOPS
+per instance and 4750 MB/s per instance. 
+
+Used for high performance, latency sensitive workloads, IO intensive NoSQL and relational
+databases. A common use case is when you have smaller volumes but need super high
+performance.
+
+io1 volumes types are the only ones that can be attached to multiple EC2 instances at the same time.
+
+#### 1.6.5.3. HDD Volume Types (st1, sc1)
+
+Two types:
 - st1
-  - Starts at 1 TiB of credit per TiB of volume size.
-  - 40 MB/s baseline per TiB
-  - Burst of 250 MB/s per TiB
-  - Max t-put of 500 MB/s
+  - Throughput optimized HDD
+  - Less expensive than SDD volumes
+  - Because it is HDD-based it is not great at random access. It is designed for data
+that needs to be written or read in a sequential way.
+  - 125 GB to 16 TB in size
+  - Maximum of 500 IOPS and, since IO on HDD-based volumes is measured as 1 MB blocks, it
+means a maximum throughput of 500 MB/s.
+  - Has a credit bucket architecture as gp2 volumes but with MB/s instead of IOPS.
+  - Baseline performance of 40 MB/s for every TB of volume size and a burst to a maximum
+of 250 MB/s for every TB of volume size.
+  - Designed for frequently accessed high throughput intensive sequential workloads such as
+big data, data warehousing and log processing.
 - sc1
-  - Designed for less frequently accessed data, it fills slower.
-  - 12 MB/s baseline per TiB
-  - Burst of 80 MB/s per TiB
-  - Max t-put of 250 MB/s
-
-#### 1.6.5.4. EBS Exam Power Up
-
-- Volumes are created in an AZ, isolated in that AZ.
-- If an AZ fails, the volume is impacted.
-- Highly available and resilient in that AZ. The only reason for failure is
-if the whole AZ fails.
-- Generally one volume to one instance, except **io1** with multi-attach
-- Has a GB/m fee regardless of instance state.
-- EBS maxes at 80k IOPS per instance and 64k vol (io1)
-- Max 2375 MB/s per instance, 1000 MiB/s (vol) (io1)
+  - Cold HDD 
+  - Even cheaper than st1
+  - 125 GB to 16 TB in size
+  - Maximum of 250 IOPS and a maximum throughput of 250 MB/s
+  - Has a credit bucket architecture as gp2 volumes but with MB/s instead of IOPS.
+  - Baseline performance of 12 MB/s for every TB of volume size and a burst to a maximum
+of 80 MB/s for every TB of volume size.
+  - Designed for less frequently accessed workloads such as archives
 
 ### 1.6.6. EC2 Instance Store
 
