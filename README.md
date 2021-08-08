@@ -2659,79 +2659,81 @@ data encryption key.
   encrypt things or hold the keys, then you need to perform full disk encryption
   at the operating system level, which is a separate thing.
 
-### 1.6.9. EC2 Network Interfaces, Instance IPs and DNS
+### 1.6.10. EC2 Network Interfaces, Instance IPs and DNS
 
-An EC2 instance starts with at least one ENI - elastic network interface.
-An instance may have ENIs in separate subnets, but everything must be
-within one AZ.
+An EC2 instance starts with at least one Elastic Network Interface (ENI),
+which is the primary ENI. Optionally, you can attach one or more secondary ENIs
+which can be in separate subnets, but everything must be within one AZ.
 
-When you launch an instance with Security Groups, they are on the
-network interface and not the instance.
+ENIs have attributes like IP addresses, DNS names and Security Groups which are presented
+as being attached to the EC2 instance itself, but from a networking perspective they are actually on
+the ENIs not the instance.
 
-#### 1.6.9.1. Elastic Network Interface (ENI)
+#### 1.6.10.1. Elastic Network Interface (ENI)
 
-Has these properties
+These are attached to ENIs:
 
 - MAC address
 - Primary IPv4 private address
-  - From the range of the subnet the ENI is within.
-  - Will be static and not change for the lifetime of the instance
-    - `10.16.0.10`
-  - Given a DNS name that is associated with the address.
-    - `ip-10-16-0-10.ec2.internal`
-    - Only resolvable inside the VPC and always points at private IP address
+  - From the range of the subnet the ENI is created in.
+  - Will be static and not change for the lifetime of the instance.
+  - Given a DNS name such as `ip-10-16-0-10.ec2.internal` that is associated with the address,
+  this is only resolvable inside the VPC and always points at this address.
 - 0 or more secondary private IP addresses
-- 0 or 1 public IPv4 address
-  - The instance must manually be set to receive an IPv4 address or spun into a
-subnet which automatically allocates an IPv4.
-This is a dynamic IP that is not fixed.
-If you stop an instance the address is removed.
-When you start up again, it is given a brand new IPv4 address.
-Restarting the instance will not change the IP address.
-Changing between EC2 hosts will change the address.
-This will be allocated a public DNS name. The Public DNS name will resolve to
-the primary private IPv4 address of the instance.
-Outside of the VPC, the DNS will resolve to the public IP address.
-This allows one single DNS name for an instance, and allows traffic to resolve
-to an internal address inside the VPC and the public will resolve to a public
-IP address.
+- 0 or 1 public IPv4 addresses
+  - The instance must manually be set to receive a public IPv4 address or launched into a
+  subnet which automatically allocates IPv4 public addresses.
+  This is a dynamic IP. It is not fixed.
+  If you stop an instance the address is removed.
+  When you start up again, it is given a brand new IPv4 address.
+  Restarting the instance will not change the IP address.
+  Changing between EC2 hosts will change the address.
+  This will be allocated a public DNS name such as `ec2-3-89-7-136.compute-1.amazonaws.com`.
+  This public DNS name will resolve to the primary private IPv4 address of the instance inside
+  the VPC. Outside of the VPC, the DNS will resolve to the public IP address.
+  This allows one single DNS name for an instance.
 - 1 elastic IP per private IPv4 address
   - Can have 1 public elastic interface per private IP address on this interface.
-This is allocated to your AWS account.
-Can associate with a private IP on the primary interface or secondary interface.
-If you are using a public IPv4 and assign an elastic IP, the original IPv4
-address will be lost. There is no way to recover the original address.
+  This is allocated to your AWS account.
+  Can be associated with a private IP on the primary interface or secondary interface.
+  If you are using a public IPv4 and assign an elastic IP, the original IPv4
+  address will be lost. There is no way to recover the original address.
 - 0 or more IPv6 address on the interface
   - These are by default public addresses.
 - Security groups
   - Applied to network interfaces.
   - Will impact all IP addresses on that interface.
-  - If you need different IP addresses impacted by different security
-  groups, then you need to make multiple interfaces and apply different
-  security groups to those interfaces.
+  - If you need different IP addresses for an instance impacted by different security
+  groups, then you need to create multiple interfaces with those IP addresses separated
+  and apply different security groups to those interfaces.
 - Source / destination checks
-  - If traffic is on the interface, it will be discarded if it is not
-  from going to or coming from one of the IP addresses
+  - If traffic is on the interface and this is enabled, it will be discarded if it is not
+  from one of the IP addresses on the interface as a source or destined to one of the IP
+  addresses on the interface as a destination. That explain why this setting should be
+  disabled for an EC2 to work as a NAT instance.
 
 Secondary interfaces function in all the same ways as primary interfaces except
-you can detach interfaces and move them to other EC2 instances.
+you can dettach them and move them to other EC2 instances.
 
-#### 1.6.9.2. ENI Exam PowerUp
+#### 1.6.10.2. ENI Exam PowerUp
 
-- Legacy software is licensed using a mac address.
-  - If you provision a secondary ENI to a specific license, you can move
-around the license to different EC2 instances.
-- Multi homed (subnets) management and data.
+- Legacy software is licensed using a MAC address.
+  - If you provision a secondary ENI on an instance and use that interface's MAC address
+  for licensing, you can dettach that interface and attach it to a new instance, and
+  move that licensing between EC2 instances.
+- Multi-homed systems.
+  - An instance with an ENI in two different subnets where one can be used for management
+  and the other for data.
 - Different security groups are attached to different interfaces.
-- The OS doesn't see the IPv4 public address.
+  - If you need different rules for different types of access based on IPs your instance has,
+  then you need multiple elastic network interfaces with different security groups on each.
+- The OS never sees the IPv4 public address.
 - You always configure the private IPv4 private address on the interface.
-- Never configure an OS with a public IPv4 address.
-- IPv4 Public IPs are Dynamic, starting and stopping will kill it.
-
-Public DNS for a given instance will resolve to the primary private IP
-address in a VPC. If you have instance to instance communication within
-the VPC, it will never leave the VPC. It does not need to touch the internet
-gateway.
+- You never configure a network interface inside an OS with a public IPv4 address inside AWS.
+- IPv4 Public IPs are dynamic, starting and stopping an instance will kill it.
+- Public DNS for a given instance will resolve to the primary private IP
+address inside a VPC. If you have instance-to-instance communication within
+the VPC, it will never leave the VPC. It does not need to go out to the internet gateway.
 
 ### 1.6.10. Amazon Machine Image (AMI)
 
