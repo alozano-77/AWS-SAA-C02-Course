@@ -2554,50 +2554,51 @@ combined performance of all the individual volumes.
 - If you need **more than 260000 IOPS** and your application can tolerate storage which is
 not persistent then you can decide to use Instance Store volumes.
 
-### 1.6.8. EBS Snapshots, restore, and fast snapshot restore
+### 1.6.8. Snapshots, Restore and Fast Snapshot Restore (FSR)
 
 - Efficient way to backup EBS volumes to S3.
-  - The data becomes region resilient.
+  - The data becomes regionally resilient.
 - Can be used to migrate data between hosts.
-
-Snapshots are incremental volume copies to S3.
-The first is a **full copy** of `data` on the volume. This can take some time.
-EBS won't be impacted, but will take time in the background.
-Future snaps are incremental, consume less space and are quicker to perform.
-
-If you delete an incremental snapshot, it moves data to ensure subsequent
+- Snapshots are incremental volume copies to S3.
+  - The first is a **full copy** of `data` on the volume and can take some time.
+  - It just copies the data used, so if you use 10 GB of a 40 GB volume then the initial snapshot
+is 10GB, not the full 40 GB. EBS won't be impacted, but will take time to copy in the background.
+  - Future snapshots are incremental, they only store the difference
+between the previous snapshot and the state of the volume when this snapshot is taken.
+Because of that they consume less space and are quicker to perform.
+- If you delete an incremental snapshot, it moves data to ensure subsequent
 snapshots will work properly.
+- Volumes can be created (restored) from snapshots.
+- Snapshots can be used to move EBS volumes between AZs.
+- Snapshots can be used to migrate data on volumes between regions.
 
-Volumes can be created (restored) from snapshots.
-Snapshots can be used to move EBS volumes between AZs.
-Snapshots can be used to migrate data between volumes.
+#### 1.6.8.1. Snapshot and Volume Performance
 
-#### 1.6.8.1. Snapshot and volume performance
-
-- When creating a new EBS volume without a snapshot, the performance is
+- When creating a new EBS volume without a snapshot, full performance is
 available immediately.
-- When restoring from S3, performs **Lazy Restore**
-  - If you restore a volume, it will transfer it slowly in the background.
+- When restoring from S3, performs **Lazy Restore**.
+  - If you restore a volume, it will transfer the data slowly in the background.
   - If you attempt to read data that hasn't been restored yet, it will
   immediately pull it from S3, but this will achieve lower levels of performance
   than reading from EBS directly.
-  - You can force a read of every block all data immediately using DD.
 
 Fast Snapshot Restore (FSR) allows for immediate restoration.
 You can create 50 of these FSRs per region. When you enable it on
 a snapshot, you pick the snapshot specifically and the AZ that you want to be
 able to do instant restores to. Each combination of Snapshot and AZ counts
 as one FSR set. You can have 50 FSR sets per region.
-FSR is not free and can get expensive with lost of different snapshots.
+FSR is not free and can get expensive with lots of different snapshots. You can have
+the same result is you force a read of every block of the volume immediately using dd on Linux
+but with the admin overhead it implies.
 
 #### 1.6.8.2. Snapshot Consumption and Billing
 
-Billed using a GB/month metric.
-20 GB stored for half a month, represents 10 GB-month.
+Billed using a GB-month metric.
+20 GB snapshots stored for half a month, represents 10 GB-month.
 
 This is used data, not allocated data. If you have a 40 GB volume but only
-use 10 GB, you will only be charged for the allocated data.
-This is not how EBS itself works.
+use 10 GB, you will only be charged for these 10 GB of data used on the volume
+when performing a snapshot.
 
 The data is incrementally stored which means doing a snapshot every 5 minutes
 will not necessarily increase the charge as opposed to doing one every hour.
