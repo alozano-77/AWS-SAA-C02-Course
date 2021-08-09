@@ -2822,24 +2822,25 @@ make changes, then create a new AMI.
 - Great if you have a known steady state usage, email usage, domain server.
 - Cheapest option with no tolerance for disruption.
 
-### 1.6.12. Instance Status Checks and Autorecovery
+### 1.6.13. Instance Status Checks and Auto Recovery
 
-Every instance has two high level status checks
+Every instance has two high level status checks:
 
 - System Status Checks
   - Failure of this check could indicate SW or HW problems of the EC2
-service or the host.
+  service or the host.
 - Instance Status Checks
-  - Specific to the file system or has a corrupted Kernel.
+  - Specific to the file system.
+  - Failure of this check could indicate a corrupted Kernel.
 
-Autorecovery can kick in and help,
+Auto recovery can kick in and help in the following ways:
 
-- Recover this instance
-  - can be a number of steps depending on the failure
-- Stop this instance
-- Terminate this instance
-  - useful in a cluster
-- Reboot this instance
+- Recover this instance.
+  - Can be a number of steps depending on the failure.
+- Stop this instance.
+- Terminate this instance.
+  - Useful in a cluster.
+- Reboot this instance.
 
 ### 1.6.13. Horizontal and Vertical Scaling
 
