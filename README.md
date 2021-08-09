@@ -2784,46 +2784,43 @@ make changes, then create a new AMI.
 - The default permissions on an AMI is that it is accessible only in your account.
 - Billing is for the storage capacity used by the EBS snapshots the AMI references to.
 
-### 1.6.11. EC2 Pricing Models
+### 1.6.12. Instance Billing Models
 
-#### 1.6.11.1. On-Demand Instances
+#### 1.6.12.1. On-Demand Instances
 
-- Hourly rate based on OS, size, options, etc
-- Billed in seconds (60s min) or hourly
-  - Depends on the OS
-- Default pricing model
-- No long-term commitments or upfront payments
-- New or uncertain application requirements
+- Hourly rate based on OS, size, options, etc.
+- Billed in seconds or hourly.
+  - Depends on the OS.
+- Default pricing model.
+- No long-term commitments or upfront payments.
+- New or uncertain application requirements.
 - Short-term, spiky, or unpredictable workloads which can't tolerate disruption.
 
-#### 1.6.11.2. Spot Instances
+#### 1.6.12.2. Spot Instances
 
-Up to 90% off on-demand, but depends on the spare capacity.
-You can set a maximum hourly rate in a certain AZ in a certain region.
-If the max price you set is above the spot price, you pay only that spot
-price for the duration that you consume that instance.
-As the spot price increases, you pay more.
-Once this price increases past your maximum, it will terminate the instance.
-Great for data analytics when the process can occur later at a lower use time.
+- Up to 90% off on-demand, but depends on the spare capacity.
+- You can set a maximum hourly rate in a certain AZ in a certain region.
+  - If the max price you set is above the spot price, you pay only that spot
+  price for the duration that you consume that instance.
+  - As the spot price increases, you pay more.
+  - Once this price increases past your maximum, it will terminate the instance.
+- Great for data analytics when the process can occur later at a lower use time.
 
-#### 1.6.11.3. Reserved Instance
+#### 1.6.12.3. Reserved Instances
 
-Up to 75% off on-demand.
-The trade off is commitment.
-You're buying capacity in advance for 1 or 3 years.
-Flexibility on how to pay
-
-- All up front
-- Partial upfront
-- No upfront
-
-Best discounts are for 3 years all up front.
-Reserved in region, or AZ with capacity reservation.
-Reserved instances takes priority for AZ capacity.
-Can perform scheduled reservation when you can commit to specific time windows.
-
-Great if you have a known stead state usage, email usage, domain server.
-Cheapest option with no tolerance for disruption.
+- Up to 75% off on-demand.
+- The trade off is commitment.
+- You're buying capacity in advance for 1 or 3 years.
+- Flexibility on how to pay:
+  - All up front
+  - Partial upfront
+  - No upfront
+- Best discounts are for 3 years all up front.
+- Reserved in a region or AZ with capacity reservation.
+- Reserved instances take priority for AZ capacity.
+- Can perform scheduled reservation when you can commit to specific time windows.
+- Great if you have a known steady state usage, email usage, domain server.
+- Cheapest option with no tolerance for disruption.
 
 ### 1.6.12. Instance Status Checks and Autorecovery
 
