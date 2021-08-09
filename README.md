@@ -2735,53 +2735,54 @@ you can dettach them and move them to other EC2 instances.
 address inside a VPC. If you have instance-to-instance communication within
 the VPC, it will never leave the VPC. It does not need to go out to the internet gateway.
 
-### 1.6.10. Amazon Machine Image (AMI)
+### 1.6.11. Amazon Machine Images (AMI)
 
-Images of EC2 instances that can launch more EC2 instance.
+Images of EC2 instances. They are one way you can create a template of an instance configuration
+and then use that template to create many instances from that configuration.
 
 - When you launch an EC2 instance, you are using an Amazon provided AMI.
-- Can be Amazon or community provided
-- Marketplace (can include commercial software)
-  - Will charge you for the instance cost and an extra cost for the AMI
+- AMIs can be Amazon or community provided.
+- AMIs can be marketplace provided (can include commercial software).
+  - Will charge you for the instance cost and an extra cost for the AMI.
 - AMIs are regional with a unique ID.
-- Controls permissions
-  - Default only your account can use it.
+  - They can only be used in the region that they are in.
+- AMIs control permissions.
+  - By default only your account can use them.
   - Can be set to be public.
-  - Can have specific AWS accounts on the AMI.
-- Can create an AMI from an existing EC2 instance to capture the current config.
+  - Can have specific AWS accounts on them.
+- You can create an AMI from an existing EC2 instance to capture the current config of that instance.
 
-#### 1.6.10.1. AMI Lifecycle
+#### 1.6.11.1. AMI Lifecycle
 
-1. Launch: EBS volumes are attached to EC2 devices using block IDs.
+1. **Launch**: An AMI is used to launch an EC2 instance.
+  - EBS volumes are attached to EC2 devices using block device IDs.
+  - The boot volume is usually `/dev/xvda`.
+  - The data volume is usually `/dev/xvdf`.
 
-   - BOOT /dev/xvda
-   - DATA /dev/xvdf
+2. **Configure**: Customize the instance to fit the needs of your organization.
+  - This might be an OS with certain applications and services installed or an instance with a certain set
+  of volumes attached of a certain size.
 
-2. Configure: customize the instance from applications or volume sizes.
+3. **Create Image or AMI**:
+  - AMIs contain permissions.
+  - EBS snapshots are created from attached EBS volumes.
+    - An AMI itself does not contain any real data volume. Snapshots are referenced inside the AMI using
+    block device mapping, which is a table of data that links the snapshot IDs that were just created when
+    making the AMI to a device ID that the original volumes had on the EC2 instance.
 
-3. Create Image or AMI
+4. **Launch**: When launching an instance using an AMI, these previously created snapshots are used to create
+  new EBS volumes in the AZ the EC2 instance is being launched into and those volumes are attached to that new
+  instance using the same device IDs that it contained in the block device mapping.
 
-    - AMI contains:
-      - Permissions: who can use it, is it public or private
-      - EBS snapshots are created from attached EBS volumes
-        - Snapshots are referenced inside the AMI using block device mapping.
-        - Table of data that links the snapshot IDs that you've just
-        created when making that AMI and it has for each one of those
-        snapshots, a device ID that the original volumes had on the EC2
-        instance.
+#### 1.6.11.2. AMI Exam PowerUp
 
-4. Launch: When launching an instance, the snapshots are used to create new EBS
-volumes in the AZ of the EC2 instance and contain the same block device mapping.
-
-#### 1.6.10.2. AMI Exam PowerUps
-
-- AMI can only be used in one region
-- AMI Baking: creating an AMI from a configuration instance.
-- An AMI cannot be edited. If you need to update an AMI, launch an instance,
-make changes, then make new AMI
-- Can be copied between regions
-- Remember permissions by default are your account only
-- Billing is for the storage capacity for the EBS snapshots the AMI references.
+- AMIs can only be used in one region.
+- AMI Baking means creating an AMI from a configured instance.
+- An AMI cannot be edited. If you need to update its configuration, use this AMI to launch an instance,
+make changes, then create a new AMI.
+- Can be copied between regions.
+- The default permissions on an AMI is that it is accessible only in your account.
+- Billing is for the storage capacity used by the EBS snapshots the AMI references to.
 
 ### 1.6.11. EC2 Pricing Models
 
