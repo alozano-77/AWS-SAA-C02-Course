@@ -2881,20 +2881,19 @@ servers get equal parts of the load.
 - Using smaller instances is less expensive.
 - Allows for better granularity.
 
-### 1.6.14. Instance Metadata
+### 1.6.15. Instance Metadata
 
-> A service EC2 provides to instances. It is data about the instance that can be used to configure or manage a running instance. It is a way an instance or anything running inside an instance can access information about the environment it wouldn't be able to access otherwise.
+> A service EC2 provides to instances. It is data about the instance that can be used to configure or manage a running instance.
+It is a way an instance or anything running inside an instance can access information about the environment it wouldn't be able to access otherwise.
 
 - Accessible inside all instances using the same access method.
 
 Memorize [instance metadata](http://169.254.169.254/latest/meta-data/) -> `http://169.254.169.254/latest/meta-data/`
 
-Meta-data contains information on the:
-
-- environment the instance is in.
+- Meta-data contains information on the environment the instance is in.
 - You can find out about the networking or user-data among other things.
 - This is not authenticated or encrypted. Anyone who can gain access to the
-instance can see the meta-data. This can be restricted by local firewall
+instance can see the meta-data. This can be restricted by local firewall.
 
 ---
 
