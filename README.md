@@ -2145,14 +2145,14 @@ EC2 provides Infrastructure as a Service (IaaS Product)
 
 ### 1.6.1. Virtualization 101
 
-Servers are configured in three sections without virtualization.
+Before virtualization the architecture of a server looked like this:
 
-- CPU hardware
+- Phyical resources (CPU, memory, network card, devices)
 - Kernel
   - Operating system
   - Runs in **privileged mode** and can interact with the hardware directly.
-- User Mode
-  - Runs applications.
+- Applications
+  - Runs in **user mode**
   - Can make a **system call** to the Kernel to interact with the hardware.
   - If an app tries to interact with the hardware without a system call, it
   will cause a system error and can crash the server or at minimum the app.
@@ -2161,75 +2161,83 @@ Servers are configured in three sections without virtualization.
 
 Host OS operated on the HW and included a hypervisor (HV).
 SW ran in privileged mode and had full access to the HW.
-Guest OS wrapped in a VM and had devices mapped into their OS to emulate real
+Guest OS was wrapped in a VM and had devices mapped into them to emulate real
 HW. Drivers such as graphics cards were all SW emulated to allow the process
 to run properly.
 
 The guest OS still believed they were running on real HW and tried
-to take control of the HW. The areas were not real and only allocated
-space to them for the moment.
+to take control of the HW. Areas of physical memory and disk were not real and only
+allocated to them by the HV. Without a special arrangement, this system would at best
+crash and at worst all the guests would overwrite each other's memories and disk areas.
 
-The HV performs **binary translation**.
-System calls are intercepted and translated in SW on the way. The guest OS needs
+To avoid this, the HV performs **binary translation**.
+System calls are intercepted and translated in SW on the fly. The guest OS needs
 no modification, but slows down a lot.
 
 #### 1.6.1.2. Para-Virtualization
 
-Guest OS are modified and run in HV containers, except they do not use slow
-binary translation. The OS is modified to change the **system calls** to
-**user calls**. Instead of calling on the HW, they call on the HV using
-**hypercalls**. Areas of the OS call the HV instead of the HW.
+Guest OS are modified and run in the same VMs, except they do not use slow
+binary translation anymore. The OS is modified to change the **system calls** to
+**user calls** but instead of calling on the HW, they call on the HV using
+**hypercalls**. So areas of the OS that would traditionally make priviledged calls
+directly to the HW are modified to call the HV instead. The OS needed to be
+modified specifically for the particular HV that was in use.
+
+The OS became almost virtualization aware which massively improved performance but
+it was still a set of software processes designed to trick the OS and other HW into
+believing that nothing had changed.
 
 #### 1.6.1.3. Hardware Assisted Virtualization
 
-The physical HW itself is virtualization aware. The CPU has specific
-functions so the HV can come in and support. When guest OS tries to run
-privileged instructions, they are trapped by the CPU and do not halt
+The physical HW itself is virtualization aware, primarily the CPU. The CPU has specific
+instructions so the HV can directly control and configure this support. When guest OS
+tries to run privileged instructions, they are trapped by the CPU and do not halt
 the process. They are redirected to the HV from the HW.
 
-What matters for a VM is the input and output operations such
-as network transfer and disk IO. The problem is multiple OS try to access
-the same piece of hardware but they get caught up on sharing.
+What matters for a VM is the input and output operations such as network transfer and disk
+IO. VMs have what they think is physical hardware as in the case of a network card but
+these cards are just logical devices using a driver that actually connect back to a single
+piece of physical hardware which sits in the host but, unless there is a physical network
+card per VM, there always going to be some level of software getting in the way.
+This hugely impacts performance and consumes a lot CPU cycles on the host when performing
+highly transactional activities.
 
-#### 1.6.1.4. SR-IOV (Singe Route IO virtualization)
+#### 1.6.1.4. SR-IOV (Single Route IO virtualization)
 
-Allows a network or any card to present itself as many mini cards.
-As far as the HV is concerned, they are real dedicated cards for their
-use. No translation needs to be done by the HV. The physical card
-handles it all. In EC2 this feature is called **enhanced networking**.
+HW devices themselves become virtualization aware. Allows a network or any card to
+present itself as many mini cards. As far as the HW is concerned, they are real dedicated
+cards for each guest OS' use. No translation needs to be done by the HV. The physical card
+which supports SR-IOV handles it all. In EC2 this feature is called **enhanced networking**.
+It means faster speeds, consistent lower latency even at high loads and less CPU usage for
+the host CPU even when the guest OS is consuming high amounts of consistent I/O.
 
 ### 1.6.2. EC2 Architecture and Resilience
 
-EC2 instances are virtual machines run on EC2 hosts.
+EC2 instances are virtual machines and run on EC2 hosts.
 
-Tenancy:
+These hosts can be classified into:
 
-- **Shared** - Instances are run on shared hardware, but isolated from other customers.
-- **Dedicated** - Instances are run on hardware that's dedicates to a single customer.
-  Dedicated instances may share hardware with other instances from the same AWS account
-  that are not Dedicated instances.
-- **Dedicated host** - Instances are run on a physical server fully dedicated for your use.
-  Pay for entire host, don't pay for instances.
+- **Shared hosts**: Instances are run on shared hardware, but isolated from other customers.
+Pay for the individual instances based on how they have been running for and what resources
+they have allocated.
+- **Dedicated hosts**: Instances are run on hardware that's dedicated to a single AWS
+account. Pay for entire host, don't pay for instances.
 
-- AZ resilient service. They run within only one AZ system.
-  - You can't access them cross zone.
+EC2 is an AZ resilient service. Instances run within only one AZ. You can't access them cross
+zone.
 
-EC2 host contains
+EC2 hosts contain:
 
 - Local hardware such as CPU and memory
-- Also have temporary instance store
+- Temporary local storage called Instance Store
   - If instance moves hosts, the storage is lost.
-- Can use remote storage, Elastic Block Store (EBS).
+- Remote storage: Elastic Block Store (EBS).
   - EBS allows you to allocate volumes of persistent storage to instances
 within the same AZ.
-- 2 types of networking
-  - Storage networking
-  - Data networking
-
-EC2 Networking (ENI)
+- 2 types of networking: Storage networking and data networking
 
 When instances are provisioned within a specific subnet within a VPC
-A primary elastic network interface is provisioned in a subnet which
+a primary elastic network interface (ENI) is provisioned in a subnet which
 maps to the physical hardware on the EC2 host. Subnets are also within
 one specific AZ. Instances can have multiple network interfaces, even within
 different subnets so long as they're within the same AZ.
@@ -2243,47 +2251,62 @@ it will stay on that host until either:
 The instance will be relocated to another host in the same AZ. Instances
 cannot move to different AZs. Everything about their hardware is locked within
 one specific AZ.
-A migration is taking a **copy** of an instance and moving it to a different AZ.
 
-In general instances of the same type and generation will occupy the same host.
+There is a way a migration could be done but it would mean taking a **copy** of an instance
+and creating a brand new one in a different AZ.
+
+In general, instances of the same type and generation will occupy the same host.
 The only difference will generally be their size.
 
 #### 1.6.2.1. EC2 Strengths
 
-Long running compute needs. Many other AWS services have run time limits.
-
-Server style applications
-
-- things waiting for network response
-- burst or stead-load
-- monolithic application stack
-  - middle ware or specific run time components
-- migrating application workloads or disaster recovery
+- Traditional OS+Application compute
+- Long running compute needs. Many other AWS services have run time limits.
+- Server style applications such as those that wait for incoming connections
+- Applications that have burst or steady-state load requirements
+- Monolithic application stacks
+  - database, middleware or specific run time components
+- Migrated application workloads or Disaster Recovery
   - existing applications running on a server and a backup system to intervene
 
 ### 1.6.3. EC2 Instance Types
 
-- **General Purpose** (T, M) - default steady state workloads with even resources
-- **Compute Optimized** (C) - Media processing, scientific modeling and gaming
+Choosing an instance type influences the following:
+
+- Raw amount of resources that you get
+  - CPU, memory, local storage capacity and the type of that storage
+- Resource Ratios
+  - Instance types suited to compute applications might give you more CPU and less memory
+for a given dollar spent
+- Storage and data network bandwidth
+- Architecture of the hardware instances run on
+  - ARM vs x86 architectures, Intel vs AMD CPUs
+- Additional features and capabilities
+  - GPU and FPGA
+
+- **General Purpose** (T, M) - Default. Diverse (occasional peaks) and steady-state
+workloads with even resource ratios.
+- **Compute Optimized** (C) - Media processing, HPC, scientific modelling, gaming and ML.
 - **Memory Optimized** (R, X) - Processing large in-memory data sets
 - **Accelerated Computing** (P, G, F) - Hardware GPU, FPGAs
 - **Storage Optimized** (H, I, D) - Large amounts of super fast local storage.
-  Massive amounts of IO per second. Elastic search and analytic workloads.
+  Sequential and random IO. Data warehousing, Elasticsearch search and analytic workloads.
 
 #### 1.6.3.1. Naming Scheme
 
-R5dn.8xlarge - whole thing is the instance type. When in doubt give the
-full instance type
+Example: R5dn.8xlarge
+
+Full string represents the instance type
 
 - 1st char: Instance family.
 - 2nd char: Instance generation. Generally always select the newest generation.
-- char after period: Instance size. Memory and CPU considerations.
-  - Often easier to scale system with a larger number of smaller instance sizes.
-- 3rd char - before period: additional capabilities
-  - a: amd cpu
+- 3rd and 4th chars: Additional capabilities
+  - a: AMD cpu
   - d: NVMe storage
   - n: network optimized
-  - e: extra capacity for ram or storage
+  - e: extra capacity for RAM or storage
+- String after period: Instance size. Memory and CPU considerations.
+  - Often easier to scale system with a larger number of smaller instance sizes.
 
 ### 1.6.4. Storage Refresher
 
@@ -2293,122 +2316,173 @@ full instance type
   - Ephemeral storage or temporary storage
 - **Elastic Block Store (EBS)**
   - Network attached storage
-  - Volumes delivered over the network
+  - Volumes delivered and attached to devices over the network
   - Persistent storage lives on past the lifetime of the instance
 
 #### 1.6.4.1. Three types of storage
 
-- Block Storage: Volume presented to the OS as a collection of blocks. No
-structure beyond that. These are mountable and bootable. The OS will
-create a file system on top of this, NTFS or EXT3 and then it mounts
-it as a drive or a root volume on Linux. Spinning hard disks or SSD. This
-could also be delivered by a physical volume. Has no built in structure.
-You can mount an EBS volume or boot off an EBS volume.
+- **Block Storage**: Volume presented to the OS as a collection of uniquely addressable blocks.
+Has no built in structure. These are mountable and bootable. The OS will
+create a file system on top of this such as NTFS or EXT3 and then it mounts
+it as a drive on Windows or a root volume on Linux. Spinning hard disks or SSD. This
+could also be delivered as a logical volume. You can mount an EBS volume or boot off an EBS
+volume.
 
-- File Storage: Presented as a file share with a structure. You access the
-files by traversing the storage. You cannot boot from storage, but you
-can mount it.
+- **File Storage**: Presented as a file share (a ready made file system) with a structure.
+You access the files by traversing the structure. You can create folders and store files
+on them. You cannot boot from storage, but you can mount it.
 
-- Object Storage: It is a flat collection of objects. An object can be anything
-with or without attached metadata. To retrieve the object, you need to provide
+- **Object Storage**: It is a flat collection of objects. No structure. An object can be
+anything. It can have attached metadata. To retrieve the object, you need to provide
 the key and then the value will be returned. This is not mountable or
 bootable. It scales very well and can have simultaneous access.
 
 #### 1.6.4.2. Storage Performance
 
-- IO Block Size: Determines how to split up the data.
-- IOPS: How many reads or writes a system can accommodate per second.
-- Throughput: End rate achieved, expressed in MB/s (megabyte per second).
+- **IO (Block) Size**: It is the size of the blocks of data that you are writing to or reading
+from disk per IO operation. Determines how to split up the data. If your storage block size
+is 16 kb and you write 64 kb of data, it will use 4 blocks.
+- **IOPS**: How many reads or writes a system can accommodate per second.
+- **Throughput**: Rate of data a storage system can store on a particular device,
+expressed in MB/s (megabyte per second).
 
 `Block Size * IOPS = Throughput`
 
-This isn't the only part of the chain, but it is a simplification.
-A system might have a throughput cap. The IOPS might decrease as the block
+These aren't the only part of the storage chain. It is a simplification.
+A system might have a throughput capacity. The IOPS might decrease as the block
 size increases.
 
 ### 1.6.5. Elastic Block Store (EBS)
 
-- Allocate block storage **volumes** to instances.
+- Provides block storage
+  - It takes raw physical disks and it presents an allocation of these physical disks
+known as volumes
+  - Instances see block devices and create a file system on these
 - Volumes are isolated to one AZ.
   - The data is highly available and resilient for that AZ.
   - All of the data is replicated within that AZ. The entire AZ must have
   a major fault to go down.
-- Two physical storage types available (SSD/HDD)
-- Varying level of performance (IOPS, T-put)
-- Billed as GB/month.
-  - If you provision a 1TB for an entire month, you're billed as such.
-  - If you have half of the data, you are billed for half of the month.
-- Four types of volumes, each with a dominant performance attribute.
-  - General purpose SSD (gp2)
-  - Provisioned IOPS SSD (io1)
+- Generally, attached to one EC2 instance (or other service) over a storage network
+  - Can be detached from one instance and reattached to another
+  - Only io1 volume types have a multi-attach feature that allows them to be attached
+to multiple EC2 instances at the same type.
+- A backup of a volume can be created into S3 in the form of a snapshot
+  - Snapshots can be used to migrate volumes between AZs
+- Different physical storage types, different sizes and different performance profiles
+- Billed using GB-month.
+  - The price for 1GB for 1 month would be the same as 2GB for half a month and the same
+as half a GB for 2 months.
+  - There are some extra charges for certain types of volumes with specific enhanced
+performance characteristics.
+- There is a maximum per instance performance that can be achieved between the EBS service
+and a single EC2 instance.
+  - Influenced by the type of volume, the type of the instance and the size of the instance.
+  - These are more than one volume can provide on its own so multiple volumes would
+be needed to saturate these maximums.
+- Four types of volumes, each with a dominant performance attribute:
+  - General purpose SSD (gp2, gp3)
+  - Provisioned IOPS SSD (io1, io2, io2 Block Express) 
     - maximum IOPS such as databases
-  - T-put optimized HDD (st1)
-    - maximum t-put for logs or media storage
+  - Throughput optimized HDD (st1)
+    - maximum throughput for logs or media storage
   - Cold HDD (sc1)
 
-#### 1.6.5.1. General Purpose SSD (gp2)
+#### 1.6.5.1. General Purpose SSD (gp2, gp3)
 
-Uses a performance bucket architecture based on the IOPS it can deliver.
-The GP2 starts with 5,400,000 IOPS allocated. It is all available instantly.
+Two types:
+- gp2
+- gp3
 
-You can consume the capacity quickly or slowly over the life of the volume.
-The capacity is filled back based upon the volume size.
-Min of 100 IOPS added back to the bucket per second.
+gp2 and gp3 volumes can be as small as 1GB or as large as 16TB
 
-Above that, there are 3 IOPS/GiB of volume size. The max is 16,000 IOPS.
-This is the **baseline performance**
+gp2 volumes are created with IO credit allocation. An IO credit allows you to use an
+IO operation.
 
-Default for boot volumes and should be the default for data volumes.
-Can only be attached to one EC2 instance at a time.
+gp2 volumes can be thought of as IO Buckets with a capacity of 5.4 million IO credits that
+fill at the **Baseline Performance** rate of the volume. All volumes start with their
+maximum capacity.
 
-#### 1.6.5.2. Provisioned IOPS SSD (io1)
+An IO Bucket fills with a minimun of 100 IO credits per second regardless of volume size.
+Beyond this, it fills with 3 IO credits per second per GB of volume size. These rates 
+constitute the **Baseline Performance**, which can go up to a maximum of 16000 IO credits
+per second.
 
-You pay for capacity and the IOPs set on the volume.
-This is good if your volume size is small but need a lot of IOPS.
+Can burst up to 3000 IOPS for volumes smaller than 1 TB. Great for boots and initial
+workloads.
 
-50:1 IOPS to GiB Ratio
-64,000 is the max IOPS per volume assuming 16 KiB I/O.
+If you are consuming more IO credits than the rate at which the bucket is refilling then
+you are depleting the bucket.
 
-Good for latency sensitive workloads such as mongoDB.
-Multi-attach allows them to attach to multiple EC2 instances at once.
+gp3 volumes are not based on a credit bucket architecture as gp2.
 
-#### 1.6.5.3. HDD Volume Types
+Every gp3 volume regardless of size starts with a standard 3000 IOPS and a throughput
+of 125 MB/s.
 
-- great value
-- great for high throughput vs IOPs
-- 500 GiB - 16 TiB
-- Neither can be used for EC2 boot volumes.
-- Good for streaming data on a hard disk.
-  - Media conversion with large amounts of storage.
-- Frequently accessed high throughput intensive workload
-  - log processing
-  - data warehouses
-- The access patterns should be sequential
-  - Massive inefficiency for small reads and writes
+The base price for gp3 is approximately 20% cheaper than gp2 and you can pay extra cost
+for up to 16000 IOPS or 1000 MB/s. This throughput is 4 times faster than gp2 whose maximum
+is 250 MB/s.
 
-Two types
+With gp2 and gp3 volumes you can achieve a maximum of 260000 IOPS per instance and a
+throughput of 70000 MB/s per instance.
 
+#### 1.6.5.2. Provisioned IOPS SSD (io1, io2, io2 Block Express)
+
+Three types:
+- io1
+- io2
+- io2 Block Express
+
+IOPS can be adjusted independently of the size of the volume and are designed for super
+high performance situations.
+
+With io1 and io2 you can achieve a maximum of 64000 IOPS per volume and a maximum of
+1000 MB/s of throughput per volume. With io2 Block Express you can achieve 256000 IOPS per
+volume and 4000 MB/s of throughput per volume.
+
+io1 and io2 volumes can be as small as 4 GB or as large as 16TB. io2 Block Express volumes
+can be as small as 4 GB or as large as 64 TB.
+
+For these types of volumes you pay for both the size and the provisioned IOPS that you need.
+
+There is a maximum at the size to performance ratio. For io1 it is 50 IOPS per GB of volume
+size which is bigger than the 3 IOPS per GB for gp2. For io2 this increases to 500 IOPS
+per GB of volume size. For io2 Block Express it is 1000 IOPS per GB of volume size.
+
+With io1 and io2 Block Express volumes you can achieve a maximum of 260000 IOPS per instance
+and a throughput of 7500 MB/s per instance. With io2 volumes these decrease to 160000 IOPS
+per instance and 4750 MB/s per instance. 
+
+Used for high performance, latency sensitive workloads, IO intensive NoSQL and relational
+databases. A common use case is when you have smaller volumes but need super high
+performance.
+
+io1 volumes types are the only ones that can be attached to multiple EC2 instances at the same time.
+
+#### 1.6.5.3. HDD Volume Types (st1, sc1)
+
+Two types:
 - st1
-  - Starts at 1 TiB of credit per TiB of volume size.
-  - 40 MB/s baseline per TiB
-  - Burst of 250 MB/s per TiB
-  - Max t-put of 500 MB/s
+  - Throughput optimized HDD
+  - Less expensive than SDD volumes
+  - Because it is HDD-based it is not great at random access. It is designed for data
+that needs to be written or read in a sequential way.
+  - 125 GB to 16 TB in size
+  - Maximum of 500 IOPS and, since IO on HDD-based volumes is measured as 1 MB blocks, it
+means a maximum throughput of 500 MB/s.
+  - Has a credit bucket architecture as gp2 volumes but with MB/s instead of IOPS.
+  - Baseline performance of 40 MB/s for every TB of volume size and a burst to a maximum
+of 250 MB/s for every TB of volume size.
+  - Designed for frequently accessed high throughput intensive sequential workloads such as
+big data, data warehousing and log processing.
 - sc1
-  - Designed for less frequently accessed data, it fills slower.
-  - 12 MB/s baseline per TiB
-  - Burst of 80 MB/s per TiB
-  - Max t-put of 250 MB/s
-
-#### 1.6.5.4. EBS Exam Power Up
-
-- Volumes are created in an AZ, isolated in that AZ.
-- If an AZ fails, the volume is impacted.
-- Highly available and resilient in that AZ. The only reason for failure is
-if the whole AZ fails.
-- Generally one volume to one instance, except **io1** with multi-attach
-- Has a GB/m fee regardless of instance state.
-- EBS maxes at 80k IOPS per instance and 64k vol (io1)
-- Max 2375 MB/s per instance, 1000 MiB/s (vol) (io1)
+  - Cold HDD 
+  - Even cheaper than st1
+  - 125 GB to 16 TB in size
+  - Maximum of 250 IOPS and a maximum throughput of 250 MB/s
+  - Has a credit bucket architecture as gp2 volumes but with MB/s instead of IOPS.
+  - Baseline performance of 12 MB/s for every TB of volume size and a burst to a maximum
+of 80 MB/s for every TB of volume size.
+  - Designed for less frequently accessed workloads such as archives
 
 ### 1.6.6. EC2 Instance Store
 
@@ -2445,317 +2519,332 @@ at all.
 
 ### 1.6.7. EBS vs Instance Store
 
-If the read/write can be handled by EBS, that should be default.
+- If you need **persistent storage** you should choose EBS since there are many reasons data
+can be lost in Instance Store volumes such as hardware failure, rebooting, maintenance,
+anything that moves instances between hosts. An exception to this happens if your
+application supports **built-in** replication. In that case you can use lots of Instance
+Store volumes on lots of instances and that way you get their performance benefits without
+the negative risks.
 
-When to use EBS
+- If you need **resilient storage** you should choose EBS since it provides hardware that is
+resilient within an AZ and you also have the ability to snapshot volumes to S3, which is
+regionally resilient.
 
-- Highly available and reliable in an AZ. Can self correct against HW issues.
-- Persist independently from EC2 instances.
-  - Can be removed or reattached.
-  - You can terminated instance and keep the data.
-- Multi-attach feature of **io1**
-  - Can create a multi shared volume.
-- Region resilient backups.
-- Require up to 64,000 IOPS and 1,000 MiB/s per volume
-- Require up to 80,000 IOPS and 2,375 MB/s per instance
+- If you need storage that needs to be **isolated from instance lifecyle** you should choose
+EBS. For example, if you need a volume which you can attach to one instance, use it for
+a while, unattach it and then reattach it to something else.
 
-When to use Instance Store
+- If you need **high performance** you can choose both EBS and Instance Store.
 
-- Great value, they're included in the cost of an instance.
-- More than 80,000 IOPS and 2,375 MB/s
-- If you need temporary storage, or can handle volatility.
-- Stateless services, where the server holds nothing of value.
-- Rigid lifecycle link between storage and the instance.
-  - This ensures the data is erased when the instance goes down.
+- If you need **super high performance** you will need to default to using Instance Store
+volumes.
 
-### 1.6.8. EBS Snapshots, restore, and fast snapshot restore
+- If **cost** is a primary concern you should look at using Instance Store volumes since
+they are included with the price of many EC2 instances. If you are forced to use EBS you
+should default to st1 or sc1 volume types.
+
+- If you need **up to 16000 IOPS** choose gp2 or gp3.
+
+- If you need **between 16000 and 64000 IOPS** you need to pick io1 or io2.
+
+- If you need **up to 260000 IOPS** (maximum IOPS per instance) you can take lots of
+indivual EBS volumes and you can create a RAID 0 set from those volumes to get up to the
+combined performance of all the individual volumes.
+
+- If you need **more than 260000 IOPS** and your application can tolerate storage which is
+not persistent then you can decide to use Instance Store volumes.
+
+### 1.6.8. Snapshots, Restore and Fast Snapshot Restore (FSR)
 
 - Efficient way to backup EBS volumes to S3.
-  - The data becomes region resilient.
+  - The data becomes regionally resilient.
 - Can be used to migrate data between hosts.
-
-Snapshots are incremental volume copies to S3.
-The first is a **full copy** of `data` on the volume. This can take some time.
-EBS won't be impacted, but will take time in the background.
-Future snaps are incremental, consume less space and are quicker to perform.
-
-If you delete an incremental snapshot, it moves data to ensure subsequent
+- Snapshots are incremental volume copies to S3.
+  - The first is a **full copy** of `data` on the volume and can take some time.
+  - It just copies the data used, so if you use 10 GB of a 40 GB volume then the initial snapshot
+is 10GB, not the full 40 GB. EBS won't be impacted, but will take time to copy in the background.
+  - Future snapshots are incremental, they only store the difference
+between the previous snapshot and the state of the volume when this snapshot is taken.
+Because of that they consume less space and are quicker to perform.
+- If you delete an incremental snapshot, it moves data to ensure subsequent
 snapshots will work properly.
+- Volumes can be created (restored) from snapshots.
+- Snapshots can be used to move EBS volumes between AZs.
+- Snapshots can be used to migrate data on volumes between regions.
 
-Volumes can be created (restored) from snapshots.
-Snapshots can be used to move EBS volumes between AZs.
-Snapshots can be used to migrate data between volumes.
+#### 1.6.8.1. Snapshot and Volume Performance
 
-#### 1.6.8.1. Snapshot and volume performance
-
-- When creating a new EBS volume without a snapshot, the performance is
+- When creating a new EBS volume without a snapshot, full performance is
 available immediately.
-- When restoring from S3, performs **Lazy Restore**
-  - If you restore a volume, it will transfer it slowly in the background.
+- When restoring from S3, performs **Lazy Restore**.
+  - If you restore a volume, it will transfer the data slowly in the background.
   - If you attempt to read data that hasn't been restored yet, it will
   immediately pull it from S3, but this will achieve lower levels of performance
   than reading from EBS directly.
-  - You can force a read of every block all data immediately using DD.
 
 Fast Snapshot Restore (FSR) allows for immediate restoration.
 You can create 50 of these FSRs per region. When you enable it on
 a snapshot, you pick the snapshot specifically and the AZ that you want to be
 able to do instant restores to. Each combination of Snapshot and AZ counts
 as one FSR set. You can have 50 FSR sets per region.
-FSR is not free and can get expensive with lost of different snapshots.
+FSR is not free and can get expensive with lots of different snapshots. You can have
+the same result is you force a read of every block of the volume immediately using dd on Linux
+but with the admin overhead it implies.
 
 #### 1.6.8.2. Snapshot Consumption and Billing
 
-Billed using a GB/month metric.
-20 GB stored for half a month, represents 10 GB-month.
+Billed using a GB-month metric.
+20 GB snapshots stored for half a month, represents 10 GB-month.
 
 This is used data, not allocated data. If you have a 40 GB volume but only
-use 10 GB, you will only be charged for the allocated data.
-This is not how EBS itself works.
+use 10 GB, you will only be charged for these 10 GB of data used on the volume
+when performing a snapshot.
 
 The data is incrementally stored which means doing a snapshot every 5 minutes
 will not necessarily increase the charge as opposed to doing one every hour.
 
-#### 1.6.8.3. EBS Encryption
+#### 1.6.9. EBS Encryption
 
-Provides at rest encryption for block volumes and snapshots.
+Provides at rest encryption for volumes and snapshots. By default no encryption is applied.
 
-When you don't have EBS encryption, the volume is not encrypted.
-The physical hardware itself may be performing at rest encryption, but
+When you don't have EBS encryption enable, EBS as a service is not performing any encryption
+but the OS itself still could be performing disk encryption internally, but
 that is a separate thing.
 
-When you set up an EBS volume initially, EBS uses KMS and a customer master key.
-This can be the EBS default (CMK) which is referred to as `aws/ebs` or it
+When you set up an EBS volume initially, EBS uses KMS and a Customer Master Key (CMK).
+This can either be the EBS default AWS managed CMK which is referred to as `aws/ebs` or it
 could be a customer managed CMK which you manage yourself.
 
 That key is used by EBS when an encrypted volume is created. The CMK
-generates an encrypted **data encryption key (DEK)** which is stored with the volume with
-on the physical disk. This key can only be decrypted using KMS when a role with
-the proper permissions to decrypt that DEK.
+generates an encrypted **Data Encryption Key (DEK)** which is stored with the volume
+on the physical disk. This key can only be decrypted using KMS assuming that the entity
+trying to do it has the permissions to decrypt that DEK.
 
-When the volume is first used, EBS asks CMS to decrypt the key and stores
-the decrypted key in memory on the EC2 host while it's being used. At all
-other times it's stored on the volume in encrypted form.
+When the volume is first used, EBS asks KMS to decrypt the key, which is loaded
+into the memory of the EC2 host while it's being used. And all
+the times it's stored on the volume in encrypted form.
 
 When the EC2 instance is using the encrypted volume, it can use the
-decrypted data encryption key to move data on and off the volume. It is used
-for all cryptographic operations when data is being used to and from the
-volume.
+decrypted DEK to move data on and off the volume. It is used
+for all cryptographic operations by the EC2 host when data is being written to this volume
+or read from this volume.
 
 When data is stored at rest, it is stored as ciphertext.
 
-If the EBS volume is ever moved, the key is discarded.
+If the EC2 instance is ever moved from a host to another, the key is discarded.
 
-If a snapshot is made of an encrypted EBS volume, the same data encryption
-key is used for that snapshot. Anything made from this snapshot is also
-encrypted in the same way.
+If a snapshot is made of an encrypted EBS volume, the same DEK is used
+for that snapshot. Anything made from this snapshot is also
+encrypted with the same key.
 
 Every time you create a new EBS volume from scratch, it creates a new
 data encryption key.
 
-##### 1.6.8.3.1. EBS Encryption Exam Power Up
+##### 1.6.9.1. EBS Encryption Exam Power Up
 
 - AWS accounts can be set to encrypt EBS volumes by default.
-  - It will use the default CMK unless a different one is chosen.
-  - Each volume uses 1 unique DEK (data encryption key)
-  - Snapshots and future volume use the same DEK
-- Can't change a volume to NOT be encrypted.
+  - It will use either the default CMK or a customer managed CMK.
+  - Each volume uses 1 unique DEK.
+  - Snapshots and future volumes use the same DEK.
+- Can't change a volume to NOT be encrypted. Once you encrypt a volume it stays that way.
   - You could mount an unencrypted volume and copy things over but you can't
   change the original volume.
 - The OS itself isn't aware of the encryption, there is no performance loss.
   - The volume itself is encrypted using AES256
   - This occurs between the EC2 host and the EBS system itself.
   - The OS does not see any encryption. It simply writes data out and reads
-  data in from a disk.
-  - If an exam question does not use AES256, or it suggests you need an OS to
-encrypt or hold the keys, then you need to perform full disk encryption
-at the operating system level.
+  data in from a disk. No performance loss.
+  - The volume itself is encrypted using AES256 and this occurs between the EC2 host and the EBS system
+  itself. If an exam question does not use AES256, or it suggests you need the OS to
+  encrypt things or hold the keys, then you need to perform full disk encryption
+  at the operating system level, which is a separate thing.
 
-### 1.6.9. EC2 Network Interfaces, Instance IPs and DNS
+### 1.6.10. EC2 Network Interfaces, Instance IPs and DNS
 
-An EC2 instance starts with at least one ENI - elastic network interface.
-An instance may have ENIs in separate subnets, but everything must be
-within one AZ.
+An EC2 instance starts with at least one Elastic Network Interface (ENI),
+which is the primary ENI. Optionally, you can attach one or more secondary ENIs
+which can be in separate subnets, but everything must be within one AZ.
 
-When you launch an instance with Security Groups, they are on the
-network interface and not the instance.
+ENIs have attributes like IP addresses, DNS names and Security Groups which are presented
+as being attached to the EC2 instance itself, but from a networking perspective they are actually on
+the ENIs not the instance.
 
-#### 1.6.9.1. Elastic Network Interface (ENI)
+#### 1.6.10.1. Elastic Network Interface (ENI)
 
-Has these properties
+These are attached to ENIs:
 
 - MAC address
 - Primary IPv4 private address
-  - From the range of the subnet the ENI is within.
-  - Will be static and not change for the lifetime of the instance
-    - `10.16.0.10`
-  - Given a DNS name that is associated with the address.
-    - `ip-10-16-0-10.ec2.internal`
-    - Only resolvable inside the VPC and always points at private IP address
+  - From the range of the subnet the ENI is created in.
+  - Will be static and not change for the lifetime of the instance.
+  - Given a DNS name such as `ip-10-16-0-10.ec2.internal` that is associated with the address,
+  this is only resolvable inside the VPC and always points at this address.
 - 0 or more secondary private IP addresses
-- 0 or 1 public IPv4 address
-  - The instance must manually be set to receive an IPv4 address or spun into a
-subnet which automatically allocates an IPv4.
-This is a dynamic IP that is not fixed.
-If you stop an instance the address is removed.
-When you start up again, it is given a brand new IPv4 address.
-Restarting the instance will not change the IP address.
-Changing between EC2 hosts will change the address.
-This will be allocated a public DNS name. The Public DNS name will resolve to
-the primary private IPv4 address of the instance.
-Outside of the VPC, the DNS will resolve to the public IP address.
-This allows one single DNS name for an instance, and allows traffic to resolve
-to an internal address inside the VPC and the public will resolve to a public
-IP address.
+- 0 or 1 public IPv4 addresses
+  - The instance must manually be set to receive a public IPv4 address or launched into a
+  subnet which automatically allocates IPv4 public addresses.
+  This is a dynamic IP. It is not fixed.
+  If you stop an instance the address is removed.
+  When you start up again, it is given a brand new IPv4 address.
+  Restarting the instance will not change the IP address.
+  Changing between EC2 hosts will change the address.
+  This will be allocated a public DNS name such as `ec2-3-89-7-136.compute-1.amazonaws.com`.
+  This public DNS name will resolve to the primary private IPv4 address of the instance inside
+  the VPC. Outside of the VPC, the DNS will resolve to the public IP address.
+  This allows one single DNS name for an instance.
 - 1 elastic IP per private IPv4 address
   - Can have 1 public elastic interface per private IP address on this interface.
-This is allocated to your AWS account.
-Can associate with a private IP on the primary interface or secondary interface.
-If you are using a public IPv4 and assign an elastic IP, the original IPv4
-address will be lost. There is no way to recover the original address.
+  This is allocated to your AWS account.
+  Can be associated with a private IP on the primary interface or secondary interface.
+  If you are using a public IPv4 and assign an elastic IP, the original IPv4
+  address will be lost. There is no way to recover the original address.
 - 0 or more IPv6 address on the interface
   - These are by default public addresses.
 - Security groups
   - Applied to network interfaces.
   - Will impact all IP addresses on that interface.
-  - If you need different IP addresses impacted by different security
-  groups, then you need to make multiple interfaces and apply different
-  security groups to those interfaces.
+  - If you need different IP addresses for an instance impacted by different security
+  groups, then you need to create multiple interfaces with those IP addresses separated
+  and apply different security groups to those interfaces.
 - Source / destination checks
-  - If traffic is on the interface, it will be discarded if it is not
-  from going to or coming from one of the IP addresses
+  - If traffic is on the interface and this is enabled, it will be discarded if it is not
+  from one of the IP addresses on the interface as a source or destined to one of the IP
+  addresses on the interface as a destination. That explain why this setting should be
+  disabled for an EC2 to work as a NAT instance.
 
 Secondary interfaces function in all the same ways as primary interfaces except
-you can detach interfaces and move them to other EC2 instances.
+you can dettach them and move them to other EC2 instances.
 
-#### 1.6.9.2. ENI Exam PowerUp
+#### 1.6.10.2. ENI Exam PowerUp
 
-- Legacy software is licensed using a mac address.
-  - If you provision a secondary ENI to a specific license, you can move
-around the license to different EC2 instances.
-- Multi homed (subnets) management and data.
+- Legacy software is licensed using a MAC address.
+  - If you provision a secondary ENI on an instance and use that interface's MAC address
+  for licensing, you can dettach that interface and attach it to a new instance, and
+  move that licensing between EC2 instances.
+- Multi-homed systems.
+  - An instance with an ENI in two different subnets where one can be used for management
+  and the other for data.
 - Different security groups are attached to different interfaces.
-- The OS doesn't see the IPv4 public address.
+  - If you need different rules for different types of access based on IPs your instance has,
+  then you need multiple elastic network interfaces with different security groups on each.
+- The OS never sees the IPv4 public address.
 - You always configure the private IPv4 private address on the interface.
-- Never configure an OS with a public IPv4 address.
-- IPv4 Public IPs are Dynamic, starting and stopping will kill it.
+- You never configure a network interface inside an OS with a public IPv4 address inside AWS.
+- IPv4 Public IPs are dynamic, starting and stopping an instance will kill it.
+- Public DNS for a given instance will resolve to the primary private IP
+address inside a VPC. If you have instance-to-instance communication within
+the VPC, it will never leave the VPC. It does not need to go out to the internet gateway.
 
-Public DNS for a given instance will resolve to the primary private IP
-address in a VPC. If you have instance to instance communication within
-the VPC, it will never leave the VPC. It does not need to touch the internet
-gateway.
+### 1.6.11. Amazon Machine Images (AMI)
 
-### 1.6.10. Amazon Machine Image (AMI)
-
-Images of EC2 instances that can launch more EC2 instance.
+Images of EC2 instances. They are one way you can create a template of an instance configuration
+and then use that template to create many instances from that configuration.
 
 - When you launch an EC2 instance, you are using an Amazon provided AMI.
-- Can be Amazon or community provided
-- Marketplace (can include commercial software)
-  - Will charge you for the instance cost and an extra cost for the AMI
+- AMIs can be Amazon or community provided.
+- AMIs can be marketplace provided (can include commercial software).
+  - Will charge you for the instance cost and an extra cost for the AMI.
 - AMIs are regional with a unique ID.
-- Controls permissions
-  - Default only your account can use it.
+  - They can only be used in the region that they are in.
+- AMIs control permissions.
+  - By default only your account can use them.
   - Can be set to be public.
-  - Can have specific AWS accounts on the AMI.
-- Can create an AMI from an existing EC2 instance to capture the current config.
+  - Can have specific AWS accounts on them.
+- You can create an AMI from an existing EC2 instance to capture the current config of that instance.
 
-#### 1.6.10.1. AMI Lifecycle
+#### 1.6.11.1. AMI Lifecycle
 
-1. Launch: EBS volumes are attached to EC2 devices using block IDs.
+1. **Launch**: An AMI is used to launch an EC2 instance.
+  - EBS volumes are attached to EC2 devices using block device IDs.
+  - The boot volume is usually `/dev/xvda`.
+  - The data volume is usually `/dev/xvdf`.
 
-   - BOOT /dev/xvda
-   - DATA /dev/xvdf
+2. **Configure**: Customize the instance to fit the needs of your organization.
+  - This might be an OS with certain applications and services installed or an instance with a certain set
+  of volumes attached of a certain size.
 
-2. Configure: customize the instance from applications or volume sizes.
+3. **Create Image or AMI**:
+  - AMIs contain permissions.
+  - EBS snapshots are created from attached EBS volumes.
+    - An AMI itself does not contain any real data volume. Snapshots are referenced inside the AMI using
+    block device mapping, which is a table of data that links the snapshot IDs that were just created when
+    making the AMI to a device ID that the original volumes had on the EC2 instance.
 
-3. Create Image or AMI
+4. **Launch**: When launching an instance using an AMI, these previously created snapshots are used to create
+  new EBS volumes in the AZ the EC2 instance is being launched into and those volumes are attached to that new
+  instance using the same device IDs that it contained in the block device mapping.
 
-    - AMI contains:
-      - Permissions: who can use it, is it public or private
-      - EBS snapshots are created from attached EBS volumes
-        - Snapshots are referenced inside the AMI using block device mapping.
-        - Table of data that links the snapshot IDs that you've just
-        created when making that AMI and it has for each one of those
-        snapshots, a device ID that the original volumes had on the EC2
-        instance.
+#### 1.6.11.2. AMI Exam PowerUp
 
-4. Launch: When launching an instance, the snapshots are used to create new EBS
-volumes in the AZ of the EC2 instance and contain the same block device mapping.
+- AMIs can only be used in one region.
+- AMI Baking means creating an AMI from a configured instance.
+- An AMI cannot be edited. If you need to update its configuration, use this AMI to launch an instance,
+make changes, then create a new AMI.
+- Can be copied between regions.
+- The default permissions on an AMI is that it is accessible only in your account.
+- Billing is for the storage capacity used by the EBS snapshots the AMI references to.
 
-#### 1.6.10.2. AMI Exam PowerUps
+### 1.6.12. Instance Billing Models
 
-- AMI can only be used in one region
-- AMI Baking: creating an AMI from a configuration instance.
-- An AMI cannot be edited. If you need to update an AMI, launch an instance,
-make changes, then make new AMI
-- Can be copied between regions
-- Remember permissions by default are your account only
-- Billing is for the storage capacity for the EBS snapshots the AMI references.
+#### 1.6.12.1. On-Demand Instances
 
-### 1.6.11. EC2 Pricing Models
-
-#### 1.6.11.1. On-Demand Instances
-
-- Hourly rate based on OS, size, options, etc
-- Billed in seconds (60s min) or hourly
-  - Depends on the OS
-- Default pricing model
-- No long-term commitments or upfront payments
-- New or uncertain application requirements
+- Hourly rate based on OS, size, options, etc.
+- Billed in seconds or hourly.
+  - Depends on the OS.
+- Default pricing model.
+- No long-term commitments or upfront payments.
+- New or uncertain application requirements.
 - Short-term, spiky, or unpredictable workloads which can't tolerate disruption.
 
-#### 1.6.11.2. Spot Instances
+#### 1.6.12.2. Spot Instances
 
-Up to 90% off on-demand, but depends on the spare capacity.
-You can set a maximum hourly rate in a certain AZ in a certain region.
-If the max price you set is above the spot price, you pay only that spot
-price for the duration that you consume that instance.
-As the spot price increases, you pay more.
-Once this price increases past your maximum, it will terminate the instance.
-Great for data analytics when the process can occur later at a lower use time.
+- Up to 90% off on-demand, but depends on the spare capacity.
+- You can set a maximum hourly rate in a certain AZ in a certain region.
+  - If the max price you set is above the spot price, you pay only that spot
+  price for the duration that you consume that instance.
+  - As the spot price increases, you pay more.
+  - Once this price increases past your maximum, it will terminate the instance.
+- Great for data analytics when the process can occur later at a lower use time.
 
-#### 1.6.11.3. Reserved Instance
+#### 1.6.12.3. Reserved Instances
 
-Up to 75% off on-demand.
-The trade off is commitment.
-You're buying capacity in advance for 1 or 3 years.
-Flexibility on how to pay
+- Up to 75% off on-demand.
+- The trade off is commitment.
+- You're buying capacity in advance for 1 or 3 years.
+- Flexibility on how to pay:
+  - All up front
+  - Partial upfront
+  - No upfront
+- Best discounts are for 3 years all up front.
+- Reserved in a region or AZ with capacity reservation.
+- Reserved instances take priority for AZ capacity.
+- Can perform scheduled reservation when you can commit to specific time windows.
+- Great if you have a known steady state usage, email usage, domain server.
+- Cheapest option with no tolerance for disruption.
 
-- All up front
-- Partial upfront
-- No upfront
+### 1.6.13. Instance Status Checks and Auto Recovery
 
-Best discounts are for 3 years all up front.
-Reserved in region, or AZ with capacity reservation.
-Reserved instances takes priority for AZ capacity.
-Can perform scheduled reservation when you can commit to specific time windows.
-
-Great if you have a known stead state usage, email usage, domain server.
-Cheapest option with no tolerance for disruption.
-
-### 1.6.12. Instance Status Checks and Autorecovery
-
-Every instance has two high level status checks
+Every instance has two high level status checks:
 
 - System Status Checks
   - Failure of this check could indicate SW or HW problems of the EC2
-service or the host.
+  service or the host.
 - Instance Status Checks
-  - Specific to the file system or has a corrupted Kernel.
+  - Specific to the file system.
+  - Failure of this check could indicate a corrupted Kernel.
 
-Autorecovery can kick in and help,
+Auto recovery can kick in and help in the following ways:
 
-- Recover this instance
-  - can be a number of steps depending on the failure
-- Stop this instance
-- Terminate this instance
-  - useful in a cluster
-- Reboot this instance
+- Recover this instance.
+  - Can be a number of steps depending on the failure.
+- Stop this instance.
+- Terminate this instance.
+  - Useful in a cluster.
+- Reboot this instance.
 
-### 1.6.13. Horizontal and Vertical Scaling
+### 1.6.14. Horizontal and Vertical Scaling
 
-#### 1.6.13.1. Vertical Scaling
+#### 1.6.14.1. Vertical Scaling
 
 As customer load increases, the server may need to grow to handle more data.
 The server can increase in capacity, but this will require a reboot.
@@ -2764,13 +2853,12 @@ The server can increase in capacity, but this will require a reboot.
 - Larger instances also carry a **$ premium** compared to smaller instances.
 - Instance size is an upper cap on performance.
 - No application modification is needed.
-  - Works for all applications, even monoliths (all code in one app)
+  - Works for all applications, even monoliths (all code in one app).
 
-#### 1.6.13.2. Horizontal Scaling
+#### 1.6.14.2. Horizontal Scaling
 
 As the customer load increases, this adds additional capacity.
-Instead of one running copy of an application, you can have multiple versions
-running on each server.
+Instead of one running copy of an application, you can have multiple versions running on each server.
 This requires a load balancer.
 
 > A load balancer is an _appliance_ that sits in between your servers -- in this case instances -- and your customers.
@@ -2784,29 +2872,28 @@ servers get equal parts of the load.
 - This requires either *application support* or *off-host* sessions.
   - If you use off-host sessions, then your session data is stored in another place, an external database.
   - This means that the servers are what's called **stateless**, they are just dump instances of your application.
-  - The application does care which instance you are connected to because your session is externally hosted somewhere else.
+  - The application doesn't care which instance you are connected to because your session is externally hosted somewhere else.
 
-#### 1.6.13.3. Benefits of Horizontal Scaling
+#### 1.6.14.3. Benefits of Horizontal Scaling
 
 - No disruption while scaling up or down.
 - No real limits to scaling.
-- Uses smaller instances is less expensive.
+- Using smaller instances is less expensive.
 - Allows for better granularity.
 
-### 1.6.14. Instance Metadata
+### 1.6.15. Instance Metadata
 
-> A service EC2 provides to instances. It is data about the instance that can be used to configure or manage a running instance. It is a way an instance or anything running inside an instance can access information about the environment it wouldn't be able to access otherwise.
+> A service EC2 provides to instances. It is data about the instance that can be used to configure or manage a running instance.
+It is a way an instance or anything running inside an instance can access information about the environment it wouldn't be able to access otherwise.
 
 - Accessible inside all instances using the same access method.
 
 Memorize [instance metadata](http://169.254.169.254/latest/meta-data/) -> `http://169.254.169.254/latest/meta-data/`
 
-Meta-data contains information on the:
-
-- environment the instance is in.
+- Meta-data contains information on the environment the instance is in.
 - You can find out about the networking or user-data among other things.
 - This is not authenticated or encrypted. Anyone who can gain access to the
-instance can see the meta-data. This can be restricted by local firewall
+instance can see the meta-data. This can be restricted by local firewall.
 
 ---
 
