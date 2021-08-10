@@ -2842,9 +2842,9 @@ Auto recovery can kick in and help in the following ways:
   - Useful in a cluster.
 - Reboot this instance.
 
-### 1.6.13. Horizontal and Vertical Scaling
+### 1.6.14. Horizontal and Vertical Scaling
 
-#### 1.6.13.1. Vertical Scaling
+#### 1.6.14.1. Vertical Scaling
 
 As customer load increases, the server may need to grow to handle more data.
 The server can increase in capacity, but this will require a reboot.
@@ -2853,13 +2853,12 @@ The server can increase in capacity, but this will require a reboot.
 - Larger instances also carry a **$ premium** compared to smaller instances.
 - Instance size is an upper cap on performance.
 - No application modification is needed.
-  - Works for all applications, even monoliths (all code in one app)
+  - Works for all applications, even monoliths (all code in one app).
 
-#### 1.6.13.2. Horizontal Scaling
+#### 1.6.14.2. Horizontal Scaling
 
 As the customer load increases, this adds additional capacity.
-Instead of one running copy of an application, you can have multiple versions
-running on each server.
+Instead of one running copy of an application, you can have multiple versions running on each server.
 This requires a load balancer.
 
 > A load balancer is an _appliance_ that sits in between your servers -- in this case instances -- and your customers.
@@ -2873,13 +2872,13 @@ servers get equal parts of the load.
 - This requires either *application support* or *off-host* sessions.
   - If you use off-host sessions, then your session data is stored in another place, an external database.
   - This means that the servers are what's called **stateless**, they are just dump instances of your application.
-  - The application does care which instance you are connected to because your session is externally hosted somewhere else.
+  - The application doesn't care which instance you are connected to because your session is externally hosted somewhere else.
 
-#### 1.6.13.3. Benefits of Horizontal Scaling
+#### 1.6.14.3. Benefits of Horizontal Scaling
 
 - No disruption while scaling up or down.
 - No real limits to scaling.
-- Uses smaller instances is less expensive.
+- Using smaller instances is less expensive.
 - Allows for better granularity.
 
 ### 1.6.14. Instance Metadata
