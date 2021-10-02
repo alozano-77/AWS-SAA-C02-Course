@@ -193,7 +193,9 @@ IP CIDR of a default VPC is always: **172.31.0.0/16**
 
 Configured to have one subnet in each AZ in the region by default.
 
-Subnets are given one section of the IP ranges for the default service.
+Subnets are given one section of the IP ranges for the default service. 
+They are configured to provide anything that is deployed inside those subnets with public IPv4 addresses. 
+
 In general do not use the Default VPC in a region because it is not flexible.
 
 Default VPC is large because it uses the /16 range.
@@ -208,19 +210,16 @@ Default compute service. Provides access to virtual machines called instances.
 
 #### 1.2.5.1. Infrastructure as as Service (IaaS)
 
-The unit of consumption is an instance
-EC2 instance is configured to launch into a single VPC subnet.
+The unit of consumption is an instance.
+An EC2 instance is configured to launch into a single VPC subnet.
 Private service by default, public access must be configured.
 The VPC needs to support public access. If you use a custom VPC then you must
 handle the networking on your own.
 
 EC2 deploys into one AZ. If it fails, the instance fails.
 
-Different sizes and capabilities all use On-Demand Billing - Per second.
+Different sizes and capabilities. All use On-Demand Billing - Per second.
 Only pay for what you consume.
-
-Charge for running the instance, CPU, memory and storage.
-Extra cost for any commercial software the instance deploys with.
 
 Local on-host storage or **Elastic Block Storage**
 
@@ -231,13 +230,15 @@ Pricing based on:
 - Storage
 - Networking
 
+Extra cost for any commercial software the instance deploys with.
+
 #### 1.2.5.2. Running State
 
 Charged for all four categories.
 
 - Running on a physical host using CPU.
 - Using memory even with no processing.
-- OS is stored on disk allocated
+- OS and its data are stored on disk, which is allocated to you.
 - Networking is always ready to transfer information.
 
 #### 1.2.5.3. Stopped State
@@ -247,7 +248,7 @@ Charged for EBS storage  only.
 - No CPU resources are being consumed
 - No memory is being used
 - Networking is not running
-- Storage is allocated to the instance for the OS.
+- Storage is allocated to the instance for the OS together with any applications.
 
 #### 1.2.5.4. Terminated State
 
@@ -260,19 +261,19 @@ AMIs in one region are not available from other regions.
 
 Contains:
 
-- Permissions: control which accounts can and can't use the AMI.
+- Permissions: controls which accounts can and can't use the AMI.
 
-  - Public: Anyone can launch it.
+  - Public - Anyone can launch it.
 
-  - Owner - Implicit allow, only the owner can use it  spin up new instances
+  - Owner - Implicit allow, only the owner can use it to spin up new instances
 
-  - Explicit - owner grants access to AMI for specific AWS accounts
+  - Explicit - Owner grants access to AMI for specific AWS accounts
 
-- Root Volume: contain the **Boot Volume**
+- Root Volume: contains the **Boot Volume**
 
 - Block Device Mapping: links the volumes that the AMI has and
 how they're presented to the operating system. Determines which volume is a
-boot volume and which volumes is a data volume.
+boot volume and which volume is a data volume.
 
 
 #### 1.2.5.6. Connecting to EC2
@@ -426,19 +427,19 @@ Time ordered set of data points such as:
 - Network IN/OUT
 - Disk IO
 
-This is not for a specific server. This could get things from different servers
+This is not for a specific server. This could get things from different servers.
 
-Anytime CPU Utilization is reported, the **datapoint** will report
+Anytime CPU Utilization is reported, the **datapoint** will report:
 
 - Timestamp = 2019-12-03
 - Value = 98.3
 
-**Dimensions** separate data points for different **things** or
-**perspectives** within the same metric
+**Dimensions** could be used to get metrics for a specific instance or type of instance, among others. They separate data points for different **things** or
+**perspectives** within the same metric.
 
 #### 1.2.9.3. Alarms
 
-Has two states `ok` or `alarm`.State can send an SNS or action.
+Has two states `ok` or `alarm`. A notification could be sent to an SNS topic or an action could be performed based on an alarm state.
 Third state can be insufficient data state. Not a problem, just wait.
 
 ### 1.2.10. Shared Responsibility Model
@@ -447,16 +448,16 @@ AWS: Responsible for security **OF** the cloud
 
 Customer: Responsible for security **IN** the cloud
 
-### 1.2.11. High Availability (HA), Fault-Tolerance (FT), and Disaster Recover (DR)
+### 1.2.11. High Availability (HA), Fault-Tolerance (FT) and Disaster Recovery (DR)
 
 #### 1.2.11.1. High Availability (HA)
 
 - Aims to **ensure** an agreed level of operational **performance**, usually
 **uptime**, for a **higher than normal period**
-- Instead of diagnosing the issue, swap it out.
-- Redundant hardware to minimize downtown
+- Instead of diagnosing the issue, if you have a process ready to replace it, it can be fixed quickly and probably in an automated way.
+- Spare infrastructure ready to switch customers over to in the event of a disaster to minimize downtime
 - User disruption is not ideal, but is allowed
-  - The user might need to log back in or lose some data on their screen.
+  - The user might have a small disruption or might need to log back in.
 - Maximizing a system's uptime
   - 99.9% (Three 9's) = 8.7 hours downtime per year.
   - 99.999 (Five 9's) = 5.26 minutes downtime per year.
@@ -470,7 +471,7 @@ in the event of the **failure of some** (one or more faults within) of its
 expensive. Outages must be minimized and the system needs levels of
 redundancy.
 - An airplane is an example of system that needs Fault Tolerance. It has
-more engines than it needs for redundancy.
+more engines than it needs so it can operate through failure.
 
 Example:
 A patient is waiting for a life saving surgery and is under anesthetic.
@@ -478,7 +479,7 @@ While being monitored, the life support system is dosing medicine.
 This type of system cannot only be highly available, even a movement of
 interruption is deadly.
 
-#### 1.2.11.3. Disaster Recover (DR)
+#### 1.2.11.3. Disaster Recovery (DR)
 
 - Set of policies, tools and procedures to **enable the recovery** or
 **continuation** of **vital** technology infrastructure and systems
@@ -496,6 +497,8 @@ This involves:
 This is designed to keep the crucial and non replaceable parts of the
 system in place.
 
+Used when HA and FT don't work.
+
 ### 1.2.12. Domain Name System (DNS)
 
 DNS is a discovery service. Translates machines into humans and vice-versa.
@@ -506,17 +509,17 @@ Parts of the DNS system
 - DNS Client: Piece of software running on the OS for a device you're using.
 - Resolver: Software on your device or server which queries DNS on your behalf.
 - Zone: A part of the DNS database.
-  - This would be www.amazon.com
-  - What the data is, the substance
-- Zonefile: physical database for a zone
+  - This would be amazon.com
+  - What the data is, its substance
+- Zone file: physical database for a zone
   - How physically that data is stored
-- Nameserver: where zonefiles are hosted
+- Nameserver: where zone files are hosted
 
 Steps:
 
-Find the Nameserver which hosts a particular Zonefile.
-Query that Nameserver for a record with that Zone.
-It then passes the information back to the client.
+Find the Nameserver which hosts a particular zone file.
+Query that Nameserver for a record that is in that zone file.
+It then passes the information back to the DNS client.
 
 #### 1.2.12.1. DNS Root
 
@@ -525,11 +528,11 @@ DNS names are read right to left with multiple parts separated by periods.
 
 `www.netflix.com.`
 
-The period is assumed to be there in a browser when it's not present.
+The last period is assumed to be there in a browser when it's not present.
 The DNS Root is hosted on DNS Root Servers (13). These are hosted
 by 12 major companies.
 
-**Root Hints** is a pointer to the DNS Root server
+**Root Hints** is a pointer to the DNS Root servers provided by the OS vendor
 
 Process
 
@@ -552,13 +555,13 @@ a root hints file to know how to access a root server and query the root zone.
 - One piece can be authoritative for amazon.com
 - The root zone is the start and the only thing trusted in DNS.
 - The root zone can delegate a part of itself to another zone or entity.
-- That someone else then becomes authoritative for that piece of itself only.
+- That someone else then becomes authoritative for just the part that's delegated.
 - The root zone is just a database of the top level domains.
 
-The top level domains are the only things to the left of the DNS name.
+The top level domains are the only thing immediately to the left of the root in a DNS name.
 
-- `.com` or `.org` are generic top level domains (GTLD)
-- `.uk` is a country code top level domains (CCTLD)
+- `.com` or `.org` are generic top level domains (gTLD)
+- `.uk` is a country code top level domain (ccTLD)
 
 **Registry** maintains the zones for a TLD (e.g .ORG)
 **Registrar** has relationships with the .org TLD zone manager
@@ -567,39 +570,39 @@ allowing domain registration
 ### 1.2.13. Route53 Fundamentals
 
 - Registers domains
-- Can Host Zone Files on managed nameservers
+- Can host zone files on managed nameservers
 - This is a global service, no need to pick a region
 - Globally Resilience
   - Can operate with failure in one or more regions
 
 #### 1.2.13.1. Register Domains
 
-Has relationships with all major registries
+Has relationships with all major registries (registrar)
 
 - Route 53 will check with the top level domain to see if the name is available
-- Router 53 creates a zonefile for the domain to be registered
-- Allocates nameservice for that zone
+- Route 53 creates a zone file for the domain to be registered
+- Allocates nameservers for that zone
   - Generally four of these for one individual zone
   - This is a hosted zone
   - The zone file will be put on these four managed nameservers
-- Router 53 will communicate with the `.org` registry and add the nameserver
-records into the zone file for the top level domain.
-  - This is done with a nameserver record.
+- Route 53 will communicate with the `.org` registry and add the nameserver records 
+into the zone file for that top level domain.
+  - This is done with a nameserver record (NS).
 
 #### 1.2.13.2. Route53 Details
 
-**Zonefiles** in AWS
+**Zone files** in AWS
 Hosted on four managed name servers
 
-- Can be **public** or **private**
+- Can be **public** or **private** (linked to one or more VPCs)
 
 ### 1.2.14. DNS Record
 
 - Nameserver (NS): Allows delegation to occur in the DNS.
-- A and AAAA Records: Maps the host to a v4 or v6 host type. Most of the time
+- A and AAAA Records: Maps the host to a v4 or v6 host type respectively. Most of the time
 you will make both types of record, A and AAAA.
 - CNAME Record Type: Allows DNS shortcuts to reduce admin overhead.
-CNAMES cannot point directly at an IP address and only another name.
+CNAMES cannot point directly to an IP address, only another name.
 - MX records: How emails are sent. They have two main parts:
   - Priority: Lower values for the priority field are higher priority.
   - Value
@@ -3269,6 +3272,20 @@ Hosted Zones are what the DNS system references via delegation and name server
 records. A hosted zone, when referenced in this way by the DNS system, is known
 as being authoritative for a domain.
 It becomes the single source of truth for a domain.
+
+VPC instances are already configured (if enabled) with the VPC +2 address as their
+DNS resolver - this allows querying of R53 public and internet hosted DNS zones from
+instances within that VPC.
+
+### 1.9.2. Private Hosted Zones
+
+Same as public hosted zones except these are not public.
+They are associated with VPCs and are only accesible within those VPCs via the R53 resolver.
+
+It's possible to use a technique called Split-view for public and internal use with the same
+zone name. A common architecure is to make the public hosted zone a subset of the private hosted zone
+containing only those records that are meant to be accessed from the Internet, while inside VPCs
+associated with the private hosted zone all resource records can be accessed.
 
 ### 1.9.2. Route 53 Health Checks
 
