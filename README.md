@@ -262,15 +262,15 @@ Contains:
 how they're presented to the operating system. Determines which volume is a
 boot volume and which volume is a data volume.
 
-
-#### 1.2.5.6. Connecting to EC2
-
 AMI Types:
 
 - Amazon Quick Start AMIs
 - AWS Marketplace AMIs
 - Community AMIs
 - Private AMIs
+
+
+#### 1.2.5.6. Connecting to EC2
 
 - Windows using RDP (Remote Desktop Protocol), Port 3389
 - Linux SSH protocol, Port 22
