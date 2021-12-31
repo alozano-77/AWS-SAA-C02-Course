@@ -6,7 +6,7 @@
 
 Represented different ways for people vs computer.
 
-4 numbers from 0 to 255 seperated by a period
+4 numbers from 0 to 255 separated by a period
 
 There is just over 4 billion addresses.
 
